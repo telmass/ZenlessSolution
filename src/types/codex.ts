@@ -47,6 +47,15 @@ export interface BangbooIndexItem {
   en: string
   rank: string
   description: string
+  descriptionZh: string
+}
+
+export interface BangbooSkill {
+  tab: string
+  title: string
+  desc: string
+  detail: string
+  levels: number
 }
 
 export interface BangbooStats {
@@ -57,11 +66,14 @@ export interface BangbooStats {
   critRate: number
   critDmg: number
   penRatio: number
-  anomalyProficiency: number
+  anomalyMastery: number
 }
 
 export interface BangbooDetail extends BangbooIndexItem {
   codename: string
   iconUrl: string
+  wikiId: number | null
+  descriptionZh: string
+  skills: BangbooSkill[]
   stats: BangbooStats
 }

@@ -44,6 +44,8 @@ def main() -> None:
     engine_icons = load("engine-icons.json")
     sets = load("drive-sets.json")
     bangboo = load("bangboo.json")
+    wiki = load("bangboo-wiki.json") if (SOURCES / "bangboo-wiki.json").exists() else {"byName": {}}
+    wiki_by_name = wiki.get("byName", {})
 
     engine_items = []
     for item in engines:
@@ -85,6 +87,7 @@ def main() -> None:
 
     bangboo_items = []
     for item in bangboo:
+        extra = wiki_by_name.get(item["name"], {})
         bangboo_items.append(
             {
                 "id": item["id"],
@@ -95,6 +98,9 @@ def main() -> None:
                 "rank": item.get("rank", ""),
                 "iconUrl": item.get("icon", ""),
                 "description": item.get("description", ""),
+                "descriptionZh": extra.get("description", ""),
+                "wikiId": extra.get("wikiId"),
+                "skills": extra.get("skills", []),
                 "stats": item.get("stats", {}),
             }
         )
@@ -155,6 +161,7 @@ def main() -> None:
                     "en": item["en"],
                     "rank": item["rank"],
                     "description": item["description"],
+                    "descriptionZh": item["descriptionZh"],
                 }
                 for item in bangboo_items
             ],

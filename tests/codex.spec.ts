@@ -30,4 +30,8 @@ describe('codex datasets', () => {
     // One beta bangboo has no icon in the current asset manifest.
     expect(missingBangboo.length).toBeLessThanOrEqual(1)
   })
+
+  it('has Chinese profiles for the released bangboo', () => {
+    expect(bangboo.filter((item) => item.descriptionZh).length).toBeGreaterThanOrEqual(40)
+  })
 })

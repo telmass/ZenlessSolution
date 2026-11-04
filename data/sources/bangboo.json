@@ -16,7 +16,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -36,7 +36,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 132.0
+   "anomalyMastery": 132.0
   }
  },
  {
@@ -56,7 +56,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -76,7 +76,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 123.0
+   "anomalyMastery": 123.0
   }
  },
  {
@@ -96,7 +96,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -116,7 +116,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 132.0
+   "anomalyMastery": 132.0
   }
  },
  {
@@ -136,7 +136,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 123.0
+   "anomalyMastery": 123.0
   }
  },
  {
@@ -156,7 +156,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -176,7 +176,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 97.0
+   "anomalyMastery": 97.0
   }
  },
  {
@@ -196,7 +196,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -216,7 +216,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 117.0
+   "anomalyMastery": 117.0
   }
  },
  {
@@ -236,7 +236,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -256,7 +256,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -276,7 +276,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -296,7 +296,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -316,7 +316,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -336,7 +336,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -356,7 +356,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -376,7 +376,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
@@ -396,13 +396,13 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 110.0
+   "anomalyMastery": 110.0
   }
  },
  {
   "id": "bb-54006",
   "slug": "rocketboo",
-  "name": "飚速布",
+  "name": "飙速布",
   "en": "Rocketboo",
   "codename": "Rocketboo",
   "rank": "S",
@@ -416,7 +416,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 119.0
+   "anomalyMastery": 119.0
   }
  },
  {
@@ -436,7 +436,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 132.0
+   "anomalyMastery": 132.0
   }
  },
  {
@@ -456,7 +456,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -476,7 +476,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -496,7 +496,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 120.0
+   "anomalyMastery": 120.0
   }
  },
  {
@@ -516,7 +516,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -536,7 +536,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -556,7 +556,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -576,7 +576,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -596,7 +596,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 108.0
+   "anomalyMastery": 108.0
   }
  },
  {
@@ -616,7 +616,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 88.0
+   "anomalyMastery": 88.0
   }
  },
  {
@@ -636,7 +636,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 112.0
+   "anomalyMastery": 112.0
   }
  },
  {
@@ -656,7 +656,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -676,7 +676,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -696,7 +696,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -716,7 +716,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 120.0
+   "anomalyMastery": 120.0
   }
  },
  {
@@ -736,7 +736,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 120.0
+   "anomalyMastery": 120.0
   }
  },
  {
@@ -756,7 +756,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -776,7 +776,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -796,7 +796,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -816,7 +816,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  },
  {
@@ -836,7 +836,7 @@
    "critRate": 5.0,
    "critDmg": 50.0,
    "penRatio": 0.0,
-   "anomalyProficiency": 100.0
+   "anomalyMastery": 100.0
   }
  }
 ]

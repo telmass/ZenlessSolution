@@ -29,7 +29,7 @@ function rankClass(value: string) {
     <header class="codex-head">
       <div>
         <h1>邦布</h1>
-        <p>邦布的基础属性、代号与档案描述。技能文本仍在与官方 WIKI 条目做映射。</p>
+        <p>邦布的评级、基础属性、主动技与连携技，以及官方中文档案。</p>
       </div>
       <div class="codex-head__count num">
         {{ bangboo.length }}
@@ -79,7 +79,7 @@ function rankClass(value: string) {
           </div>
           <p class="codex-card__meta">{{ item.en }}</p>
           <p class="codex-card__meta codex-card__meta--clamp">
-            {{ item.description || '暂无档案描述。' }}
+            {{ item.descriptionZh || item.description || '暂无档案描述。' }}
           </p>
         </div>
       </RouterLink>

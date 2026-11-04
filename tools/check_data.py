@@ -160,6 +160,12 @@ def main() -> None:
         if len(rows) != expected_count:
             fail(errors, f"{filename} = {len(rows)}, expected {expected_count}")
 
+    wiki_path = ROOT / "data" / "sources" / "bangboo-wiki.json"
+    if wiki_path.exists():
+        wiki = json.loads(wiki_path.read_text(encoding="utf-8"))
+        if len(wiki.get("byName", {})) < 41:
+            fail(errors, f"bangboo wiki entries = {len(wiki.get('byName', {}))}, expected >= 41")
+
     payload = json.dumps(agent, ensure_ascii=False)
     if "TODO" in payload or "TODO" in json.dumps(guide, ensure_ascii=False):
         fail(errors, "generated data contains TODO")

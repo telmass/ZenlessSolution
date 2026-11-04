@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import bangbooData from '@/data/codex/bangboo.json'
 import type { BangbooDetail } from '@/types/codex'
 import { media } from '@/lib/media'
+import RichText from '@/components/RichText.vue'
 
 const route = useRoute()
 const bangboo = bangbooData as unknown as BangbooDetail[]
@@ -20,7 +21,7 @@ const stats = computed(() => {
     { label: '暴击率', value: raw.critRate, unit: '%' },
     { label: '暴击伤害', value: raw.critDmg, unit: '%' },
     { label: '穿透率', value: raw.penRatio, unit: '%' },
-    { label: '异常精通', value: raw.anomalyProficiency, unit: '' },
+    { label: '异常掌控', value: raw.anomalyMastery, unit: '' },
   ]
 })
 
@@ -56,7 +57,8 @@ function rankClass(value: string) {
             <span class="tag tag--accent" :class="rankClass(item.rank)">{{ item.rank }}</span>
             <span class="tag">{{ item.en }}</span>
           </div>
-          <p class="detail-note" lang="en">{{ item.description || '暂无档案描述。' }}</p>
+          <p v-if="item.descriptionZh" class="detail-note">{{ item.descriptionZh }}</p>
+          <p v-else class="detail-note" lang="en">{{ item.description || '暂无档案描述。' }}</p>
         </div>
       </header>
 
@@ -68,14 +70,39 @@ function rankClass(value: string) {
             <b class="num">{{ stat.value }}{{ stat.unit }}</b>
           </div>
         </div>
-        <p class="detail-note">邦布属性为图鉴基础值，不随代理人面板变化。</p>
+        <p class="detail-note">邦布属性为图鉴初始值，不随代理人面板变化。</p>
+      </section>
+
+      <section v-if="item.skills.length" class="detail-section">
+        <h2>技能</h2>
+        <div class="bangboo-skills">
+          <article v-for="(skill, index) in item.skills" :key="index" class="bangboo-skill">
+            <header class="bangboo-skill__head">
+              <span class="skill-tab">{{ skill.tab }}</span>
+              <h3>{{ skill.title || item.name }}</h3>
+            </header>
+            <RichText :text="skill.desc" class="detail-prose" />
+            <div v-if="skill.detail" class="skill-detail">
+              <span class="skill-detail__label">Lv.1 详细数据</span>
+              <p v-for="line in skill.detail.split('\n')" :key="line">{{ line }}</p>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section class="detail-section">
-        <h2>技能与档案</h2>
-        <p class="detail-note">
-          邦布的主动技能与中文档案仍在与官方 WIKI 条目做映射；当前展示基础属性与英文档案描述，技能文本待补。
+        <h2>档案与来源</h2>
+        <p v-if="item.description" class="detail-note detail-note--en" lang="en">{{ item.description }}</p>
+        <p v-if="item.wikiId" class="detail-note">
+          <a
+            :href="`https://baike.mihoyo.com/zzz/wiki/content/${item.wikiId}/detail?mhy_presentation_style=fullscreen`"
+            target="_blank"
+            rel="noreferrer"
+          >
+            官方 WIKI 条目 ↗
+          </a>
         </p>
+        <p v-else class="detail-note">该邦布暂无官方 WIKI 条目，技能与中文档案待补。</p>
       </section>
     </template>
 
