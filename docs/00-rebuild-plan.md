@@ -2,6 +2,7 @@
 
 > **版本**：v1.0 · 2026-11-04
 > **状态**：方案已确认（D1 纯静态 / D3 基准 0+1 / D4 轴 + 单点卡 / D7 本地 WebP），待启动实现
+> **实现进度**（2026-11-04）：M0 骨架、M1 菲欧妮数据与本地资产、M2 代理人档案/技能/影画/攻略已落地；下一步 M3 面板引擎。
 > **范围**：官方图鉴复刻 + 代理人攻略 + 菲欧妮（phoenix）配置对比
 > **原则**：一个数据源、一套计算核心、一个前端；先窄后深，先正确后完整。
 
@@ -397,7 +398,7 @@ ZenlessSolution/
 | 构建 | `vite@6`、`typescript@5.7`、`@vitejs/plugin-vue` | 标准组合 |
 | 样式 | 原生 CSS + `tokens.css` | 图鉴视觉需要定制，不引 UI 库 |
 | 图表 | 轻量自绘 SVG（柱/瀑布） | 只为对比服务，避免 ECharts 体积 |
-| 图片 | `sharp`（devDependency） | 下载后转 WebP/AVIF、生成主色与尺寸 |
+| 图片 | Python Pillow（当前）；`sharp`（可选，后续需要 AVIF 批量时） | 下载后转 WebP、生成主色与尺寸 |
 | 测试 | `vitest`、`@vue/test-utils`、`jsdom` | 与旧项目一致 |
 | Lint | `eslint` + `@typescript-eslint` + `prettier` | 统一风格 |
 | 工具链 | Python 3.13 + `httpx`、`beautifulsoup4`、`pydantic`、`tomli-w`、`pytest` | 抓取/校验 |
@@ -552,14 +553,15 @@ data/media/urls.toml          key → 源 URL + 来源 + 抓取时间
         │  pnpm assets:sync
         ▼
 .cache/assets/originals/<sha256>.<ext>        （gitignore，可重下）
-        │  sharp：resize + webp(q80)，full 额外 avif
+        │  Pillow：resize + webp(q80)，full 额外 avif
         ▼
-public/assets/<type>/<slug>/<variant>.<hash8>.webp
-public/assets/manifest.json                   key → {src,width,height,hash,color}
+public/assets/media/<hash10>-<variant>.webp    （内容 hash 命名）
+public/assets/manifest.json                    key → {src,width,height,hash,color}
 ```
 
-- **源站变换优先**：米游社 OSS 支持 `?x-oss-process=image/resize,w_640/format,webp`，能直接取到已压缩图；取不到再本地 sharp 转码。
-- **格式**：WebP 为默认；仅 `full` 变体额外产 AVIF（`<picture>` + WebP fallback）。若 AVIF 相对 WebP 节省 < 25% 则丢弃，避免文件翻倍。
+- **源站变换优先**：米游社 OSS 支持 `?x-oss-process=image/resize,w_640/format,webp`，能直接取到已压缩图；取不到再本地转码（首切片用 Pillow，未引入 sharp 原生依赖）。
+- **清单解耦**：文件按内容 hash 命名，`manifest.json` 负责 `媒体键 → 路径`；同一原图被多个键引用时只存一份。
+- **格式**：WebP 为默认；`full` 变体规划额外产 AVIF（`<picture>` + WebP fallback）。首切片先只产 WebP，AVIF 在确认 Pillow/libavif 可用后接入；若 AVIF 相对 WebP 节省 < 25% 则放弃，避免文件翻倍。
 - **透明图**：立绘 / tachie 保留 alpha，不铺白底。
 - **命名**：内容 hash 后缀（不可变缓存，`Cache-Control: immutable`）；清单里的 `hash` 用于校验与失效。
 - **占位**：sharp 取主色写入 manifest，加载前用纯色块 + `aspect-ratio`，避免 CLS。
@@ -1210,7 +1212,7 @@ jobs:
 | D4 | 参考轴 | A 20s 固定轴；B 只做单次事件；C 两者都给 | ✅ **C（已确认）** | 伤害页复杂度 |
 | D5 | 视觉 | A 贴近官方图鉴；B ZZZ 街头风原创；C 折中 | **C**（结构像官方、气质像 ZZZ） | 设计工作量 |
 | D6 | 是否保留 PNG 导出 | A v1 不做；B 做 | **A**（本地图已同源，Later 成本低） | 省 2–3 天 |
-| D7 | 图片格式 | A 全 WebP；B WebP + full 变体 AVIF | ✅ **B（已确认）**：WebP 默认，`full` 额外 AVIF，`<picture>` 回退 | 资产体积与编码时间 |
+| D7 | 图片格式 | A 全 WebP；B WebP + full 变体 AVIF | ✅ **B（已确认）**：WebP 默认，`full` 规划 AVIF；首切片先 WebP | 资产体积与编码时间 |
 
 > D1/D3/D4/D7 已确认；D2/D5/D6 仍按推荐值推进，有异议随时叫停。
 
