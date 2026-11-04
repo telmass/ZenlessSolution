@@ -1,0 +1,343 @@
+background = "https://i.gachabase.net/EYmENBuHcerI7PCnpvo5Yflh8MBPJwQPx6C79KmH5KQ/q:50/f:webp/plain/zzz/assets/8000849831ef282230a0403845820fae.png"
+schemaVersion = 2
+
+[_meta]
+agentId = "ep-2216"
+name = "菲欧妮"
+note = "本文件为菲欧妮·蕾法爱菈的攻略编辑内容（加点/推荐/队伍/文字攻略），与抓取产物 phoenix.json 分开维护；graduationPanel 由 calc_graduation_panel.py 用仓库计算器实算后写入，请勿手改。"
+editorialSources = [
+    "技能机制：抓取自米游社 WIKI 代理人页的技能与影画文本（strategy/phoenix/data/phoenix.json）",
+    "配装口径：仓库计算器选项表（data/options.json）、音擎预设（data/weapon-presets.json）与驱动盘预设（data/drive-disc-presets.json）",
+    "官方玩法预审：2026-10-27 读取官方角色玩法合集 https://baike.mihoyo.com/zzz/wiki/channel/map/66/68，定位/核心机制/输出循环/推荐配装/常见误区逐条对照抓取数据，结果见下方 _meta.preAudit",
+    "推荐档位与队伍：社区攻略整理，经需求方确认",
+]
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/2216/detail"
+preAudit = "已核对：角色定位、核心技结构、影画 1/6、音擎首选与限定下位、驱动盘 4+2 与主词条、副词条优先级、255 掌控阈值、两支队伍、出招表。有冲突：音擎第三选择由嵌合编译器更正为朔月裁霜（社区攻略确认嵌合编译器特效无法被灼蚀火伤触发）。待确认（已由需求方拍板）：不新增队伍、5 号位备选仅保留穿透率+24%、文字攻略补充影画要点。"
+
+[cinemaPriority]
+image = "https://static.nanoka.cc/assets/zzz/IconRolePiece1641.webp"
+keyLevels = [1, 6]
+note = "核心命座为 1 / 6 影画"
+
+[[skillPriority]]
+key = "core"
+label = "核心技"
+icon = "/images/skills/core.webp"
+level = 7
+maxLevel = 7
+next = ">"
+id = "core"
+
+[[skillPriority]]
+key = "chain"
+label = "连携技"
+icon = "/images/skills/chain.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "chain"
+
+[[skillPriority]]
+key = "basic"
+label = "普通攻击"
+icon = "/images/skills/basic.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "basic"
+
+[[skillPriority]]
+key = "special"
+label = "特殊技"
+icon = "/images/skills/special.webp"
+level = 12
+maxLevel = 12
+next = ">"
+id = "special"
+
+[[skillPriority]]
+key = "assist"
+label = "支援技"
+icon = "/images/skills/assist.webp"
+level = 12
+maxLevel = 12
+next = ">"
+id = "assist"
+
+[[skillPriority]]
+key = "dodge"
+label = "闪避"
+icon = "/images/skills/dodge.webp"
+level = 7
+maxLevel = 12
+next = ""
+id = "dodge"
+
+[[weapons]]
+tier = "首选"
+note = "专武装备者的异常精通提升90点；队伍中任意角色对敌人造成的属性异常伤害产生暴击时，装备者造成的火属性伤害提升40%，持续20秒，重复触发刷新持续时间。"
+
+[[weapons.items]]
+name = "涅槃初翎"
+stats = "S 级 · 基础攻击 713 · 异常掌控 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/12/233874762/0d237081fd0f184e4fc22abbbf5a4641_3451218840361264643.png"
+engineId = "ep-2259"
+refinement = 1
+
+[[weapons]]
+tier = "限定下位"
+note = "相比专武，只少了40%的增伤，其他属性无差异，算最佳下位替代。\n其他异常掌控音擎不推荐，场内表现可能不如常驻下位音擎。"
+
+[[weapons.items]]
+name = "壳中之灵"
+stats = "S 级 · 基础攻击 713 · 异常掌控 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/02/24/141353238/3214160dc64637a1823af2cef51d505b_6802413686352293170.png"
+engineId = "ep-1883"
+refinement = 1
+
+[[weapons]]
+tier = "其他限定下位"
+note = "仅利用副属性的 30% 异常掌控即可保证 255 阈值，特效为冰属性增伤与异放增伤，菲欧妮无法触发，属于纯白板下位。"
+
+[[weapons.items]]
+name = "朔月裁霜"
+stats = "S 级 · 基础攻击 713 · 异常掌控 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/04/30/15559334/39c79cd0e48bff218c74eec559e116f2_6669784355888716200.png"
+engineId = "ep-1964"
+refinement = 1
+
+[[weapons]]
+tier = "常驻下位"
+note = "实在没有以上选择再考虑，但不推荐抽取本体。"
+
+[[weapons.items]]
+name = "双生泣星"
+stats = "A 级 · 基础攻击 594 · 攻击力 25%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b8c620882b72deab5a23c7cdd_3200938913040663318.png"
+engineId = "ep-212"
+refinement = 5
+
+[[driveBuilds]]
+name = "常驻套装： 4 自由蓝调 + 2 法厄同之歌"
+subPriority = [
+    { label = "异常精通", next = ">", id = "am" },
+    { label = "攻击力%", next = ">", id = "atk_pct" },
+    { label = "攻击力", next = ">", id = "atk_flat" },
+    { label = "穿透值", next = "", id = "pen_val" },
+]
+set4Id = "ep-191"
+set2Id = "ep-1194"
+
+[[driveBuilds.mainStats]]
+slot = "4 号位"
+main = "异常精通 +92"
+alt = "无"
+note = ""
+mainId = "am_92"
+
+[[driveBuilds.mainStats]]
+slot = "5 号位"
+main = "火属性伤害 +30%"
+alt = "穿透率 +24%"
+note = "2命前火伤，2命后根据需求选择"
+mainId = "dmg_30"
+mainElement = "火"
+altId = "pr_24"
+
+[[driveBuilds.mainStats]]
+slot = "6 号位"
+main = "异常掌控 +30%"
+alt = "无"
+note = ""
+mainId = "ac_pct_30"
+
+[driveBuilds.set4]
+name = "自由蓝调"
+label = "异常精通 +30"
+effect4 = "[强化特殊技]命中敌人时，根据装备者的属性类型，使目标对应属性异常积蓄抗性降低20%，持续8秒，相同属性的效果不可叠加。"
+scene = "搭配菲欧妮的被动[灼蚀],稳定全局收益。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png"
+
+[driveBuilds.set2]
+main = [
+    { name = "法厄同之歌", label = "异常掌控 +8%", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+
+[[teams]]
+name = "菲欧妮+维琳娜+蕾米埃尔"
+
+[[teams.members]]
+agentId = "ep-2216"
+name = "菲欧妮"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/16/71319299/0c6fe6449ebd56b87745a332ade80e1f_5954047325411114795.png"
+note = "火属性异常主C，驻场输出，核心被动为全队施加[灼蚀]并提升异常爆伤。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+set4Ids = ["ep-191"]
+
+[[teams.members]]
+agentId = "ep-1960"
+name = "维琳娜"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/15/76099754/11878922b3ca137a99bf3906b74cb5df_3794220973506474405.png"
+note = "风属性异常，是菲欧妮当之无愧的最佳队友。"
+set4 = [
+    { name = "呼啸沙龙", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/18/76099754/7589a4b9181ef956d0b22e3a60fc3908_2366218006868139587.png" },
+]
+set4Ids = ["ep-2038"]
+
+[[teams.members]]
+agentId = "ep-2076"
+name = "蕾米埃尔"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/15559334/13b7b06627a8a99ffdf1f397b1daf7d1_5495460923605178593.png"
+note = "放大[灼蚀]伤害，可以让菲欧妮伤害进一步提高。"
+set4 = [
+    { name = "谶羽之誓", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png" },
+]
+set4Ids = ["ep-2116"]
+
+[[teams]]
+name = "菲欧妮+维琳娜+柚叶"
+
+[[teams.members]]
+agentId = "ep-2216"
+name = "菲欧妮"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/16/71319299/0c6fe6449ebd56b87745a332ade80e1f_5954047325411114795.png"
+note = "火属性异常主C，驻场输出，核心被动为全队施加[灼蚀]并提升异常爆伤。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+set4Ids = ["ep-191"]
+
+[[teams.members]]
+agentId = "ep-1960"
+name = "维琳娜"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/15/76099754/11878922b3ca137a99bf3906b74cb5df_3794220973506474405.png"
+note = "风属性异常，是菲欧妮当之无愧的最佳队友。"
+set4 = [
+    { name = "呼啸沙龙", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/18/76099754/7589a4b9181ef956d0b22e3a60fc3908_2366218006868139587.png" },
+]
+set4Ids = ["ep-2038"]
+
+[[teams.members]]
+agentId = "ep-1386"
+name = "柚叶"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/10/76099754/f288f8b22deafa2493c389fc4465d77b_8800233381222281203.png"
+note = "通过柚叶染色加快火异常的附着速率，提高全队dps。"
+set4 = [
+    { name = "月光骑士颂", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG" },
+]
+set4Ids = ["ep-1551"]
+
+[[textGuide]]
+title = "出招表（驻场循环）"
+lines = [
+    "① 进场后积累[燔焰]，通过[燃烧攻击]回复燔焰，最多120点。",
+    "② 燔焰足够时长按[普通攻击：焚罪]触发[异放]，结算对应属性的属性异常伤害，暴击伤害额外提升40%。",
+    "③ [特殊技：掠火]可触发完美格挡，点按后直接衔接第三段[普通攻击]，跳过后撤动作。",
+    "④ [强化特殊技：燎斩]拥有[升变]时发动，蓄力可提升伤害，视为[燃烧攻击]。",
+    "⑤ 能量足够时发动[强化特殊技：眩焰]获得1点[升变]，随后发动[强化特殊技：坠阳]。",
+    "⑥ [终结技：万死重明]消耗所有生命值进入[生竭]，随后自动释放[终结技：烬火追魂]恢复生命并触发[异放]。",
+]
+
+[[textGuide]]
+title = "注意事项"
+lines = [
+    "核心被动[涅槃]使菲欧妮的异常精通提升43–85点（随核心技等级），且[灼蚀]状态下敌人受到属性异常伤害时有概率触发暴击，初始异常掌控超过155点时每点额外提升0.7%暴击率，255点时达到最大值。",
+    "[强化特殊技：眩焰]发动后进入[枯荣]状态，下次[强化特殊技：眩焰]会替换为[强化特殊技：坠阳]。",
+    "异常精通是菲欧妮的核心副词条，优先堆叠。",
+]
+
+[[textGuide]]
+title = "影画要点"
+lines = [
+    "L1 进入战场获得 1 点[升变]，[灼蚀]状态下的敌人受到属性异常伤害的暴击伤害额外提升 25%，[燃烧攻击]造成伤害时[燔焰]获取效率提升 15%——加速启动，可直接发动[强化特殊技：燎斩]衔接普攻并触发自由蓝调 4 件套效果。",
+    "L2 菲欧妮对敌人施加[灼烧]效果时，该效果持续时间提升 2 秒；对[灼蚀]状态下的敌人造成的伤害提升 30%——延长灼烧即延长紊乱与乱流的基础伤害，同时补足自身增伤区，提升乱流与耀变的伤害。",
+    "L3 / L5：普通攻击、闪避、支援技、特殊技、连携技技能等级 +2，进一步抬高招式倍率。",
+    "L4 [终结技：烬火追魂]以及[普通攻击：焚罪]终结一击命中处于异常状态的敌人时，额外触发一次[异放]效果，固定结算 600% 倍率的对应属性的属性异常伤害。",
+    "L6 菲欧妮无视目标 15% 全属性伤害抗性；发动[强化特殊技：眩焰]时获得 1 点[升变]；触发的[异放]效果无视敌人 40% 防御力——提升全环境伤害下限，[升变]获取频率增加使每波连招循环都能插入[强化特殊技：燎斩]。6 影前连招为 EAAEAAE（一整套打完才衔接[燎斩]），6 影后变为 EAAE,EAAE，加速异常积蓄与[燔焰]循环。",
+]
+
+[graduationPanel]
+statRule = "effective_plus_small"
+totals = [
+    { label = "攻击力", value = 2538.1, unit = "" },
+    { label = "异常精通", value = 510, unit = "" },
+    { label = "异常掌控", value = 255.4, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-26T13:33:14+00:00"
+
+[graduationPanel.build]
+agent = "菲欧妮·蕾法爱菈"
+weapon = "涅槃初翎"
+core = "异常掌控 +36、基础攻击力 +75"
+set4 = "自由蓝调"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位火属性伤害 +30%，6 号位异常掌控 +30%"
+subStats = "54 条满配：异常精通 ×30、攻击力% ×11、攻击力 ×6、穿透值 ×6、生命值% ×1"
+
+[graduationPanel.spec]
+agentId = "ep-2216"
+weaponId = "ep-2259"
+refinement = 1
+set4Id = "ep-191"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "火"
+disc6MainId = "ac_pct_30"
+core = ["ac", "atk_base"]
+subStats = [
+    { id = "am", count = 30 },
+    { id = "atk_pct", count = 11 },
+    { id = "atk_flat", count = 6 },
+    { id = "pen_val", count = 6 },
+    { id = "hp_pct", count = 1 },
+]
+budget = 54
+filler = 0
+
+[graduationPanelAlt]
+statRule = "effective_plus_small"
+totals = [
+    { label = "攻击力", value = 2585.7, unit = "" },
+    { label = "异常精通", value = 375, unit = "" },
+    { label = "异常掌控", value = 255.4, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-26T13:33:14+00:00"
+title = "非满配毕业面板（30 词条）"
+
+[graduationPanelAlt.build]
+agent = "菲欧妮·蕾法爱菈"
+weapon = "涅槃初翎"
+core = "异常掌控 +36、基础攻击力 +75"
+set4 = "自由蓝调"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位火属性伤害 +30%，6 号位异常掌控 +30%"
+subStats = "30 条：异常精通 ×15、攻击力% ×14、攻击力 ×1"
+
+[graduationPanelAlt.spec]
+agentId = "ep-2216"
+weaponId = "ep-2259"
+refinement = 1
+set4Id = "ep-191"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "火"
+disc6MainId = "ac_pct_30"
+budget = 30
+subStats = [
+    { id = "am", count = 15 },
+    { id = "atk_pct", count = 14 },
+    { id = "atk_flat", count = 1 },
+]
+filler = 0

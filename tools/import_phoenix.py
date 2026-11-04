@@ -1,9 +1,9 @@
-"""Import Fioni (phoenix) from the legacy project into the new data contract.
+"""Import Fioni (phoenix) from the checked-in source snapshots into the app contract.
 
 Sources (read-only):
-  - C:\\code\\zzz-panelAndstrategy\\strategy\\phoenix\\data\\phoenix.json
-  - C:\\code\\zzz-panelAndstrategy\\strategy\\phoenix\\data\\phoenix.strategy.toml
-  - C:\\code\\zzz-panelAndstrategy\\data\\catalog\\agents.json
+  - data/sources/phoenix.json          (official wiki scrape, legacy snapshot)
+  - data/guides/phoenix.toml           (editorial guide, legacy v2 shape)
+  - data/sources/agents.json           (catalog subset: base stats / core options)
 
 Outputs:
   - src/data/agents/phoenix.json
@@ -22,9 +22,8 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-LEGACY = Path(r"C:\code\zzz-panelAndstrategy")
-SRC = LEGACY / "strategy" / "phoenix" / "data"
-CATALOG = LEGACY / "data" / "catalog"
+SOURCES = ROOT / "data" / "sources"
+GUIDES = ROOT / "data" / "guides"
 
 OUT_DATA = ROOT / "src" / "data"
 OUT_AGENTS = OUT_DATA / "agents"
@@ -107,9 +106,9 @@ def load_media(entries: list[dict]) -> None:
 
 
 def main() -> None:
-    phoenix = json.loads((SRC / "phoenix.json").read_text(encoding="utf-8"))
-    strategy = tomllib.loads((SRC / "phoenix.strategy.toml").read_text(encoding="utf-8"))
-    agents = json.loads((CATALOG / "agents.json").read_text(encoding="utf-8"))
+    phoenix = json.loads((SOURCES / "phoenix.json").read_text(encoding="utf-8"))
+    strategy = tomllib.loads((GUIDES / "phoenix.toml").read_text(encoding="utf-8"))
+    agents = json.loads((SOURCES / "agents.json").read_text(encoding="utf-8"))
     agent = next(a for a in agents if a["id"] == "ep-2216")
 
     profile = phoenix["profile"]

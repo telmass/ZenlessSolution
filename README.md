@@ -32,11 +32,13 @@ pnpm preview
 ## 数据与资产
 
 ```bash
-pnpm data:build    # 从旧项目抓取产物生成 src/data/agents/phoenix.json + media.json
+pnpm data:build    # data/ → src/data/agents/phoenix.json + media.json
 pnpm assets:sync   # 下载源图 → 本地 WebP → src/data/media-manifest.json
 pnpm assets:check  # 离线校验：清单 ↔ 文件 ↔ 数据引用、预算、孤儿文件
 ```
 
+- `data/sources/`：抓取快照（官方 WIKI 代理人页、基础面板）。
+- `data/guides/phoenix.toml`：攻略人工编辑的唯一源。
 - `src/data/agents/phoenix.json`：生成物，勿手改。
 - `public/assets/media/`：本地 WebP（内容 hash 命名），随站点发布。
 - `.cache/assets/originals/`：原图缓存，不入库。
