@@ -6,6 +6,7 @@ import { computePanel } from '@/core/panel/compute'
 import { engines, mainStatsFor, sets, STAT_LABELS, STAT_UNITS, substats } from '@/core/panel/data'
 import { formatStat } from '@/core/panel/format'
 import { coreBonusFor, graduation54, presets, type BuildSpec } from '@/core/panel/presets'
+import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
 import { media } from '@/lib/media'
 
 const props = defineProps<{ agent: Agent }>()
@@ -19,6 +20,26 @@ const spec = reactive<BuildSpec>({
 })
 
 const expanded = ref<StatId | null>(null)
+const includePenValue = ref(false)
+
+const effective = computed(() =>
+  analyzeSubstats(spec.substats, PHOENIX_PROFILE, {
+    includePenValue: includePenValue.value,
+    budget: spec.budget || 54,
+  }),
+)
+
+function tierFor(id: string) {
+  const row = effective.value.rows.find((item) => item.id === id)
+  if (row) return row.tier
+  if (PHOENIX_PROFILE.effective.includes(id)) return 'effective'
+  if (PHOENIX_PROFILE.small.includes(id)) return 'small'
+  return 'invalid'
+}
+
+function tierLabel(id: string) {
+  return { effective: '有效', small: '小', invalid: '无效' }[tierFor(id)]
+}
 
 function applyPreset(preset: BuildSpec) {
   spec.id = preset.id
@@ -197,6 +218,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
             <div v-for="rule in substats" :key="rule.id" class="sub">
               <div class="sub__label">
                 <b>{{ rule.label }}</b>
+                <em class="sub__tier" :class="`sub__tier--${tierFor(rule.id)}`">{{ tierLabel(rule.id) }}</em>
                 <small>+{{ rule.value }}{{ rule.kind === 'pct' ? '%' : '' }}/条</small>
               </div>
               <div class="stepper">
@@ -214,6 +236,72 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           <h3>计算结果</h3>
           <span class="result__tag">局外</span>
         </header>
+
+        <section class="result__effective">
+          <header class="effective__head">
+            <h4>有效词条</h4>
+            <label class="effective__toggle">
+              <input v-model="includePenValue" type="checkbox" />
+              穿透值计入
+            </label>
+          </header>
+
+          <div class="effective__nums">
+            <div>
+              <b class="num">{{ effective.effective }}</b>
+              <span>有效</span>
+            </div>
+            <div>
+              <b class="num">{{ effective.small }}</b>
+              <span>小词条</span>
+            </div>
+            <div>
+              <b class="num">{{ effective.invalid }}</b>
+              <span>无效</span>
+            </div>
+            <div>
+              <b class="num">{{ effective.total }}</b>
+              <span>总条数</span>
+            </div>
+          </div>
+
+          <div class="effective__bar" aria-hidden="true">
+            <span
+              class="effective__bar-effective"
+              :style="{ width: `${(effective.effective / Math.max(1, effective.total)) * 100}%` }"
+            ></span>
+            <span
+              class="effective__bar-small"
+              :style="{ width: `${(effective.small / Math.max(1, effective.total)) * 100}%` }"
+            ></span>
+            <span
+              class="effective__bar-invalid"
+              :style="{ width: `${(effective.invalid / Math.max(1, effective.total)) * 100}%` }"
+            ></span>
+          </div>
+
+          <p class="effective__note">
+            {{ effective.effective }} 有效 + {{ effective.small }} 小 + {{ effective.invalid }} 无效 · 共
+            {{ effective.total }} / {{ effective.budget }} 条
+          </p>
+          <p v-if="effective.overBudget" class="effective__warn">
+            超出 {{ effective.budget }} 条预算
+          </p>
+
+          <details class="effective__detail">
+            <summary>口径与分配</summary>
+            <ul>
+              <li v-for="row in effective.rows" :key="row.id">
+                <span>{{ row.label }} × {{ row.rolls }}</span>
+                <em :class="`sub__tier--${row.tier}`">{{ tierLabel(row.id) }}</em>
+              </li>
+            </ul>
+            <p>
+              有效：异常精通、攻击力%；小词条：攻击力、穿透值；其余无效。穿透值可切换计入有效。该口径只用于展示，
+              不进入面板或伤害计算。
+            </p>
+          </details>
+        </section>
 
         <div class="result__stats">
           <button
@@ -509,8 +597,11 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .sub__label {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  align-items: baseline;
+  column-gap: 6px;
 }
 
 .sub__label b {
@@ -518,7 +609,31 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   font-weight: 500;
 }
 
+.sub__tier {
+  padding: 0 3px;
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.sub__tier--effective {
+  border-color: rgba(240, 223, 78, 0.45);
+  color: var(--accent);
+}
+
+.sub__tier--small {
+  border-color: rgba(143, 183, 255, 0.35);
+  color: #8fb7ff;
+}
+
+.sub__tier--invalid {
+  color: var(--line-strong);
+}
+
 .sub__label small {
+  grid-column: 1 / -1;
   color: var(--muted);
   font-size: 10px;
 }
@@ -623,6 +738,133 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .result__row.is-open {
   background: var(--accent-soft);
+}
+
+.result__effective {
+  margin: var(--s3) 0 var(--s2);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.effective__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+
+.effective__head h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.effective__toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.effective__toggle input {
+  width: 12px;
+  height: 12px;
+  accent-color: var(--accent);
+}
+
+.effective__bar {
+  display: flex;
+  height: 6px;
+  margin: var(--s3) 0;
+  background: var(--line);
+}
+
+.effective__bar-effective {
+  background: var(--accent);
+}
+
+.effective__bar-small {
+  background: #6d7688;
+}
+
+.effective__bar-invalid {
+  background: var(--line-strong);
+}
+
+.effective__nums {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.effective__nums b {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.result__effective .effective__nums b {
+  font-size: var(--fs-18);
+}
+
+.effective__nums span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.effective__note {
+  margin-top: var(--s2);
+  color: var(--text-2);
+  font-size: var(--fs-11);
+}
+
+.effective__warn {
+  margin-top: 2px;
+  color: var(--danger);
+  font-size: var(--fs-11);
+}
+
+.effective__detail {
+  margin-top: var(--s2);
+}
+
+.effective__detail summary {
+  color: var(--muted);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.effective__detail ul {
+  display: grid;
+  gap: 3px;
+  margin: var(--s2) 0;
+}
+
+.effective__detail li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.effective__detail em {
+  font-style: normal;
+}
+
+.effective__detail p {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
 }
 
 .result__sources {

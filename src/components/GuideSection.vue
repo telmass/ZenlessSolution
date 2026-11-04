@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Agent, GuideGraduation } from '@/types/agent'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
+import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
 
 const props = defineProps<{ agent: Agent }>()
 
@@ -45,11 +46,28 @@ const buildRows = (graduation: GuideGraduation) =>
 const effectiveCount = computed(() => {
   const spec = guide.value.graduation?.spec
   if (!spec?.subStats) return null
-  const effective = new Set(['am', 'anomaly_proficiency', 'atk_pct'])
-  return spec.subStats
-    .filter((item) => effective.has(item.id))
-    .reduce((total, item) => total + item.count, 0)
+  return analyzeSubstats(graduationCounts(spec.subStats), PHOENIX_PROFILE, {
+    budget: spec.budget,
+  }).effective
 })
+
+const SUBSTAT_ID_MAP: Record<string, string> = {
+  am: 'anomaly_proficiency',
+  pen_val: 'pen_value',
+}
+
+function graduationCounts(subStats: { id: string; count: number }[]) {
+  return Object.fromEntries(
+    subStats.map((item) => [SUBSTAT_ID_MAP[item.id] ?? item.id, item.count]),
+  )
+}
+
+function graduationAnalysis(item: GuideGraduation, includePenValue = false) {
+  return analyzeSubstats(graduationCounts(item.spec.subStats ?? []), PHOENIX_PROFILE, {
+    includePenValue,
+    budget: item.spec.budget,
+  })
+}
 
 function graduationLabel(item: GuideGraduation): string {
   const budget = item.spec.budget
@@ -215,6 +233,14 @@ function graduationLabel(item: GuideGraduation): string {
                 <b class="num">× {{ sub.count }}</b>
               </li>
             </ul>
+          </div>
+          <div class="graduation__effective">
+            <span><b class="num">{{ graduationAnalysis(item).effective }}</b> 有效</span>
+            <span>{{ graduationAnalysis(item).small }} 小</span>
+            <span>{{ graduationAnalysis(item).invalid }} 无效</span>
+            <em v-if="graduationAnalysis(item, true).effective !== graduationAnalysis(item).effective">
+              含穿透 {{ graduationAnalysis(item, true).effective }} 有效
+            </em>
           </div>
           <p class="graduation__note">{{ item.note }}</p>
         </article>
@@ -658,8 +684,7 @@ function graduationLabel(item: GuideGraduation): string {
   border-top: 1px solid var(--line);
 }
 
-.graduation__head {
-  display: flex;
+.graduation__head {  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s3);
@@ -744,6 +769,32 @@ function graduationLabel(item: GuideGraduation): string {
 .graduation__subs li b {
   margin-left: 3px;
   color: var(--accent);
+}
+
+.graduation__effective {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-top: var(--s3);
+  padding-top: var(--s2);
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: var(--fs-11);
+}
+
+.graduation__effective b {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  font-weight: 600;
+}
+
+.graduation__effective em {
+  margin-left: auto;
+  color: var(--line-strong);
+  font-size: 10px;
+  font-style: normal;
 }
 
 .graduation__note {
