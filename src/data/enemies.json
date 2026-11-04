@@ -1,0 +1,38 @@
+[
+ {
+  "id": "standard",
+  "label": "标准木桩",
+  "level": 60,
+  "defense": 953,
+  "resistance": 0,
+  "stunned": false,
+  "note": "默认档：无抗性、非失衡。"
+ },
+ {
+  "id": "weak",
+  "label": "弱点木桩",
+  "level": 60,
+  "defense": 953,
+  "resistance": -20,
+  "stunned": false,
+  "note": "火弱点，抗性 -20%。"
+ },
+ {
+  "id": "stunned",
+  "label": "失衡爆发",
+  "level": 60,
+  "defense": 953,
+  "resistance": 0,
+  "stunned": true,
+  "note": "全部事件按失衡 1.5 倍计算，仅作上限参考。"
+ },
+ {
+  "id": "high-res",
+  "label": "高抗木桩",
+  "level": 60,
+  "defense": 953,
+  "resistance": 40,
+  "stunned": false,
+  "note": "火抗 40%，检验抗性区。"
+ }
+]

@@ -1,51 +1,161 @@
 <script setup lang="ts">
-import type { Agent } from '@/types/agent'
+import { computed } from 'vue'
+import type { Agent, AgentCinema } from '@/types/agent'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
 
-defineProps<{ agent: Agent }>()
+const props = defineProps<{ agent: Agent }>()
+
+interface CinemaGroup {
+  key: string
+  showcase: string
+  first: number
+  last: number
+  image: string
+  items: AgentCinema[]
+}
+
+// L1-L3 share the official "意象影画 02" backdrop, L4-L6 share "03".
+const groups = computed<CinemaGroup[]>(() => {
+  const out: CinemaGroup[] = []
+  for (const cinema of props.agent.cinemas) {
+    const last = out[out.length - 1]
+    if (last && last.image === cinema.image) {
+      last.items.push(cinema)
+      last.last = cinema.level
+      continue
+    }
+    out.push({
+      key: `${cinema.image || 'level'}-${cinema.level}`,
+      showcase: (cinema.image.split(':').pop() || '').padStart(2, '0'),
+      first: cinema.level,
+      last: cinema.level,
+      image: cinema.image,
+      items: [cinema],
+    })
+  }
+  return out
+})
 </script>
 
 <template>
   <div class="cinema-timeline">
-    <ol class="cinema-list">
-      <li
-        v-for="cinema in agent.cinemas"
-        :id="`cinema-${cinema.level}`"
-        :key="cinema.level"
-        class="cinema"
-        :class="{ 'is-key': cinema.keyLevel }"
-      >
-        <div class="cinema__marker">
-          <span class="cinema__level num">L{{ cinema.level }}</span>
-          <img
-            v-if="media(agent.assets.film)"
-            class="cinema__film"
-            :src="media(agent.assets.film)"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-          />
-        </div>
+    <div v-for="group in groups" :key="group.key" class="cinema-group">
+      <div
+        v-if="media(group.image)"
+        class="cinema-group__bg"
+        :style="{ backgroundImage: `url('${media(group.image)}')` }"
+        aria-hidden="true"
+      />
 
-        <div class="cinema__body">
-          <header class="cinema__head">
-            <h3>{{ cinema.name }}</h3>
-            <span v-if="cinema.keyLevel" class="cinema__key">关键</span>
-          </header>
-          <RichText :text="cinema.effect" class="cinema__effect" />
-        </div>
+      <div class="cinema-group__head">
+        <span class="cinema-group__label">意象影画 {{ group.showcase }}</span>
+        <span class="cinema-group__range">L{{ group.first }} – L{{ group.last }}</span>
+      </div>
 
-        <aside v-if="cinema.story" class="cinema__story">
-          <span class="cinema__story-label">影画故事</span>
-          <p>{{ cinema.story }}</p>
-        </aside>
-      </li>
-    </ol>
+      <ol class="cinema-list">
+        <li
+          v-for="cinema in group.items"
+          :id="`cinema-${cinema.level}`"
+          :key="cinema.level"
+          class="cinema"
+          :class="{ 'is-key': cinema.keyLevel }"
+        >
+          <div class="cinema__marker">
+            <span class="cinema__level num">L{{ cinema.level }}</span>
+            <img
+              v-if="media(agent.assets.film)"
+              class="cinema__film"
+              :src="media(agent.assets.film)"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="cinema__body">
+            <header class="cinema__head">
+              <h3>{{ cinema.name }}</h3>
+              <span v-if="cinema.keyLevel" class="cinema__key">关键</span>
+            </header>
+            <RichText :text="cinema.effect" class="cinema__effect" />
+          </div>
+
+          <aside v-if="cinema.story" class="cinema__story">
+            <span class="cinema__story-label">影画故事</span>
+            <p>{{ cinema.story }}</p>
+          </aside>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.cinema-timeline {
+  display: grid;
+  gap: var(--s6);
+}
+
+.cinema-group {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* 整组共用官方意象影画：全幅低透明度铺底，向右淡出，正文保持可读。 */
+.cinema-group__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center 24%;
+  background-size: cover;
+  opacity: 0.14;
+  filter: blur(5px) brightness(0.6) saturate(0.62);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  pointer-events: none;
+}
+
+.cinema-group__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 7, 9, 0.15) 0%,
+    rgba(7, 7, 9, 0.5) 55%,
+    rgba(7, 7, 9, 0.9) 100%
+  );
+}
+
+.cinema-group__head {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  padding: var(--s4) 0 var(--s2);
+}
+
+.cinema-group:first-child .cinema-group__head {
+  padding-top: 0;
+}
+
+.cinema-group__label {
+  color: var(--text-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-11);
+  letter-spacing: 0.14em;
+  text-shadow: 0 1px 8px rgba(7, 7, 9, 0.9);
+}
+
+.cinema-group__range {
+  color: var(--line-strong);
+  font-size: var(--fs-11);
+  letter-spacing: 0.08em;
+}
+
 .cinema-list {
   position: relative;
   display: grid;
@@ -67,10 +177,6 @@ defineProps<{ agent: Agent }>()
   gap: var(--s5);
   padding: var(--s5) 0;
   border-bottom: 1px solid var(--line);
-}
-
-.cinema:first-child {
-  border-top: 1px solid var(--line);
 }
 
 .cinema__marker {

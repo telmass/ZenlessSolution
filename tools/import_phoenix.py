@@ -4,6 +4,7 @@ Sources (read-only):
   - data/sources/phoenix.json          (official wiki scrape, legacy snapshot)
   - data/guides/phoenix.toml           (editorial guide, legacy v2 shape)
   - data/sources/agents.json           (catalog subset: base stats / core options)
+  - data/sources/agents-index.json     (full 61-agent roster + open/locked state)
 
 Outputs:
   - src/data/agents/phoenix.json
@@ -15,7 +16,6 @@ Run: python tools/import_phoenix.py
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 import tomllib
@@ -24,6 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "data" / "sources"
 GUIDES = ROOT / "data" / "guides"
+SOURCE_INDEX = SOURCES / "agents-index.json"
 
 OUT_DATA = ROOT / "src" / "data"
 OUT_AGENTS = OUT_DATA / "agents"
@@ -149,18 +150,12 @@ def main() -> None:
     )
 
     cinemas = []
-    seen_cinema: dict[str, str] = {}
     for cinema in phoenix["cinemas"]:
         level = cinema["level"]
         url = phoenix["cinemaBackdrops"].get(str(level), {}).get("image")
-        key = ""
-        if url:
-            digest = hashlib.sha1(url.encode("utf-8")).hexdigest()[:12]
-            if digest in seen_cinema:
-                key = seen_cinema[digest]
-            else:
-                key = add_media(f"agent:phoenix:cinema:{level}", url, "cinema", 720, 405)
-                seen_cinema[digest] = key
+        # Official showcase: L1-L3 share "影画展示2", L4-L6 share "影画展示3".
+        group = 2 if level <= 3 else 3
+        key = add_media(f"agent:phoenix:cinema:{group}", url, "cinema", 1440, 810) if url else ""
         cinemas.append(
             {
                 "level": level,
@@ -424,18 +419,34 @@ def main() -> None:
         json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
     )
 
-    index = [
+    # The roster is curated separately so rebuilding Phoenix never drops the other
+    # 60 locked entries. Only Phoenix's live fields are refreshed from this import.
+    if not SOURCE_INDEX.exists():
+        raise SystemExit(f"missing roster source: {SOURCE_INDEX}")
+    source_index = json.loads(SOURCE_INDEX.read_text(encoding="utf-8"))
+    phoenix_entry = next(
+        (dict(item) for item in source_index if item.get("slug") == "phoenix"),
+        {},
+    )
+    phoenix_entry.update(
         {
+            "id": out["id"],
             "slug": "phoenix",
+            "en": phoenix_entry.get("en", "Phoenix"),
             "name": out["name"],
             "fullName": out["fullName"],
             "rarity": out["rarity"],
             "element": out["element"],
             "specialty": out["specialty"],
             "faction": out["faction"],
+            "available": True,
             "avatar": avatar_key,
+            "full": full_key,
             "tags": tags,
         }
+    )
+    index = [phoenix_entry] + [
+        dict(item) for item in source_index if item.get("slug") != "phoenix"
     ]
     (OUT_AGENTS / "index.json").write_text(
         json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8"

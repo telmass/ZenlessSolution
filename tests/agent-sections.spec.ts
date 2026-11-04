@@ -56,6 +56,7 @@ describe('section deep links', () => {
     expect(resolveSection('#skills')).toBe('skills')
     expect(resolveSection('cinema-4')).toBe('cinemas')
     expect(resolveSection('build')).toBe('build')
+    expect(resolveSection('damage')).toBe('damage')
     expect(resolveSection('unknown')).toBeNull()
   })
 })

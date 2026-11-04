@@ -23,22 +23,6 @@
   "source": "https://i.gachabase.net/EYmENBuHcerI7PCnpvo5Yflh8MBPJwQPx6C79KmH5KQ/q:50/f:webp/plain/zzz/assets/8000849831ef282230a0403845820fae.png",
   "variant": "full"
  },
- "agent:phoenix:cinema:1": {
-  "src": "/assets/media/e859bc0f3a-cinema.webp",
-  "width": 720,
-  "height": 397,
-  "color": "#927980",
-  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/6c45212fd0b14e14556991389fcacfd3_2512902174911162122.png?x-oss-process=image/format,webp",
-  "variant": "cinema"
- },
- "agent:phoenix:cinema:4": {
-  "src": "/assets/media/ddc34e1c78-cinema.webp",
-  "width": 720,
-  "height": 397,
-  "color": "#ccabad",
-  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/0c1b6fba15c8ea02bf03be2ec579d687_6327523380981810275.png?x-oss-process=image/format,webp",
-  "variant": "cinema"
- },
  "engine:ep-2259:icon": {
   "src": "/assets/media/4177b5b52f-icon.webp",
   "width": 160,
@@ -1454,5 +1438,21 @@
   "color": "#262828",
   "source": "https://cdn.gachabase.net/zzz/assets/df4d9ba9c5c2ab4a21770a99e313ef57.png",
   "variant": "icon"
+ },
+ "agent:phoenix:cinema:2": {
+  "src": "/assets/media/e859bc0f3a-cinema.webp",
+  "width": 1440,
+  "height": 793,
+  "color": "#927980",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/6c45212fd0b14e14556991389fcacfd3_2512902174911162122.png?x-oss-process=image/format,webp",
+  "variant": "cinema"
+ },
+ "agent:phoenix:cinema:3": {
+  "src": "/assets/media/ddc34e1c78-cinema.webp",
+  "width": 1440,
+  "height": 793,
+  "color": "#ccabad",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/0c1b6fba15c8ea02bf03be2ec579d687_6327523380981810275.png?x-oss-process=image/format,webp",
+  "variant": "cinema"
  }
 }

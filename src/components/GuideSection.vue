@@ -459,7 +459,8 @@ function graduationLabel(item: GuideGraduation): string {
 
 .weapon-row {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
+  /* Wide enough for the longest tier label ("其他限定下位") before the 44px icon. */
+  grid-template-columns: 104px minmax(0, 1fr);
   gap: var(--s3);
   align-items: start;
   padding: var(--s4) 0;
@@ -483,7 +484,9 @@ function graduationLabel(item: GuideGraduation): string {
   color: var(--text);
   font-size: var(--fs-13);
   font-weight: 500;
-  white-space: nowrap;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .weapon-row__engines {
@@ -944,7 +947,7 @@ function graduationLabel(item: GuideGraduation): string {
   }
 
   .weapon-row {
-    grid-template-columns: 80px minmax(0, 1fr);
+    grid-template-columns: 104px minmax(0, 1fr);
     gap: var(--s3) var(--s5);
   }
 

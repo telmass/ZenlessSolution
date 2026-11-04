@@ -36,7 +36,7 @@ VARIANTS = {
     "avatar": (256, 84),
     "portrait": (720, 82),
     "full": (1440, 80),
-    "cinema": (720, 80),
+    "cinema": (1440, 80),
     "icon": (160, 84),
 }
 
@@ -99,6 +99,10 @@ def main() -> None:
     entries = json.loads(MEDIA.read_text(encoding="utf-8"))
     manifest_path = ROOT / "src" / "data" / "media-manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    # Drop keys that are no longer declared, otherwise renamed media (e.g. the
+    # per-level cinema backdrops) keep stale manifest entries and inflate checks.
+    declared = {entry["key"] for entry in entries}
+    manifest = {key: item for key, item in manifest.items() if key in declared}
 
     failed: list[str] = []
     total = 0

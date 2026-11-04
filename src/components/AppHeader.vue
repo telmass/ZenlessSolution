@@ -4,6 +4,11 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const isAgent = computed(() => route.path.startsWith('/agents'))
+const headerLabel = computed(() => {
+  if (route.path === '/agents/phoenix') return 'PHOENIX'
+  if (isAgent.value) return 'AGENTS'
+  return 'PREVIEW'
+})
 
 const nav = [
   { label: '首页', to: '/', match: (p: string) => p === '/' },
@@ -45,7 +50,7 @@ const nav = [
 
       <div class="header__meta">
         <span class="dot" aria-hidden="true"></span>
-        <span>{{ isAgent ? 'PHOENIX' : 'PREVIEW' }}</span>
+        <span>{{ headerLabel }}</span>
         <b>v0.1</b>
       </div>
     </div>
@@ -191,7 +196,11 @@ const nav = [
 
 @media (max-width: 620px) {
   .header__inner {
-    gap: 18px;
+    gap: 12px;
+  }
+
+  .nav {
+    gap: 12px;
   }
 
   .brand__text i {
@@ -199,11 +208,29 @@ const nav = [
   }
 
   .nav__link {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .nav__link.is-soon {
     display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .header__inner {
+    gap: 10px;
+  }
+
+  .nav {
+    gap: 9px;
+  }
+
+  .nav__link {
+    font-size: 11px;
+  }
+
+  .brand__text b {
+    font-size: 13px;
   }
 }
 </style>

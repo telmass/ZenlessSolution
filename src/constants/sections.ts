@@ -1,5 +1,5 @@
-﻿export interface AgentSection {
-  id: 'overview' | 'skills' | 'cinemas' | 'guide' | 'build'
+export interface AgentSection {
+  id: 'overview' | 'skills' | 'cinemas' | 'guide' | 'build' | 'damage'
   index: string
   label: string
   lede: string
@@ -36,6 +36,12 @@ export const AGENT_SECTIONS: AgentSection[] = [
     label: '配装',
     lede: '局外面板计算：核心、音擎、4+2、主副词条。',
   },
+  {
+    id: 'damage',
+    index: '06',
+    label: '伤害',
+    lede: '20 秒参考轴与单次异放：0+1 / 2+1 / 6+1 同口径对比。',
+  },
 ]
 
 export const SECTION_IDS = AGENT_SECTIONS.map((section) => section.id)
@@ -47,6 +53,7 @@ export const LEGACY_TAB_MAP: Record<string, AgentSection['id']> = {
   cinemas: 'cinemas',
   guide: 'guide',
   build: 'build',
+  damage: 'damage',
 }
 
 export function resolveSection(hashOrTab?: string | null): AgentSection['id'] | null {

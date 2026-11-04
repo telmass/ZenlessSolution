@@ -188,13 +188,18 @@ export interface Agent {
 }
 
 export interface AgentIndexItem {
+  id: string
   slug: string
+  en: string
   name: string
   fullName: string
   rarity: string
   element: string
   specialty: string
   faction: string
+  /** Whether this agent has a completed dossier and clickable detail page. */
+  available: boolean
   avatar: string
+  full: string
   tags: string[]
 }

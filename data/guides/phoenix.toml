@@ -117,6 +117,13 @@ icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b
 engineId = "ep-212"
 refinement = 5
 
+[[weapons.items]]
+name = "嵌合编译器"
+stats = "S 级 · 基础攻击 684 · 穿透率 24%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png"
+engineId = "ep-214"
+refinement = 3
+
 [[driveBuilds]]
 name = "常驻套装： 4 自由蓝调 + 2 法厄同之歌"
 subPriority = [

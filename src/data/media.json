@@ -28,18 +28,18 @@
   "height": 160
  },
  {
-  "key": "agent:phoenix:cinema:1",
+  "key": "agent:phoenix:cinema:2",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/6c45212fd0b14e14556991389fcacfd3_2512902174911162122.png?x-oss-process=image/format,webp",
   "variant": "cinema",
-  "width": 720,
-  "height": 405
+  "width": 1440,
+  "height": 810
  },
  {
-  "key": "agent:phoenix:cinema:4",
+  "key": "agent:phoenix:cinema:3",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/0c1b6fba15c8ea02bf03be2ec579d687_6327523380981810275.png?x-oss-process=image/format,webp",
   "variant": "cinema",
-  "width": 720,
-  "height": 405
+  "width": 1440,
+  "height": 810
  },
  {
   "key": "engine:ep-2259:icon",
@@ -65,6 +65,13 @@
  {
   "key": "engine:ep-212:icon",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b8c620882b72deab5a23c7cdd_3200938913040663318.png",
+  "variant": "icon",
+  "width": 160,
+  "height": 160
+ },
+ {
+  "key": "engine:ep-214:icon",
+  "url": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png",
   "variant": "icon",
   "width": 160,
   "height": 160
@@ -135,13 +142,6 @@
  {
   "key": "engine:ep-211:icon",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/26/11536806/786a88680bf755b1c37354f661515b3f_3211677812825759924.png",
-  "variant": "icon",
-  "width": 160,
-  "height": 160
- },
- {
-  "key": "engine:ep-214:icon",
-  "url": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png",
   "variant": "icon",
   "width": 160,
   "height": 160

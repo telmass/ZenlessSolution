@@ -13,12 +13,14 @@
 | `sources/bangboo-wiki.json` | 邦布技能（主动/额外/连携）与中文档案（41 只） | `refresh_bangboo_wiki.py` 产物 |
 | `guides/phoenix.toml` | 攻略人工编辑源（加点、音擎、驱动盘、队伍、文字、毕业 spec） | **人工维护** |
 | `rules/panel.toml` | 面板规则（10 副词条、17 主词条、12 种二件套、固定值） | **人工维护** |
+| `rules/enemies.toml` | 伤害页敌人预设（标准 / 弱点 / 失衡 / 高抗） | **人工维护** |
 
 ## 生成链路
 
 ```bash
 python tools/import_phoenix.py   # data/ -> src/data/agents/phoenix.json + media.json
 python tools/import_codex.py     # 音擎/驱动盘/邦布 -> src/data/codex + 媒体键
+python tools/import_enemies.py   # rules/enemies.toml -> src/data/enemies.json
 python tools/refresh_bangboo_wiki.py  # 官方 WIKI 邦布技能/中文档案（手动联网）
 python tools/import_panel.py     # rules + sources -> src/data/panel.json
 python tools/sync_assets.py      # media.json -> public/assets/media/*.webp + manifest

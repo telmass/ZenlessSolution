@@ -44,6 +44,35 @@ def main() -> None:
         fail(errors, f"unexpected agent id: {agent['id']}")
     if agent["slug"] != "phoenix":
         fail(errors, f"unexpected slug: {agent['slug']}")
+    if not index or index[0].get("full") != "agent:phoenix:full":
+        fail(errors, "agent index missing the full-body media key")
+    if len(index) != 61:
+        fail(errors, f"agent index has {len(index)} entries, expected 61")
+    if index[0].get("slug") != "phoenix":
+        fail(errors, "phoenix should be the first agent-index entry")
+    slugs = [entry.get("slug") for entry in index]
+    if len(set(slugs)) != len(slugs):
+        fail(errors, "agent index contains duplicate slugs")
+    required_index_fields = (
+        "id",
+        "slug",
+        "en",
+        "name",
+        "fullName",
+        "rarity",
+        "element",
+        "specialty",
+        "faction",
+    )
+    for entry in index:
+        missing = [field for field in required_index_fields if not entry.get(field)]
+        if missing:
+            fail(errors, f"agent index entry {entry.get('slug')} missing: {missing}")
+        if not isinstance(entry.get("available"), bool):
+            fail(errors, f"agent index entry {entry.get('slug')} has non-boolean available")
+    open_slugs = [entry.get("slug") for entry in index if entry.get("available")]
+    if open_slugs != ["phoenix"]:
+        fail(errors, f"only phoenix should be open, got: {open_slugs}")
     if agent["rarity"] != "S" or agent["element"] != "火" or agent["specialty"] != "异常":
         fail(errors, "rarity/element/specialty mismatch")
 
@@ -96,6 +125,12 @@ def main() -> None:
         fail(errors, "cinema levels mismatch")
     if {c["level"] for c in cinemas if c["keyLevel"]} != {1, 6}:
         fail(errors, "key cinemas should be 1 and 6")
+    expected_cinema_images = ["agent:phoenix:cinema:2"] * 3 + ["agent:phoenix:cinema:3"] * 3
+    if [c["image"] for c in cinemas] != expected_cinema_images:
+        fail(
+            errors,
+            f"cinema backdrops mismatch: {[c['image'] for c in cinemas]} (L1-L3 share cinema:2, L4-L6 share cinema:3)",
+        )
 
     guide = agent["guide"]
     if len(guide["weapons"]) != 4:
@@ -165,6 +200,10 @@ def main() -> None:
         wiki = json.loads(wiki_path.read_text(encoding="utf-8"))
         if len(wiki.get("byName", {})) < 41:
             fail(errors, f"bangboo wiki entries = {len(wiki.get('byName', {}))}, expected >= 41")
+
+    enemies = json.loads((ROOT / "src" / "data" / "enemies.json").read_text(encoding="utf-8"))
+    if len(enemies) != 4:
+        fail(errors, f"enemies = {len(enemies)}, expected 4")
 
     payload = json.dumps(agent, ensure_ascii=False)
     if "TODO" in payload or "TODO" in json.dumps(guide, ensure_ascii=False):

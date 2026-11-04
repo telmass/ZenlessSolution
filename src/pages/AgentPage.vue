@@ -2,7 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import phoenix from '@/data/agents/phoenix.json'
-import type { Agent } from '@/types/agent'
+import index from '@/data/agents/index.json'
+import type { Agent, AgentIndexItem } from '@/types/agent'
 import { AGENT_SECTIONS, SECTION_IDS, resolveSection } from '@/constants/sections'
 import { useSectionSpy } from '@/composables/useSectionSpy'
 import AgentHero from '@/components/AgentHero.vue'
@@ -13,6 +14,7 @@ import SkillsSection from '@/components/SkillsSection.vue'
 import CinemasSection from '@/components/CinemasSection.vue'
 import GuideSection from '@/components/GuideSection.vue'
 import PanelSection from '@/components/PanelSection.vue'
+import DamageSection from '@/components/DamageSection.vue'
 
 const route = useRoute()
 const agent = phoenix as unknown as Agent
@@ -143,6 +145,9 @@ onBeforeUnmount(() => {
 })
 
 const notFound = computed(() => route.params.slug !== 'phoenix')
+const requested = computed(() =>
+  (index as unknown as AgentIndexItem[]).find((item) => item.slug === route.params.slug),
+)
 </script>
 
 <template>
@@ -202,6 +207,16 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
         />
         <PanelSection :agent="agent" />
       </section>
+
+      <section id="damage" class="chapter" aria-labelledby="damage-title">
+        <ChapterHead
+          index="06"
+          title="伤害"
+          title-id="damage-title"
+          :lede="AGENT_SECTIONS[5].lede"
+        />
+        <DamageSection :agent="agent" />
+      </section>
     </main>
 
     <Transition name="fade">
@@ -210,10 +225,19 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
   </div>
 
   <div v-else class="container empty">
-    <p class="eyebrow">Agent Not Found</p>
-    <h1>该代理人尚未接入</h1>
-    <p>当前先行复刻的是菲欧妮，其余代理人会在数据管线跑通后陆续开放。</p>
-    <RouterLink to="/agents/phoenix" class="empty__link">查看菲欧妮 →</RouterLink>
+    <p class="eyebrow">Agent · Locked</p>
+    <h1>{{ requested ? `「${requested.name}」未开放` : '该代理人尚未接入' }}</h1>
+    <p v-if="requested">
+      {{ requested.fullName }} 已在图鉴中登记，但完整档案仍在施工中。
+      当前先行开放的是菲欧妮。
+    </p>
+    <p v-else>当前先行开放的是菲欧妮，其余代理人会在数据管线跑通后陆续开放。</p>
+    <div class="empty__actions">
+      <RouterLink to="/agents" class="empty__link">返回代理人图鉴 →</RouterLink>
+      <RouterLink v-if="requested" to="/agents/phoenix" class="empty__link">
+        查看菲欧妮 →
+      </RouterLink>
+    </div>
   </div>
 </template>
 
@@ -301,6 +325,20 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
   display: inline-block;
   margin-top: 20px;
   color: var(--accent);
+}
+
+.empty__link + .empty__link {
+  color: var(--muted);
+}
+
+.empty__link + .empty__link:hover {
+  color: var(--accent);
+}
+
+.empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
 }
 
 @media (max-width: 600px) {
