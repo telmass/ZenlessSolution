@@ -4,6 +4,9 @@ import type { Agent, GuideGraduation } from '@/types/agent'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
 import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
+import { computePanel } from '@/core/panel/compute'
+import { graduation54, inputFromSpec } from '@/core/panel/presets'
+import { computePhoenixDamage, enemyById } from '@/core/damage'
 
 const props = defineProps<{ agent: Agent }>()
 
@@ -67,6 +70,31 @@ function graduationAnalysis(item: GuideGraduation, includePenValue = false) {
     includePenValue,
     budget: item.spec.budget,
   })
+}
+
+const cinemaGains = computed(() => {
+  const enemy = enemyById('standard')
+  const panel = computePanel(inputFromSpec(props.agent, graduation54))
+  const totals = [0, 1, 2, 4, 6].map((cinema) =>
+    computePhoenixDamage(
+      props.agent,
+      panel.stats,
+      { cinema, refinement: 1, coreLevel: 'F', engineId: 'ep-2259' },
+      enemy,
+    ).axis.total,
+  )
+  const steps = [1, 2, 4, 6]
+  return Object.fromEntries(
+    steps.map((level, index) => [level, totals[index + 1] / totals[index] - 1]),
+  ) as Record<number, number>
+})
+
+function cinemaGain(line: string): { label: string; value: number; from: string } | null {
+  const match = /^L([1246])\b/.exec(line)
+  if (!match) return null
+  const level = Number(match[1])
+  const from = { 1: '0+1', 2: '1+1', 4: '2+1', 6: '4+1' }[level]
+  return { label: `L${level}`, value: cinemaGains.value[level], from: from ?? '' }
 }
 
 function graduationLabel(item: GuideGraduation): string {
@@ -280,8 +308,21 @@ function graduationLabel(item: GuideGraduation): string {
         <article v-for="text in guide.texts" :key="text.title" class="text">
           <h4>{{ text.title }}</h4>
           <ol>
-            <li v-for="(line, index) in text.lines" :key="index">{{ line }}</li>
+            <li v-for="(line, index) in text.lines" :key="index">
+              <span
+                v-if="text.title === '影画要点' && cinemaGain(line)"
+                class="cinema-gain"
+                :title="`相对 ${cinemaGain(line)!.from} 的 20s 轴总伤增量`"
+              >
+                {{ cinemaGain(line)!.label }}
+                +{{ (cinemaGain(line)!.value * 100).toFixed(1) }}%
+              </span>
+              {{ line }}
+            </li>
           </ol>
+          <p v-if="text.title === '影画要点'" class="cinema-gain-note">
+            百分比为 20s 参考轴相对上一影画的增量：0+1 → 1+1 → 2+1 → 4+1 → 6+1；技能 +2 未计入。
+          </p>
         </article>
       </div>
     </section>
@@ -906,6 +947,26 @@ function graduationLabel(item: GuideGraduation): string {
   color: var(--text-2);
   font-size: var(--fs-13);
   line-height: 1.8;
+}
+
+.cinema-gain {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  line-height: 1.6;
+  vertical-align: 1px;
+}
+
+.cinema-gain-note {
+  margin-top: var(--s2);
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
 }
 
 /* sources */

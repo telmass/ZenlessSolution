@@ -40,7 +40,7 @@ export const AGENT_SECTIONS: AgentSection[] = [
     id: 'damage',
     index: '06',
     label: '伤害',
-    lede: '20 秒参考轴与单次异放：0+1 / 2+1 / 6+1 同口径对比。',
+    lede: '20 秒参考轴与单次异放：0+1 / 2+1 / 4+1 / 6+1 同口径对比。',
   },
 ]
 

@@ -61,6 +61,15 @@ const CONFIGS: DamageConfig[] = [
     note: '主流毕业 C2',
   },
   {
+    id: '4+1',
+    label: '4+1',
+    cinema: 4,
+    engineId: 'ep-2259',
+    refinement: 1,
+    spec: graduation54,
+    note: 'C4 额外异放',
+  },
+  {
     id: '6+1',
     label: '6+1',
     cinema: 6,
@@ -77,6 +86,15 @@ const CONFIGS: DamageConfig[] = [
     refinement: 1,
     spec: graduation54,
     note: '壳中之灵，无专武',
+  },
+  {
+    id: '0+1 朔月',
+    label: '0+1 朔月',
+    cinema: 0,
+    engineId: 'ep-1964',
+    refinement: 1,
+    spec: graduation54,
+    note: '朔月裁霜，限定下位',
   },
   {
     id: '0+1 平民',
@@ -98,7 +116,7 @@ const CONFIGS: DamageConfig[] = [
   },
 ]
 
-const selected = ref(['0+1', '2+1', '6+1'])
+const selected = ref(['0+1', '2+1', '4+1', '6+1'])
 const enemyId = ref('standard')
 const singleMode = ref<CritMode>('expected')
 const copied = ref(false)
@@ -129,6 +147,24 @@ const visible = computed(() =>
   selected.value.map((id) => all.value.find((item) => item.id === id)).filter(Boolean) as ComputedConfig[],
 )
 const singleConfig = computed(() => visible.value[0] ?? baseline.value)
+const ENGINE_NAMES: Record<string, string> = {
+  'ep-2259': '涅槃初翎',
+  'ep-1883': '壳中之灵',
+  'ep-1964': '朔月裁霜',
+  'ep-212': '双生泣星',
+}
+
+function engineName(item: ComputedConfig) {
+  return ENGINE_NAMES[item.engineId] ?? item.label
+}
+
+function engineNote(item: ComputedConfig) {
+  if (item.id === '0+1') return '专武基准'
+  if (item.id === '0+0') return '无专武 · 白板'
+  if (item.id === '0+1 朔月') return '限定下位 · 纯白板'
+  if (item.id === 'A5') return 'A 级 · 零氪'
+  return item.note
+}
 const single = computed(() =>
   computeSingleRelease(props.agent, singleConfig.value.panel.stats, singleConfig.value.build, enemy.value, singleMode.value),
 )
@@ -170,7 +206,8 @@ const attribution = computed(() => {
   return [
     { from: '0+1', to: '1+1', label: 'C1' },
     { from: '1+1', to: '2+1', label: 'C2' },
-    { from: '2+1', to: '6+1', label: 'C3–C6' },
+    { from: '2+1', to: '4+1', label: 'C4' },
+    { from: '4+1', to: '6+1', label: 'C6' },
   ].map((step) => {
     const before = map.get(step.from)
     const after = map.get(step.to)
@@ -193,6 +230,17 @@ const metricRows = computed(() =>
     relative: relative(item),
   })),
 )
+
+const engineRows = computed(() => {
+  const ids = ['0+1', '0+0', '0+1 朔月', 'A5']
+  return ids
+    .map((id) => all.value.find((item) => item.id === id))
+    .filter((item): item is ComputedConfig => Boolean(item))
+    .map((item) => ({
+      ...item,
+      relative: total(item) / total(baseline.value),
+    }))
+})
 
 function markdown() {
   const header = ['指标', ...visible.value.map((item) => item.label)]
@@ -270,6 +318,39 @@ async function copyMarkdown() {
       </div>
       <p class="damage-meta" :title="enemy.note">
         {{ singleConfig.label }} · {{ enemy.label }} · {{ singleMode === 'expected' ? '期望' : singleMode === 'crit' ? '必暴' : '不暴' }}
+      </p>
+    </section>
+
+    <section class="damage-engines">
+      <div class="damage-engines__head">
+        <h3>音擎对比</h3>
+        <span>仅攻略推荐音擎 · 专武精 1 = 100%</span>
+      </div>
+      <div class="damage-table-wrap">
+        <table class="damage-table">
+          <thead>
+            <tr>
+              <th>音擎</th>
+              <th>单次异放</th>
+              <th>轴总伤</th>
+              <th>相对专武</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in engineRows" :key="item.id" :class="{ 'is-total': item.id === '0+1' }">
+              <th>
+                {{ engineName(item) }}
+                <small>精 {{ item.refinement }} · {{ engineNote(item) }}</small>
+              </th>
+              <td class="num">{{ format(item.damage.single.total) }}</td>
+              <td class="num">{{ format(total(item)) }}</td>
+              <td class="num">{{ percent(item.relative) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="damage-meta">
+        同为 0 影画、54 词条、标准木桩、20s 参考轴；不带入其他未推荐音擎。
       </p>
     </section>
 
@@ -579,9 +660,28 @@ async function copyMarkdown() {
 }
 
 .damage-attribution,
-.damage-assumptions {
+.damage-assumptions,
+.damage-engines {
   display: grid;
   gap: 6px;
+}
+
+.damage-engines__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+
+.damage-engines__head h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-18);
+  font-weight: 600;
+}
+
+.damage-engines__head span {
+  color: var(--muted);
+  font-size: var(--fs-11);
 }
 
 .damage-attribution h3,
