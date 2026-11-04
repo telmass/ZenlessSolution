@@ -170,13 +170,13 @@ function engineName(item: ComputedConfig) {
   return ENGINE_NAMES[item.engineId] ?? item.label
 }
 
-function engineNote(item: ComputedConfig) {
-  if (item.id === '0+1') return '专武基准'
-  if (item.id === '0+0') return '无专武 · 白板'
-  if (item.id === '0+1 朔月') return '限定下位 · 纯白板'
-  if (item.id === 'A5') return 'A 级 · 零氪'
-  if (item.id === '0+1 嵌合') return '常驻下位'
-  return item.note
+function engineEffectText(item: ComputedConfig) {
+  if (item.id === '0+1') return '+90 精通 / +40% 火伤'
+  if (item.id === '0+0') return '+90 精通'
+  if (item.id === '0+1 朔月') return '无生效效果'
+  if (item.id === 'A5') return '+192 精通（4 层）'
+  if (item.id === '0+1 嵌合') return '+111 精通（3 层）/ +18% 攻击'
+  return '—'
 }
 const single = computed(() =>
   computeSingleRelease(props.agent, singleConfig.value.panel.stats, singleConfig.value.build, enemy.value, singleMode.value),
@@ -287,9 +287,7 @@ async function copyMarkdown() {
 <template>
   <div class="damage">
     <div class="damage-toolbar">
-      <p class="damage-note">
-        20 秒参考轴，技能固定 12 级、核心 F、驱动盘与主词条固定。轴长与事件次数是假设，不是实战模拟。
-      </p>
+      <span class="damage-axis">20s 参考轴</span>
       <label class="damage-enemy">
         <span>敌人</span>
         <select v-model="enemyId">
@@ -304,7 +302,6 @@ async function copyMarkdown() {
         :key="config.id"
         class="damage-chip"
         :class="{ 'is-active': selected.includes(config.id) }"
-        :title="config.note"
         @click="toggle(config.id)"
       >
         {{ config.label }}
@@ -318,7 +315,7 @@ async function copyMarkdown() {
           <span class="damage-kicker">单次焚罪异放 · 失衡 1.5×</span>
           <b class="num">{{ format(single.total) }}</b>
         </div>
-        <div class="damage-modes" role="group" aria-label="暴击口径">
+        <div class="damage-modes" role="group" aria-label="暴击计算方式">
           <button
             v-for="mode in (['expected', 'crit', 'none'] as const)"
             :key="mode"
@@ -329,7 +326,7 @@ async function copyMarkdown() {
           </button>
         </div>
       </div>
-      <p class="damage-meta" :title="enemy.note">
+      <p class="damage-meta">
         {{ singleConfig.label }} · {{ enemy.label }} · {{ singleMode === 'expected' ? '期望' : singleMode === 'crit' ? '必暴' : '不暴' }}
       </p>
     </section>
@@ -337,13 +334,14 @@ async function copyMarkdown() {
     <section class="damage-engines">
       <div class="damage-engines__head">
         <h3>音擎对比</h3>
-        <span>仅攻略推荐音擎 · 专武精 1 = 100%</span>
+        <span>专武精 1 = 100%</span>
       </div>
       <div class="damage-table-wrap">
         <table class="damage-table">
           <thead>
             <tr>
               <th>音擎</th>
+              <th>局内 effect</th>
               <th>单次异放</th>
               <th>轴总伤</th>
               <th>相对专武</th>
@@ -353,8 +351,9 @@ async function copyMarkdown() {
             <tr v-for="item in engineRows" :key="item.id" :class="{ 'is-total': item.id === '0+1' }">
               <th>
                 {{ engineName(item) }}
-                <small>精 {{ item.refinement }} · {{ engineNote(item) }}</small>
+                <small>精 {{ item.refinement }}</small>
               </th>
+              <td class="effect-cell">{{ engineEffectText(item) }}</td>
               <td class="num">{{ format(item.damage.single.total) }}</td>
               <td class="num">{{ format(total(item)) }}</td>
               <td class="num">{{ percent(item.relative) }}</td>
@@ -362,12 +361,6 @@ async function copyMarkdown() {
           </tbody>
         </table>
       </div>
-      <p class="damage-meta">
-        同为 0 影画、54 词条、标准木桩、20s 参考轴；不带入其他未推荐音擎。局内 effect 已计入：
-        壳中之灵 +90 精通，双生泣星按 4 层 +192 精通，嵌合编译器按 3 层 +111 精通与 +18% 攻击，
-        涅槃初翎 +90 精通与 +40% 火伤；朔月裁霜的冰伤/异放增伤对火属性不触发。以上是 100% 覆盖上限，
-        不等同于抽取推荐顺序；双生泣星需要维持 4 层。
-      </p>
     </section>
 
     <div class="damage-table-wrap">
@@ -419,7 +412,6 @@ async function copyMarkdown() {
 
     <section class="damage-attribution">
       <h3>影画增量归因</h3>
-      <p class="damage-meta">同一 54 词条预算、技能 12 级；音擎/词条差异不计入影画归因。</p>
       <div class="damage-steps">
         <div v-for="step in attribution" :key="step.from">
           <span>{{ step.label }} · {{ step.from }} → {{ step.to }}</span>
@@ -461,14 +453,6 @@ async function copyMarkdown() {
         </table>
       </div>
     </details>
-
-    <div class="damage-assumptions">
-      <h3>口径与假设</h3>
-      <ul>
-        <li v-for="item in baseline.damage.axis.assumptions" :key="item">{{ item }}</li>
-        <li>{{ enemy.label }}：{{ enemy.note }}</li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -488,11 +472,10 @@ async function copyMarkdown() {
   border-bottom: 1px solid var(--line);
 }
 
-.damage-note {
-  max-width: 76ch;
+.damage-axis {
   color: var(--muted);
-  font-size: var(--fs-13);
-  line-height: 1.75;
+  font-size: var(--fs-11);
+  letter-spacing: 0.12em;
 }
 
 .damage-enemy {
@@ -676,7 +659,6 @@ async function copyMarkdown() {
 }
 
 .damage-attribution,
-.damage-assumptions,
 .damage-engines {
   display: grid;
   gap: 6px;
@@ -700,8 +682,16 @@ async function copyMarkdown() {
   font-size: var(--fs-11);
 }
 
-.damage-attribution h3,
-.damage-assumptions h3 {
+.damage-engines .damage-table {
+  min-width: 820px;
+}
+
+.effect-cell {
+  color: var(--text-2) !important;
+  font-size: var(--fs-11);
+}
+
+.damage-attribution h3 {
   font-family: var(--font-display);
   font-size: var(--fs-18);
   font-weight: 600;
@@ -746,15 +736,6 @@ async function copyMarkdown() {
 
 .damage-events[open] summary {
   margin-bottom: var(--s3);
-}
-
-.damage-assumptions ul {
-  display: grid;
-  gap: 4px;
-  padding-left: 16px;
-  color: var(--muted);
-  font-size: var(--fs-11);
-  line-height: 1.7;
 }
 
 @media (max-width: 820px) {
