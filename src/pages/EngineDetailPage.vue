@@ -65,15 +65,18 @@ const hasRefinements = computed(() => (engine.value?.effect.refinements.length ?
       <section class="detail-section">
         <div class="detail-section__head">
           <h2>音擎特效</h2>
-          <div v-if="hasRefinements" class="refinements" role="group" aria-label="精炼阶数">
-            <button
-              v-for="level in [1, 2, 3, 4, 5]"
-              :key="level"
-              :class="{ 'is-active': refinement === level }"
-              @click="refinement = level"
-            >
-              R{{ level }}
-            </button>
+          <div v-if="hasRefinements" class="refine-control">
+            <span>精炼</span>
+            <div class="refinements" role="group" aria-label="精炼阶数">
+              <button
+                v-for="level in [1, 2, 3, 4, 5]"
+                :key="level"
+                :class="{ 'is-active': refinement === level }"
+                @click="refinement = level"
+              >
+                R{{ level }}
+              </button>
+            </div>
           </div>
         </div>
 

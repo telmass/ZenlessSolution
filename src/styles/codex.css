@@ -353,6 +353,18 @@
   max-width: 82ch;
 }
 
+.refine-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.refine-control > span {
+  color: var(--muted);
+  font-size: var(--fs-11);
+  letter-spacing: 0.1em;
+}
+
 .refinements {
   display: flex;
   gap: 4px;
