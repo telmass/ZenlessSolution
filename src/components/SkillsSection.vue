@@ -82,10 +82,16 @@ const categories = computed(() => props.agent.skills)
             v-if="isOpen(category.key, moveIndex)"
             :id="`move-${category.key}-${moveIndex}`"
             class="move__detail"
+            :class="{ 'has-growth': Boolean(growthOf(move, category.key === 'core')) }"
           >
-            <RichText :text="move.text" class="move__text" />
+            <div class="move__copy">
+              <RichText :text="move.text" class="move__text" />
+              <p class="move__note">
+                1–16 级为图鉴成长表；实战等级上限受影画影响（3 影 +2、5 影 +2，对应类别上限 14 / 16）。
+              </p>
+            </div>
 
-            <template v-if="growthOf(move, category.key === 'core')">
+            <div v-if="growthOf(move, category.key === 'core')" class="move__growth">
               <div class="move__toolbar">
                 <template v-if="category.key !== 'core'">
                   <div class="levels" role="group" aria-label="技能等级">
@@ -133,11 +139,7 @@ const categories = computed(() => props.agent.skills)
                   </li>
                 </ul>
               </div>
-            </template>
-
-            <p class="move__note">
-              1–16 级为图鉴成长表；实战等级上限受影画影响（3 影 +2、5 影 +2，对应类别上限 14 / 16）。
-            </p>
+            </div>
           </div>
         </li>
       </ul>
@@ -216,6 +218,9 @@ const categories = computed(() => props.agent.skills)
 }
 
 .move__preview {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
   color: var(--muted);
   font-size: var(--fs-12);
   white-space: nowrap;
@@ -239,6 +244,28 @@ const categories = computed(() => props.agent.skills)
 
 .move__detail {
   padding: 0 0 var(--s6);
+}
+
+.move__copy,
+.move__growth {
+  min-width: 0;
+}
+
+@media (min-width: 1200px) {
+  .move__detail.has-growth {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--s8);
+    align-items: start;
+  }
+
+  .move__detail.has-growth .move__toolbar {
+    margin-top: 0;
+  }
+
+  .move__copy {
+    max-width: 60ch;
+  }
 }
 
 .move__text {
@@ -353,3 +380,4 @@ const categories = computed(() => props.agent.skills)
   }
 }
 </style>
+

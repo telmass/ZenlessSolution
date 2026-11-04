@@ -51,7 +51,8 @@ brand-fidelity: 8
 - 色板：`#070709` 底、`#101015` 面、`#23232c` 发丝线、`#f3f1ea` 正文、`#8f8c82` 次要、`#f0df4e` 品牌、`#ff6a3d` 角色元素色。
 - 字体：Barlow Condensed 600/700（Latin/数字）+ Noto Sans SC（中文），全局 ≤ 2 族；`public/fonts/` 自托管，OFL 许可。
 - 字号：11/12/13/15/16/18/22/28/36/52/clamp；正文 16px / 1.72。
-- 间距：4px 基准；章节 padding 80（移动 48），章节间距 80。
+- 宽度：内容容器 1240 → **1400px**，减少宽屏两侧空带；章节 padding 80 → **64px**（移动 40px）。
+- 间距：4px 基准；章节 padding 64（移动 40），章节间距 64。
 - 形状：结构面 0 圆角、控件 2px、头像圆形；移除卡片 12px 圆角与大面积阴影。
 - 去掉了 `PROFILE / KEY CINEMA / PRIORITY / W-ENGINE / REFERENCE PANEL` 等装饰性英文微标签，只保留 `Lv.60`、`54 词条`、`精 1` 这类真实元信息。
 
@@ -66,10 +67,10 @@ brand-fidelity: 8
 | `components/ChapterHead.vue` | 新增：章节数字 + 标题 + 导语；无英文微标签 |
 | `components/AgentHero.vue` | 删除重复 meta；增加攻略/配装锚点；降低高度 |
 | `components/OverviewSection.vue` | 去卡片：档案定义表 + 面板账本 + 核心机制块 |
-| `components/SkillsSection.vue` | 重写：6 类全展开 + 单招式手风琴 + 12 级预览 |
+| `components/SkillsSection.vue` | 重写：6 类全展开 + 单招式手风琴 + 12 级预览；≥1200px 时说明与成长表两栏 |
 | `core/skills/preview.ts` | 新增：从成长表提取 12 级伤害/失衡/段数 |
-| `components/CinemasSection.vue` | 重写：纵向时间轴；film 图标水印；保留 `cinema-N` |
-| `components/GuideSection.vue` | 去卡片/去内部编号；规格表、数字块、名单、三栏文本 |
+| `components/CinemasSection.vue` | 重写：纵向时间轴 + 右侧影画故事栏；保留 `cinema-N` |
+| `components/GuideSection.vue` | 去卡片/去内部编号；音擎推荐改 2×2 规格格，长文/表格填满宽度 |
 | `components/PanelSection.vue` | 4 张表单卡改为分组发丝线；结果面板 sticky 偏移更新 |
 | `styles/tokens.css` / `base.css` / `fonts.css` | 新 token、章节壳、字体、reduced-motion |
 

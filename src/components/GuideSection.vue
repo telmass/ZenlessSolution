@@ -93,13 +93,14 @@ function graduationLabel(item: GuideGraduation): string {
 
     <section class="block">
       <h3>音擎推荐</h3>
-      <div class="weapons">
-        <article v-for="tier in guide.weapons" :key="tier.tier" class="weapon-tier">
-          <header>
-            <h4>{{ tier.tier }}</h4>
-            <p v-if="tier.note">{{ tier.note }}</p>
-          </header>
-          <div class="weapon-tier__items">
+      <div class="weapon-table">
+        <div v-for="(tier, index) in guide.weapons" :key="tier.tier" class="weapon-row">
+          <div class="weapon-row__tier">
+            <span class="num">0{{ index + 1 }}</span>
+            <b>{{ tier.tier }}</b>
+          </div>
+
+          <div class="weapon-row__engines">
             <div v-for="item in tier.items" :key="item.name" class="weapon">
               <img v-if="media(item.icon)" :src="media(item.icon)" :alt="item.name" loading="lazy" />
               <div>
@@ -111,7 +112,9 @@ function graduationLabel(item: GuideGraduation): string {
               </div>
             </div>
           </div>
-        </article>
+
+          <p v-if="tier.note" class="weapon-row__note">{{ tier.note }}</p>
+        </div>
       </div>
     </section>
 
@@ -421,46 +424,57 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 /* engines */
-.weapons {
+.weapon-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--s8);
   border-top: 1px solid var(--line);
 }
 
-.weapon-tier {
+.weapon-row {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: var(--s6);
-  padding: var(--s5) 0;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: start;
+  padding: var(--s4) 0;
   border-bottom: 1px solid var(--line);
 }
 
-.weapon-tier h4 {
-  color: var(--accent);
-  font-size: var(--fs-15);
-}
-
-.weapon-tier header p {
-  margin-top: var(--s2);
-  color: var(--muted);
-  font-size: var(--fs-12);
-  line-height: 1.75;
-}
-
-.weapon-tier__items {
+.weapon-row__tier {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--s5);
+  align-items: baseline;
+  gap: 6px;
+  padding-top: 3px;
+}
+
+.weapon-row__tier span {
+  color: var(--accent);
+  font-size: var(--fs-11);
+  opacity: 0.7;
+}
+
+.weapon-row__tier b {
+  color: var(--text);
+  font-size: var(--fs-13);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.weapon-row__engines {
+  grid-column: 2;
+  display: grid;
+  gap: 10px;
 }
 
 .weapon {
   display: flex;
-  flex: 1 1 260px;
   gap: var(--s3);
   align-items: flex-start;
 }
 
 .weapon img {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -485,6 +499,14 @@ function graduationLabel(item: GuideGraduation): string {
   margin-top: 2px;
   color: var(--muted);
   font-size: var(--fs-12);
+}
+
+.weapon-row__note {
+  grid-column: 2;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 /* drive discs */
@@ -866,9 +888,17 @@ function graduationLabel(item: GuideGraduation): string {
     border-top: 1px solid var(--line);
   }
 
-  .weapon-tier {
+  .weapon-table {
     grid-template-columns: 1fr;
-    gap: var(--s3);
+  }
+
+  .weapon-row {
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: var(--s3) var(--s5);
+  }
+
+  .weapon-row__note {
+    grid-column: 2;
   }
 
   .texts {
@@ -880,10 +910,18 @@ function graduationLabel(item: GuideGraduation): string {
   .guide__lead {
     flex-direction: column;
     align-items: flex-start;
+    gap: var(--s4);
   }
 
   .guide__effective {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
     text-align: left;
+  }
+
+  .guide__effective b {
+    font-size: var(--fs-36);
   }
 
   .build__sets,
@@ -896,6 +934,15 @@ function graduationLabel(item: GuideGraduation): string {
 @media (max-width: 560px) {
   .priority {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .weapon-row {
+    grid-template-columns: 1fr;
+  }
+
+  .weapon-row__engines,
+  .weapon-row__note {
+    grid-column: 1;
   }
 
   .build__stats table {

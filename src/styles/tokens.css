@@ -30,7 +30,7 @@
   --shadow-nav: 0 10px 30px rgba(0, 0, 0, 0.32);
 
   /* layout */
-  --maxw: 1240px;
+  --maxw: 1400px;
   --header-h: 64px;
   --chapter-nav-h: 52px;
   --anchor-offset: calc(var(--header-h) + var(--chapter-nav-h) + 16px);

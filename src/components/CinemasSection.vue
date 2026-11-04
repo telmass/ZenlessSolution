@@ -8,10 +8,6 @@ defineProps<{ agent: Agent }>()
 
 <template>
   <div class="cinema-timeline">
-    <header class="cinema-timeline__intro">
-      <p>{{ agent.guide.cinemaPriority.note || '影画 1–6，按解锁顺序阅读；标注关键的是收益最高的档位。' }}</p>
-    </header>
-
     <ol class="cinema-list">
       <li
         v-for="cinema in agent.cinemas"
@@ -38,24 +34,18 @@ defineProps<{ agent: Agent }>()
             <span v-if="cinema.keyLevel" class="cinema__key">关键</span>
           </header>
           <RichText :text="cinema.effect" class="cinema__effect" />
-          <details v-if="cinema.story" class="cinema__story">
-            <summary>影画故事</summary>
-            <p>{{ cinema.story }}</p>
-          </details>
         </div>
+
+        <aside v-if="cinema.story" class="cinema__story">
+          <span class="cinema__story-label">影画故事</span>
+          <p>{{ cinema.story }}</p>
+        </aside>
       </li>
     </ol>
   </div>
 </template>
 
 <style scoped>
-.cinema-timeline__intro {
-  max-width: var(--measure);
-  margin-bottom: var(--s6);
-  color: var(--muted);
-  font-size: var(--fs-13);
-}
-
 .cinema-list {
   position: relative;
   display: grid;
@@ -73,7 +63,7 @@ defineProps<{ agent: Agent }>()
 
 .cinema {
   display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
+  grid-template-columns: 96px minmax(0, 1.05fr) minmax(0, 1fr);
   gap: var(--s5);
   padding: var(--s5) 0;
   border-bottom: 1px solid var(--line);
@@ -123,7 +113,7 @@ defineProps<{ agent: Agent }>()
 }
 
 .cinema__body {
-  max-width: 78ch;
+  max-width: 92ch;
   padding-top: 2px;
 }
 
@@ -154,36 +144,35 @@ defineProps<{ agent: Agent }>()
 }
 
 .cinema__story {
-  margin-top: var(--s3);
+  padding-left: var(--s5);
+  border-left: 1px solid var(--line);
 }
 
-.cinema__story summary {
+.cinema__story-label {
   color: var(--muted);
-  font-size: var(--fs-12);
-  cursor: pointer;
-  list-style: none;
-}
-
-.cinema__story summary::-webkit-details-marker {
-  display: none;
-}
-
-.cinema__story summary::before {
-  content: "＋";
-  margin-right: 6px;
-  color: var(--accent);
-}
-
-.cinema__story[open] summary::before {
-  content: "－";
+  font-size: var(--fs-11);
+  letter-spacing: 0.12em;
 }
 
 .cinema__story p {
-  margin-top: var(--s2);
+  margin-top: 6px;
   color: var(--muted);
   font-size: var(--fs-12);
   line-height: 1.9;
   white-space: pre-line;
+}
+
+@media (max-width: 1100px) {
+  .cinema {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+
+  .cinema__story {
+    grid-column: 2;
+    padding-left: 0;
+    border-left: 0;
+    margin-top: var(--s3);
+  }
 }
 
 @media (max-width: 720px) {
