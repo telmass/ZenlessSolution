@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import phoenix from '@/data/agents/phoenix.json'
 import type { Agent } from '@/types/agent'
 import { media, mediaColor } from '@/lib/media'
@@ -113,6 +113,36 @@ const agent = phoenix as unknown as Agent
       </div>
     </section>
 
+    <section class="section container">
+      <div class="section-title">
+        <h2>图鉴</h2>
+        <small>W-ENGINE / DRIVE DISC / BANGBOO</small>
+      </div>
+
+      <div class="feature-grid">
+        <RouterLink to="/engines" class="feature card">
+          <span class="feature__index num">01</span>
+          <h3>音擎</h3>
+          <p>101 把音擎的基础攻击、高级属性与精炼 1–5 特效。</p>
+          <span class="feature__link">浏览音擎 →</span>
+        </RouterLink>
+
+        <RouterLink to="/drives" class="feature card">
+          <span class="feature__index num">02</span>
+          <h3>驱动盘</h3>
+          <p>30 套驱动盘的二件套 / 四件套效果与主词条池。</p>
+          <span class="feature__link">浏览驱动盘 →</span>
+        </RouterLink>
+
+        <RouterLink to="/bangboo" class="feature card">
+          <span class="feature__index num">03</span>
+          <h3>邦布</h3>
+          <p>42 只邦布的评级、基础属性、代号与档案描述。</p>
+          <span class="feature__link">浏览邦布 →</span>
+        </RouterLink>
+      </div>
+    </section>
+
     <section class="section container roadmap">
       <div class="section-title">
         <h2>建设进度</h2>
@@ -122,9 +152,10 @@ const agent = phoenix as unknown as Agent
         <li class="is-done"><b>M0</b> 站点骨架与设计令牌</li>
         <li class="is-done"><b>M1</b> 菲欧妮数据与本地 WebP 资产</li>
         <li class="is-done"><b>M2</b> 代理人档案 / 技能 / 影画 / 攻略</li>
-        <li><b>M3</b> 面板计算器与毕业面板实算</li>
-        <li><b>M4</b> 有效词条与配置对比（0+1 基准）</li>
-        <li><b>M5</b> 全量图鉴与其余代理人</li>
+        <li class="is-done"><b>M3</b> 音擎 / 驱动盘 / 邦布图鉴</li>
+        <li class="is-done"><b>M4</b> 面板计算器与毕业面板</li>
+        <li><b>M5</b> 有效词条与 0+1 配置对比</li>
+        <li><b>M6</b> 其余代理人接入</li>
       </ul>
     </section>
   </div>

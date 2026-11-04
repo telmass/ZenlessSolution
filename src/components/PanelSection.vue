@@ -69,7 +69,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   <div class="panel-section">
     <div class="panel-toolbar">
       <p class="panel-note">
-        只计算基础面板、核心技基础属性、音擎基础值与高级属性、驱动盘与二件套；音擎特效、核心被动与四件套等局内效果不计入。
+        只计算基础面板、核心技基础属性、音擎基础值与高级属性、驱动盘的二件套；其余等局内效果不计入。
       </p>
       <div class="presets">
         <button
@@ -270,7 +270,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .panel-note {
-  max-width: 72ch;
+  max-width: none;
   color: var(--muted);
   font-size: var(--fs-13);
 }

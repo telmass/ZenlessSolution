@@ -1,0 +1,842 @@
+[
+ {
+  "id": "bb-54019",
+  "slug": "mercury",
+  "name": "「墨丘利」",
+  "en": "Mercury",
+  "codename": "「Mercury」",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/607a14ec2001dc4c8b6bac513ec81465.png",
+  "description": "A Bangboo uninterested in military merits is not a good soldier.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54009",
+  "slug": "resonaboo",
+  "name": "共鸣布",
+  "en": "Resonaboo",
+  "codename": "Resonaboo",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/496303043b0a29a7540db3aa4b365428.png",
+  "description": "Accumulating Ether energy...",
+  "stats": {
+   "hp": 396.0,
+   "atk": 65.0,
+   "def": 30.0,
+   "impact": 99.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 132.0
+  }
+ },
+ {
+  "id": "bb-54015",
+  "slug": "snap",
+  "name": "咔嚓仔",
+  "en": "Snap",
+  "codename": "Snap",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/8d885a558d46c83ccf905ffdde4e9c18.png",
+  "description": "Its flash only shines for true superstars.",
+  "stats": {
+   "hp": 479.0,
+   "atk": 64.0,
+   "def": 28.0,
+   "impact": 110.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54013",
+  "slug": "bangvolver",
+  "name": "左轮布",
+  "en": "Bangvolver",
+  "codename": "Bangvolver",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/de5706c516c1b7e60a8326a37a6331f9.png",
+  "description": "Today's Fortune: Amazing!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 65.0,
+   "def": 32.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 123.0
+  }
+ },
+ {
+  "id": "bb-54004",
+  "slug": "butler",
+  "name": "巴特勒",
+  "en": "Butler",
+  "codename": "Butler",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/3d07d335c2fb3cba40675cddd26cacb8.png",
+  "description": "A perfect butler for a perfect you.",
+  "stats": {
+   "hp": 479.0,
+   "atk": 64.0,
+   "def": 28.0,
+   "impact": 110.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54008",
+  "slug": "plugboo",
+  "name": "插头布",
+  "en": "Plugboo",
+  "codename": "Plugboo",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/37448cbc1eabc264c41c988467c7cc3d.png",
+  "description": "\"Beeeeep... beep... beep beep.\"",
+  "stats": {
+   "hp": 396.0,
+   "atk": 65.0,
+   "def": 30.0,
+   "impact": 99.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 132.0
+  }
+ },
+ {
+  "id": "bb-54014",
+  "slug": "agent-gulliver",
+  "name": "格列佛探员",
+  "en": "Agent Gulliver",
+  "codename": "Agent Gulliver",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/4c6bfe95c32d1a27e88be9e810bdd65d.png",
+  "description": "Security check! Open up!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 68.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 123.0
+  }
+ },
+ {
+  "id": "bb-54024",
+  "slug": "54024",
+  "name": "梦游布",
+  "en": "54024",
+  "codename": "54024",
+  "rank": "S",
+  "icon": null,
+  "description": "",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54020",
+  "slug": "birkblick",
+  "name": "比克布利克",
+  "en": "Birkblick",
+  "codename": "Birkblick",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/fab5b68c543fa311d559cb0602418ba8.png",
+  "description": "We're both caught in the camera's eye.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 64.0,
+   "def": 28.0,
+   "impact": 123.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 97.0
+  }
+ },
+ {
+  "id": "bb-54017",
+  "slug": "belion",
+  "name": "狮耶",
+  "en": "Belion",
+  "codename": "Belion",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/35a2e1eda8ca12c043c447942b0ba9c9.png",
+  "description": "The true essence of martial arts is the lightness and purity of heart.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54016",
+  "slug": "robin",
+  "name": "罗宾",
+  "en": "Robin",
+  "codename": "Robin",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/4de16c3c6ae19e0e282899a1c9535268.png",
+  "description": "Three, two, one! Don't blink!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 70.0,
+   "def": 28.0,
+   "impact": 117.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 117.0
+  }
+ },
+ {
+  "id": "bb-54018",
+  "slug": "miss-esme",
+  "name": "艾丝弥小姐",
+  "en": "Miss Esme",
+  "codename": "Miss Esme",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/1f4c4a50f0306e89205fe517411a473e.png",
+  "description": "In the name of Starshine, I shall alter the course of destiny!",
+  "stats": {
+   "hp": 479.0,
+   "atk": 64.0,
+   "def": 28.0,
+   "impact": 110.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54023",
+  "slug": "ariel",
+  "name": "艾瑞儿",
+  "en": "Ariel",
+  "codename": "Ariel",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/50b41af8f63e5a4758c369f536133043.png",
+  "description": "You cannot walk alone in the darkness.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54005",
+  "slug": "amillion",
+  "name": "艾米莉安",
+  "en": "Amillion",
+  "codename": "Amillion",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/aec6efcf230b47c5d4ed7dc9c7f9d83d.png",
+  "description": "A million Dennies in one Bangboo.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54021",
+  "slug": "sprout",
+  "name": "芽芽",
+  "en": "Sprout",
+  "codename": "Sprout",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/4ce3a8874166c82e5f1607548f3aae0a.png",
+  "description": "Don't underestimate our bond!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54011",
+  "slug": "red-moccus",
+  "name": "赤红莫库斯",
+  "en": "Red Moccus",
+  "codename": "Red Moccus",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/b993c8b80782ba748afaf8abc0e722b0.png",
+  "description": "I'll be waiting for you on the off-road section of the Outer Ring!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54022",
+  "slug": "ultra-jake",
+  "name": "超极杰克",
+  "en": "Ultra Jake",
+  "codename": "Ultra Jake",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/d0095b43b20acfb55a3f9c1ba64d33e1.png",
+  "description": "A super-spec En-Nah tech crystal.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54002",
+  "slug": "safety",
+  "name": "阿全",
+  "en": "Safety",
+  "codename": "Safety",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/a0b9027ab0fc7d20962b3b6e8a38e077.png",
+  "description": "Safety first, ehn-na second.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54012",
+  "slug": "officer-cui",
+  "name": "阿崔巡查",
+  "en": "Officer Cui",
+  "codename": "Officer Cui",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/cb9cebfb7ba32eb99f634d98c3243a9e.png",
+  "description": "Though it may be a Bangboo, it's even more intimidating than a Security Canine!",
+  "stats": {
+   "hp": 396.0,
+   "atk": 72.0,
+   "def": 28.0,
+   "impact": 103.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54010",
+  "slug": "biggest-fan",
+  "name": "阿饭",
+  "en": "Biggest Fan",
+  "codename": "BiggestFan",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/0c5e30c5dac24191cb057b1c3014860d.png",
+  "description": "An Angels of Delusion superfan for life!",
+  "stats": {
+   "hp": 479.0,
+   "atk": 64.0,
+   "def": 28.0,
+   "impact": 110.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 110.0
+  }
+ },
+ {
+  "id": "bb-54006",
+  "slug": "rocketboo",
+  "name": "飚速布",
+  "en": "Rocketboo",
+  "codename": "Rocketboo",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/b00f6ee153c2e9edbce68168b5e47498.png",
+  "description": "This Bangboo accelerates for 17.5 steps when running a hundred kilometers.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 69.0,
+   "def": 30.0,
+   "impact": 99.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 119.0
+  }
+ },
+ {
+  "id": "bb-54001",
+  "slug": "sharkboo",
+  "name": "鲨牙布",
+  "en": "Sharkboo",
+  "codename": "Sharkboo",
+  "rank": "S",
+  "icon": "https://cdn.gachabase.net/zzz/assets/fda5c52e6e0913508d916d1a77e710dd.png",
+  "description": "Seen in the distant seas and the seafood section of the fresh food market.",
+  "stats": {
+   "hp": 396.0,
+   "atk": 65.0,
+   "def": 30.0,
+   "impact": 99.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 132.0
+  }
+ },
+ {
+  "id": "bb-53013",
+  "slug": "baddieboo",
+  "name": "不良布",
+  "en": "Baddieboo",
+  "codename": "Baddieboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/ba56880a7e88a961fb483cc4c327c4c9.png",
+  "description": "Don't mess with it... It won't care if you're a human or Bangboo when it gets angry!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53019",
+  "slug": "bild-n-boolok",
+  "name": "乐玩布",
+  "en": "Bild N. Boolok",
+  "codename": "Bild N. Boolok",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/c42721d2597b60e28b039fa9b46af61c.png",
+  "description": "Don't step on the blocks barefoot.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53001",
+  "slug": "penguinboo",
+  "name": "企鹅布",
+  "en": "Penguinboo",
+  "codename": "Penguinboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/40799800f83d5d8c1562c46c6bd0dd46.png",
+  "description": "Widdly-waddly, icy and chilly.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 50.0,
+   "def": 30.0,
+   "impact": 90.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 120.0
+  }
+ },
+ {
+  "id": "bb-53014",
+  "slug": "overtimeboo",
+  "name": "加班布",
+  "en": "Overtimeboo",
+  "codename": "Overtimeboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/7978f83e53479d74eb2637315e8141ff.png",
+  "description": "Fatigue levels rising... Beep — now over 100!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53016",
+  "slug": "excaliboo",
+  "name": "圣剑布",
+  "en": "Excaliboo",
+  "codename": "Excaliboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/2437868bf103a9be3cf17a4b3803a957.png",
+  "description": "Only a sacred sword is needed to crown the true king.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53003",
+  "slug": "exploreboo",
+  "name": "寻宝布",
+  "en": "Exploreboo",
+  "codename": "Exploreboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/185d4f7e2042c498c57b48857173582e.png",
+  "description": "Beep-beep-beep-beep. Does that mean there treasure or that it's running outta battery?",
+  "stats": {
+   "hp": 436.0,
+   "atk": 49.0,
+   "def": 28.0,
+   "impact": 100.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53021",
+  "slug": "booltergeist",
+  "name": "幽浮布",
+  "en": "Booltergeist",
+  "codename": "Booltergeist",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/2255e8dc61107a21897bad4e937cb418.png",
+  "description": "Trick or play!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-54003",
+  "slug": "devilboo",
+  "name": "恶魔布",
+  "en": "Devilboo",
+  "codename": "Devilboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/8b279dee46680e89e0da660fccb69d23.png",
+  "description": "The only thing more tempting than a devil... is Devilboo!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 30.0,
+   "impact": 90.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 108.0
+  }
+ },
+ {
+  "id": "bb-53004",
+  "slug": "sumoboo",
+  "name": "扑击布",
+  "en": "Sumoboo",
+  "codename": "Sumoboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/5ba921b8c167060e5067fabe4ef1723e.png",
+  "description": "A sumo wrestler never retreats!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 47.0,
+   "def": 32.0,
+   "impact": 112.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 88.0
+  }
+ },
+ {
+  "id": "bb-53002",
+  "slug": "luckyboo",
+  "name": "招财布",
+  "en": "Luckyboo",
+  "codename": "Luckyboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/187b062dbef4d9f74bcc370706e4236e.png",
+  "description": "Takes up quite a bit of space when placed on the counter.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 50.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 112.0
+  }
+ },
+ {
+  "id": "bb-53008",
+  "slug": "avocaboo",
+  "name": "果核布",
+  "en": "Avocaboo",
+  "codename": "Avocaboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/8c4d5fc2c562ca54e3bb7c5f3c78d3fb.png",
+  "description": "A massive success among people who love veggie salads.",
+  "stats": {
+   "hp": 436.0,
+   "atk": 47.0,
+   "def": 32.0,
+   "impact": 100.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53015",
+  "slug": "brawlerboo",
+  "name": "格斗布",
+  "en": "Brawlerboo",
+  "codename": "Brawlerboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/eaae9ea0c25a7f996d707dfbac42b7ed.png",
+  "description": "Ten thousand en-nah forward punches as practice per day!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53012",
+  "slug": "booressure",
+  "name": "气压布",
+  "en": "Booressure",
+  "codename": "Booressure",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/d0d26618abe3d1a37ccf458e471c2e4d.png",
+  "description": "Understanding the mood of a conversation is key to becoming a Bangboo social expert.",
+  "stats": {
+   "hp": 436.0,
+   "atk": 47.0,
+   "def": 32.0,
+   "impact": 100.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53007",
+  "slug": "cryboo",
+  "name": "泪眼布",
+  "en": "Cryboo",
+  "codename": "Cryboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/cb3ae8c97d59453736ee3ce58d9c36bf.png",
+  "description": "Who knows what troubles plague a young Bangboo?",
+  "stats": {
+   "hp": 360.0,
+   "atk": 50.0,
+   "def": 30.0,
+   "impact": 90.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 120.0
+  }
+ },
+ {
+  "id": "bb-53010",
+  "slug": "electroboo",
+  "name": "电击布",
+  "en": "Electroboo",
+  "codename": "Electroboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/6159956141b78c70df8f8e947b7fb69d.png",
+  "description": "Bzzzt... Please wear insulated gloves when petting.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 50.0,
+   "def": 30.0,
+   "impact": 90.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 120.0
+  }
+ },
+ {
+  "id": "bb-53011",
+  "slug": "magnetiboo",
+  "name": "磁力布",
+  "en": "Magnetiboo",
+  "codename": "Magnetiboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/ceb8c4170b60f797b20ae8e0dbe33b22.png",
+  "description": "Suffering from anxiety caused by an attachment disorder. Treatment plan: Its master should refrain from wearing any metal accessories.",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53005",
+  "slug": "paperboo",
+  "name": "纸壳布",
+  "en": "Paperboo",
+  "codename": "Paperboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/fb851228e572cdb020d3b2649c6e75fa.png",
+  "description": "Always nostalgic over when it hatched from its shell.",
+  "stats": {
+   "hp": 436.0,
+   "atk": 47.0,
+   "def": 32.0,
+   "impact": 100.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53006",
+  "slug": "bagboo",
+  "name": "纸袋布",
+  "en": "Bagboo",
+  "codename": "Bagboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/4c2faf9f0f356aa457598674e287d99e.png",
+  "description": "There's a dark past hidden under that bag...",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53009",
+  "slug": "boollseye",
+  "name": "飞靶布",
+  "en": "Boollseye",
+  "codename": "Boollseye",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/d18aab9ac2fd10ab550d8acf0d0f9b1b.png",
+  "description": "Right in the bull's eye!",
+  "stats": {
+   "hp": 360.0,
+   "atk": 53.0,
+   "def": 32.0,
+   "impact": 94.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ },
+ {
+  "id": "bb-53017",
+  "slug": "knightboo",
+  "name": "骑士布",
+  "en": "Knightboo",
+  "codename": "Knightboo",
+  "rank": "A",
+  "icon": "https://cdn.gachabase.net/zzz/assets/df4d9ba9c5c2ab4a21770a99e313ef57.png",
+  "description": "My steed and I can both bounce to accelerate!",
+  "stats": {
+   "hp": 436.0,
+   "atk": 47.0,
+   "def": 32.0,
+   "impact": 100.0,
+   "critRate": 5.0,
+   "critDmg": 50.0,
+   "penRatio": 0.0,
+   "anomalyProficiency": 100.0
+  }
+ }
+]

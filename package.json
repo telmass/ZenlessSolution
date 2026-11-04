@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",
-    "data:build": "python tools/import_phoenix.py && python tools/import_panel.py",
+    "data:build": "python tools/import_phoenix.py && python tools/import_codex.py && python tools/import_panel.py",
     "data:check": "python tools/check_data.py",
     "assets:sync": "python tools/sync_assets.py",
     "assets:check": "python tools/check_assets.py",

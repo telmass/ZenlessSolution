@@ -19,6 +19,36 @@ const router = createRouter({
       component: () => import('@/pages/AgentPage.vue'),
     },
     {
+      path: '/engines',
+      name: 'engines',
+      component: () => import('@/pages/EngineListPage.vue'),
+    },
+    {
+      path: '/engines/:id',
+      name: 'engine',
+      component: () => import('@/pages/EngineDetailPage.vue'),
+    },
+    {
+      path: '/drives',
+      name: 'drives',
+      component: () => import('@/pages/DriveListPage.vue'),
+    },
+    {
+      path: '/drives/:id',
+      name: 'drive',
+      component: () => import('@/pages/DriveDetailPage.vue'),
+    },
+    {
+      path: '/bangboo',
+      name: 'bangboo',
+      component: () => import('@/pages/BangbooListPage.vue'),
+    },
+    {
+      path: '/bangboo/:slug',
+      name: 'bangboo-detail',
+      component: () => import('@/pages/BangbooDetailPage.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },

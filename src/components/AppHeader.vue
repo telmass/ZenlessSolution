@@ -8,9 +8,9 @@ const isAgent = computed(() => route.path.startsWith('/agents'))
 const nav = [
   { label: '首页', to: '/', match: (p: string) => p === '/' },
   { label: '代理人', to: '/agents', match: (p: string) => p.startsWith('/agents') },
-  { label: '音擎', to: '/engines', soon: true },
-  { label: '驱动盘', to: '/drives', soon: true },
-  { label: '邦布', to: '/bangboo', soon: true },
+  { label: '音擎', to: '/engines', match: (p: string) => p.startsWith('/engines') },
+  { label: '驱动盘', to: '/drives', match: (p: string) => p.startsWith('/drives') },
+  { label: '邦布', to: '/bangboo', match: (p: string) => p.startsWith('/bangboo') },
   { label: '计算器', to: '/calculator', soon: true },
 ]
 </script>

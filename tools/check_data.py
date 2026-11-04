@@ -150,6 +150,16 @@ def main() -> None:
             if "dmgBonus" not in {item["stat"] for item in panel["mainStats"]}:
                 fail(errors, "panel missing damage-bonus main stat")
 
+    codex_dir = ROOT / "src" / "data" / "codex"
+    for filename, expected_count in (
+        ("engines.json", 101),
+        ("sets.json", 30),
+        ("bangboo.json", 42),
+    ):
+        rows = json.loads((codex_dir / filename).read_text(encoding="utf-8"))
+        if len(rows) != expected_count:
+            fail(errors, f"{filename} = {len(rows)}, expected {expected_count}")
+
     payload = json.dumps(agent, ensure_ascii=False)
     if "TODO" in payload or "TODO" in json.dumps(guide, ensure_ascii=False):
         fail(errors, "generated data contains TODO")

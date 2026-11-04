@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 MEDIA = ROOT / "src" / "data" / "media.json"
 MANIFEST = ROOT / "src" / "data" / "media-manifest.json"
 AGENT = ROOT / "src" / "data" / "agents" / "phoenix.json"
+CODEX = ROOT / "src" / "data" / "codex"
 PUBLIC = ROOT / "public"
 ASSET_DIR = PUBLIC / "assets" / "media"
 
@@ -55,6 +56,23 @@ def main() -> None:
     if unknown:
         errors.append(f"data references unknown media keys: {', '.join(sorted(unknown))}")
 
+    engines = json.loads((CODEX / "engines.json").read_text(encoding="utf-8"))
+    sets = json.loads((CODEX / "sets.json").read_text(encoding="utf-8"))
+    bangboo = json.loads((CODEX / "bangboo.json").read_text(encoding="utf-8"))
+    expected = {f"engine:{item['id']}:icon" for item in engines}
+    expected |= {f"set:{item['name']}:icon" for item in sets}
+    expected |= {f"bangboo:{item['slug']}:icon" for item in bangboo if item.get("iconUrl")}
+    missing_icons = expected - set(manifest)
+    if missing_icons:
+        errors.append(f"codex icons missing from manifest: {', '.join(sorted(missing_icons)[:8])}")
+
+    if len(engines) != 101:
+        errors.append(f"engine codex = {len(engines)}, expected 101")
+    if len(sets) != 30:
+        errors.append(f"drive set codex = {len(sets)}, expected 30")
+    if len(bangboo) != 42:
+        errors.append(f"bangboo codex = {len(bangboo)}, expected 42")
+
     total = 0
     used_files: set[str] = set()
     for key, item in manifest.items():
@@ -77,6 +95,7 @@ def main() -> None:
 
     print(f"manifest keys: {len(manifest)}")
     print(f"referenced by data: {len(referenced)}")
+    print(f"codex icons expected: {len(expected)}")
     print(f"total size: {total / 1024 / 1024:.2f} MiB")
     if errors:
         print("\nFAILED:", file=sys.stderr)

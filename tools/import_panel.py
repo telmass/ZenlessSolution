@@ -54,7 +54,12 @@ TARGET_TO_STAT = {
 
 def main() -> None:
     rules = tomllib.loads(RULES.read_text(encoding="utf-8"))
-    engines_src = json.loads((SOURCES / "engines.json").read_text(encoding="utf-8"))
+    panel_engine_ids = {"ep-2259", "ep-1883", "ep-1964", "ep-212"}
+    engines_src = [
+        item
+        for item in json.loads((SOURCES / "engines.json").read_text(encoding="utf-8"))
+        if item["id"] in panel_engine_ids
+    ]
     sets_src = json.loads((SOURCES / "drive-sets.json").read_text(encoding="utf-8"))
 
     effects = {item["id"]: item for item in rules.get("setEffects", [])}
