@@ -29,7 +29,7 @@
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
-pnpm test       # Vitest：面板 / 词条 / 伤害 / 图鉴 / 页面结构（32 条）
+pnpm test       # Vitest：面板 / 词条 / 伤害 / 图鉴 / 页面结构（33 条）
 pnpm build      # 静态产物 dist/
 pnpm preview
 ```
@@ -111,6 +111,7 @@ docs/
 - 三方素材（立绘 / 背景 / film 图标）：<https://zzz.nanoka.cc/>、<https://zzz.gachabase.net/>
 
 > 非商业资料整理；游戏素材版权归 miHoYo 所有。
+
 
 
 

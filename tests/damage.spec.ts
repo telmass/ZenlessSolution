@@ -78,14 +78,12 @@ describe('weapon in-combat effects', () => {
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-1883',
-      baseAtk: 1585,
     })
     const moonlight = buildCombatStats(panel.stats, agent, {
       cinema: 0,
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-1964',
-      baseAtk: 1585,
     })
     expect(shell.ap).toBe(510 + 85 + 90)
     expect(moonlight.ap).toBe(510 + 85)
@@ -98,18 +96,27 @@ describe('weapon in-combat effects', () => {
       refinement: 5,
       coreLevel: 'F',
       engineId: 'ep-212',
-      baseAtk: 1466,
     })
     const compiler = buildCombatStats(panel.stats, agent, {
       cinema: 0,
       refinement: 3,
       coreLevel: 'F',
       engineId: 'ep-214',
-      baseAtk: 1556,
     })
     expect(dual.ap).toBe(510 + 85 + 192)
     expect(compiler.ap).toBe(510 + 85 + 111)
-    expect(compiler.atk).toBeCloseTo(panel.stats.atk + 1556 * 0.18, 8)
+    expect(compiler.atk).toBeCloseTo(panel.stats.atk * 1.18, 8)
+  })
+
+  it('applies 4-piece ATK% on the final out-of-combat panel', () => {
+    const set4 = buildCombatStats(panel.stats, agent, {
+      cinema: 0,
+      refinement: 1,
+      coreLevel: 'F',
+      engineId: 'ep-2259',
+      set4AtkPct: 10,
+    })
+    expect(set4.atk).toBeCloseTo(panel.stats.atk * 1.1, 8)
   })
 })
 
@@ -122,7 +129,6 @@ describe('phoenix 20s axis', () => {
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-2259',
-      baseAtk: 1585,
     }, standard)
     expect(result.axis.duration).toBe(20)
     expect(result.axis.events).toHaveLength(8)
@@ -137,7 +143,6 @@ describe('phoenix 20s axis', () => {
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-2259',
-      baseAtk: 1585,
     }, standard)
     const burn = c2.axis.events.find((item) => item.id === 'burn')
     const disorder = c2.axis.events.find((item) => item.id === 'disorder')
@@ -149,7 +154,6 @@ describe('phoenix 20s axis', () => {
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-2259',
-      baseAtk: 1585,
     }, standard)
     expect(c4.axis.events.some((item) => item.id === 'c4-release')).toBe(true)
 
@@ -158,9 +162,9 @@ describe('phoenix 20s axis', () => {
       refinement: 1,
       coreLevel: 'F',
       engineId: 'ep-2259',
-      baseAtk: 1585,
     }, standard)
     expect(c6.stats.resPen).toBe(0.15)
   })
 })
+
 

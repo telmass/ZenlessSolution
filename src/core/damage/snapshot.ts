@@ -44,8 +44,8 @@ export interface DamageBuild {
   refinement: number
   coreLevel: BuildSpec['coreLevel']
   engineId: string | null
-  /** 角色 + 音擎 + 核心的局外基础攻击，用于计算局内攻击%效果。 */
-  baseAtk: number
+  /** 局内 4 件套提供的攻击力%。官方规则：按局外最终面板攻击相乘。 */
+  set4AtkPct?: number
 }
 
 function coreIndex(level: BuildSpec['coreLevel']): number {
@@ -84,7 +84,9 @@ export function buildCombatStats(
   const searCritDmg = (coreCritDmg + 15 + (cinema >= 1 ? 25 : 0)) / 100
   const releaseCritDmg = searCritDmg + 0.4
   const dmgBonus = 1 + (panel.dmgBonus + effect.fireDmg + (cinema >= 2 ? 30 : 0)) / 100
-  const atk = panel.atk + (build.baseAtk * effect.atkPct) / 100
+  // 官方规则：局内百分比攻击按「局外最终面板」相乘，而不是角色+音擎基础攻击。
+  const inCombatAtkPct = effect.atkPct + (build.set4AtkPct ?? 0)
+  const atk = panel.atk * (1 + inCombatAtkPct / 100)
 
   return {
     atk,

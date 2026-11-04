@@ -3,8 +3,7 @@ import { computed, ref } from 'vue'
 import type { Agent } from '@/types/agent'
 import type { PanelResult } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
-import { graduation30, graduation54, inputFromSpec, coreBonusFor, type BuildSpec } from '@/core/panel/presets'
-import { engines } from '@/core/panel/data'
+import { graduation30, graduation54, inputFromSpec, type BuildSpec } from '@/core/panel/presets'
 import {
   computePhoenixDamage,
   computeSingleRelease,
@@ -137,17 +136,13 @@ const all = computed<ComputedConfig[]>(() =>
   CONFIGS.map((config) => {
     const spec = { ...config.spec, engineId: config.engineId }
     const panel = computePanel(inputFromSpec(props.agent, spec))
-    const engine = engines.find((item) => item.id === config.engineId)
-    const baseAtk =
-      props.agent.base.atk +
-      (engine?.baseAtk ?? 0) +
-      coreBonusFor(props.agent, spec.coreLevel).atkBase
     const build: DamageBuild = {
       cinema: config.cinema,
       refinement: config.refinement,
       coreLevel: spec.coreLevel,
       engineId: config.engineId,
-      baseAtk,
+      // 自由蓝调 4 件套不给攻击%；若换其他 4 件套，按 panel.atk 计入这里。
+      set4AtkPct: 0,
     }
     return {
       ...config,
