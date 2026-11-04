@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import phoenix from '@/data/agents/phoenix.json'
 import type { Agent } from '@/types/agent'
 import { media, mediaColor } from '@/lib/media'
@@ -36,7 +36,7 @@ const agent = phoenix as unknown as Agent
               进入代理人档案
               <span aria-hidden="true">→</span>
             </RouterLink>
-            <RouterLink to="/agents/phoenix?tab=guide" class="btn btn--ghost">
+            <RouterLink to="/agents/phoenix#guide" class="btn btn--ghost">
               直接看攻略
             </RouterLink>
           </div>
@@ -97,14 +97,14 @@ const agent = phoenix as unknown as Agent
           <span class="feature__link">浏览档案 →</span>
         </RouterLink>
 
-        <RouterLink to="/agents/phoenix?tab=skills" class="feature card">
+        <RouterLink to="/agents/phoenix#skills" class="feature card">
           <span class="feature__index num">02</span>
           <h3>技能与影画</h3>
           <p>18 个招式、逐级倍率、核心被动「涅槃」的七档数值，影画 1 / 6 关键节点。</p>
           <span class="feature__link">查看技能 →</span>
         </RouterLink>
 
-        <RouterLink to="/agents/phoenix?tab=guide" class="feature card">
+        <RouterLink to="/agents/phoenix#guide" class="feature card">
           <span class="feature__index num">03</span>
           <h3>攻略与配装</h3>
           <p>加点顺序、四档音擎、自由蓝调 4+2、毕业面板 54 / 30 词条、两支队伍与出招表。</p>
@@ -482,3 +482,4 @@ const agent = phoenix as unknown as Agent
   }
 }
 </style>
+

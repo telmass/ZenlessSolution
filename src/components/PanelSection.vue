@@ -67,14 +67,10 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 <template>
   <div class="panel-section">
-    <div class="panel-section__head">
-      <div>
-        <p class="eyebrow">Out-of-combat Panel</p>
-        <h2>局外面板计算</h2>
-        <p class="panel-section__sub">
-          只计算基础面板、核心技基础属性、音擎基础值与高级属性、驱动盘与二件套；音擎特效、核心被动与四件套等局内效果不计入。
-        </p>
-      </div>
+    <div class="panel-toolbar">
+      <p class="panel-note">
+        只计算基础面板、核心技基础属性、音擎基础值与高级属性、驱动盘与二件套；音擎特效、核心被动与四件套等局内效果不计入。
+      </p>
       <div class="presets">
         <button
           v-for="preset in presets"
@@ -90,7 +86,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
     <div class="panel-section__grid">
       <div class="form">
-        <section class="card form__card">
+        <section class="form__group">
           <header class="form__head">
             <h3>核心技</h3>
             <span class="form__hint">A/C/E 异常掌控 · B/D/F 基础攻击</span>
@@ -108,7 +104,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           </div>
         </section>
 
-        <section class="card form__card">
+        <section class="form__group">
           <header class="form__head">
             <h3>音擎</h3>
             <span class="form__hint">精炼不影响局外面板</span>
@@ -143,7 +139,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           </div>
         </section>
 
-        <section class="card form__card">
+        <section class="form__group">
           <header class="form__head">
             <h3>驱动盘</h3>
             <span class="form__hint">只支持 4 + 2</span>
@@ -189,7 +185,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           </div>
         </section>
 
-        <section class="card form__card">
+        <section class="form__group">
           <header class="form__head">
             <h3>副词条</h3>
             <span class="form__hint">
@@ -213,7 +209,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
         </section>
       </div>
 
-      <aside class="result card">
+      <aside class="result">
         <header class="result__head">
           <h3>计算结果</h3>
           <span class="result__tag">局外</span>
@@ -261,28 +257,22 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 <style scoped>
 .panel-section {
   display: grid;
-  gap: 22px;
+  gap: var(--s5);
 }
 
-.panel-section__head {
+.panel-toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
-  gap: 24px;
+  justify-content: space-between;
+  gap: var(--s5);
+  padding-bottom: var(--s4);
+  border-bottom: 1px solid var(--line);
 }
 
-.panel-section__head h2 {
-  margin-top: 8px;
-  font-family: var(--font-display);
-  font-size: clamp(30px, 4vw, 42px);
-  letter-spacing: 0.03em;
-}
-
-.panel-section__sub {
-  max-width: 68ch;
-  margin-top: 8px;
+.panel-note {
+  max-width: 72ch;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-13);
 }
 
 .presets {
@@ -297,7 +287,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   color: var(--text-2);
-  font-size: 12px;
+  font-size: var(--fs-12);
 }
 
 .presets__item:hover {
@@ -315,33 +305,37 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .panel-section__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 20px;
+  gap: var(--s7);
   align-items: start;
 }
 
 .form {
   display: grid;
-  gap: 14px;
   min-width: 0;
 }
 
-.form__card {
-  padding: 20px 22px;
+.form__group {
+  padding: var(--s5) 0;
+  border-top: 1px solid var(--line);
+}
+
+.form__group:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .form__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
+  gap: var(--s4);
+  margin-bottom: var(--s4);
 }
 
 .form__head h3 {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--fs-16);
+  font-weight: 600;
   letter-spacing: 0.04em;
 }
 
@@ -478,10 +472,9 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .set-summary {
   display: grid;
   gap: 4px;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-left: 2px solid var(--fire);
-  background: rgba(255, 106, 61, 0.04);
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line);
 }
 
 .set-summary p {
@@ -558,8 +551,10 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .result {
   position: sticky;
-  top: calc(var(--header-h) + 74px);
-  padding: 20px 22px;
+  top: calc(var(--header-h) + var(--chapter-nav-h) + 16px);
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .result__head {
@@ -668,10 +663,9 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .result__warnings {
   display: grid;
   gap: 5px;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-left: 2px solid var(--danger);
-  background: rgba(255, 77, 79, 0.06);
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--danger);
 }
 
 .result__warnings li {
@@ -697,7 +691,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 @media (max-width: 760px) {
-  .panel-section__head {
+  .panel-toolbar {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -709,3 +703,4 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   }
 }
 </style>
+

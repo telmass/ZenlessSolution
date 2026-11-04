@@ -25,6 +25,9 @@ const router = createRouter({
   ],
   scrollBehavior(to, _from, saved) {
     if (saved) return saved
+    // The agent page owns hash scrolling so sticky header + chapter nav
+    // offsets stay in one place and programmatic scrolls are not doubled.
+    if (to.name === 'agent') return false
     if (to.hash) return { el: to.hash, top: 96, behavior: 'smooth' }
     return { top: 0 }
   },

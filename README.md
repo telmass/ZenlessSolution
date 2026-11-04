@@ -2,19 +2,19 @@
 
 绝区零（Zenless Zone Zero）**官方图鉴复刻 + 代理人攻略 + 面板/配置对比**。
 
-> 当前：**菲欧妮（Phoenix）先行复刻**。重建计划见 [docs/00-rebuild-plan.md](docs/00-rebuild-plan.md)，面板规则见 [docs/02-panel-rules.md](docs/02-panel-rules.md)。
+> 当前：**菲欧妮（Phoenix）先行复刻**。重建计划 [docs/00-rebuild-plan.md](docs/00-rebuild-plan.md) · 面板规则 [docs/02-panel-rules.md](docs/02-panel-rules.md) · 页面重构记录 [docs/03-agent-page-redesign.md](docs/03-agent-page-redesign.md)。
 
 ## 当前进度
 
 | 模块 | 状态 |
 | --- | --- |
-| 站点骨架 / 设计令牌 / 响应式布局 | ✅ |
-| 菲欧妮 · 概览（档案、60 级面板、核心技 A–F、关键影画） | ✅ |
-| 菲欧妮 · 技能（6 类 / 18 招式 / 1–16 级成长 / 全等级表） | ✅ |
-| 菲欧妮 · 影画（1–6，关键影画 1 / 6，film 图标） | ✅ |
+| 单页档案流：概览 → 技能 → 影画 → 攻略 → 配装，章节锚点导航 | ✅ |
+| 菲欧妮 · 概览（档案、60 级面板、核心技 A–F） | ✅ |
+| 菲欧妮 · 技能（6 类全展开 / 18 招式手风琴 / 1–16 级成长） | ✅ |
+| 菲欧妮 · 影画（L1–L6 时间轴，关键影画 1 / 6，film 图标） | ✅ |
 | 菲欧妮 · 攻略（加点、音擎、驱动盘、毕业面板、队伍、文字攻略） | ✅ |
 | 局外面板计算器（核心 / 音擎 / 4+2 / 主副词条 / 来源明细） | ✅ |
-| 本地 WebP 资产（19 个媒体键，0.57 MiB） | ✅ |
+| 本地 WebP 资产（19 个媒体键，0.57 MiB）与自托管展示字体 | ✅ |
 | 有效词条 / 0+1 配置对比 / 伤害引擎 | ⏳ 下一步 |
 | 其余 60 位代理人与音擎 / 驱动盘 / 邦布图鉴 | ⏳ 计划中 |
 
@@ -23,12 +23,19 @@
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
-pnpm test       # Vitest：面板引擎对拍
+pnpm test       # Vitest：面板引擎 + 页面结构（10 条）
 pnpm build      # 静态产物 dist/
 pnpm preview
 ```
 
 要求 Node.js ≥ 20；数据脚本需要 Python 3.11+ 与 Pillow。
+
+## 页面与深链
+
+- `/agents/phoenix`：整页连续阅读，顶部章节导航只负责跳转，不再用 Tab 隐藏内容。
+- 章节锚点：`#overview`、`#skills`、`#cinemas`、`#guide`、`#build`；影画子锚点 `#cinema-1..6` 仍可用。
+- 旧链接 `?tab=skills|cinemas|guide|build` 会自动改写为对应 hash，不刷新页面。
+- `#skills` 默认展开「普通攻击：裁生」；其余招式点击行内展开，全等级表可切换。
 
 ## 数据与资产
 
@@ -44,7 +51,7 @@ pnpm verify        # data:check + assets:check + test + typecheck + build
 - `data/guides/phoenix.toml`：攻略人工编辑的唯一源。
 - `data/rules/panel.toml`：主副词条、二件套、驱动盘固定值的规则表。
 - `src/data/`：生成物（agent / panel / media manifest），勿手改。
-- `public/assets/media/`：本地 WebP（内容 hash 命名），随站点发布。
+- `public/assets/media/`：本地 WebP（内容 hash 命名）；`public/fonts/`：Barlow Condensed（OFL）。
 - `.cache/assets/originals/`：原图缓存，不入库。
 
 ## 目录结构
@@ -52,11 +59,14 @@ pnpm verify        # data:check + assets:check + test + typecheck + build
 ```text
 src/
 ├─ pages/          首页 / 代理人列表 / 代理人详情
-├─ components/     Hero、技能、影画、攻略、配装、成长表、富文本
-├─ core/panel/     纯 TS 面板引擎（类型 / 数据 / 计算 / 毕业预设）
+├─ components/     Hero、章节导航、概览、技能、影画、攻略、配装
+├─ composables/    useSectionSpy（章节滚动高亮）
+├─ constants/      sections（章节清单与旧 tab 映射）
+├─ core/panel/     纯 TS 面板引擎
+├─ core/skills/    招式预览提取
 ├─ data/           生成的 JSON（agent / panel / media manifest）
 ├─ lib/            media 解析
-├─ styles/         tokens.css / base.css
+├─ styles/         fonts / tokens / base
 └─ types/          数据契约
 tools/
 ├─ import_phoenix.py   抓取快照 + 攻略 TOML → 图鉴数据
@@ -65,10 +75,13 @@ tools/
 ├─ check_data.py       数据契约校验
 └─ check_assets.py     资产校验
 tests/
-└─ panel.spec.ts       面板引擎与旧计算器对拍
+├─ panel.spec.ts           面板引擎与旧计算器对拍
+├─ skills-preview.spec.ts  招式 12 级预览
+└─ agent-sections.spec.ts  五章节同时渲染 / 深链映射
 docs/
-├─ 00-rebuild-plan.md  重建计划
-└─ 02-panel-rules.md   局外面板计算规则
+├─ 00-rebuild-plan.md        重建计划
+├─ 02-panel-rules.md         局外面板计算规则
+└─ 03-agent-page-redesign.md 单页档案流与视觉系统
 ```
 
 ## 数据来源

@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import phoenix from '@/data/agents/phoenix.json'
 import type { Agent } from '@/types/agent'
+import { AGENT_SECTIONS, SECTION_IDS, resolveSection } from '@/constants/sections'
+import { useSectionSpy } from '@/composables/useSectionSpy'
 import AgentHero from '@/components/AgentHero.vue'
+import SectionNav from '@/components/SectionNav.vue'
+import ChapterHead from '@/components/ChapterHead.vue'
 import OverviewSection from '@/components/OverviewSection.vue'
 import SkillsSection from '@/components/SkillsSection.vue'
 import CinemasSection from '@/components/CinemasSection.vue'
@@ -11,64 +15,198 @@ import GuideSection from '@/components/GuideSection.vue'
 import PanelSection from '@/components/PanelSection.vue'
 
 const route = useRoute()
-const router = useRouter()
-
 const agent = phoenix as unknown as Agent
 
-const tabs = [
-  { id: 'overview', label: '概览', en: 'OVERVIEW' },
-  { id: 'skills', label: '技能', en: 'SKILLS' },
-  { id: 'cinemas', label: '影画', en: 'CINEMA' },
-  { id: 'guide', label: '攻略', en: 'GUIDE' },
-  { id: 'build', label: '配装', en: 'BUILD' },
-] as const
+const { active, setActive, hold } = useSectionSpy({ ids: SECTION_IDS, offset: 132 })
+const progress = ref(0)
+const showTop = ref(false)
+let ticking = false
+let initialAlignCancelled = false
+const alignTimers: number[] = []
 
-type TabId = (typeof tabs)[number]['id']
+const reducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const active = computed<TabId>(() => {
-  const tab = route.query.tab
-  return tabs.some((item) => item.id === tab) ? (tab as TabId) : 'overview'
+function anchorOffset(): number {
+  const header = document.querySelector<HTMLElement>('.header')
+  const nav = document.querySelector<HTMLElement>('.section-nav')
+  return (header?.offsetHeight ?? 64) + (nav?.offsetHeight ?? 52) + 16
+}
+
+function scrollToSection(
+  id: string,
+  options: { animate?: boolean; activeId?: string; initial?: boolean } = {},
+) {
+  const element = document.getElementById(id)
+  if (!element) return
+
+  if (!options.initial) initialAlignCancelled = true
+
+  const sectionId = options.activeId ?? (id.startsWith('cinema-') ? 'cinemas' : id)
+  if (SECTION_IDS.includes(sectionId as (typeof SECTION_IDS)[number])) {
+    setActive(sectionId)
+    hold(1200)
+  }
+
+  const top = Math.max(0, element.getBoundingClientRect().top + window.scrollY - anchorOffset())
+  const instant = options.animate === false || reducedMotion()
+  if (instant) {
+    const root = document.documentElement
+    const previous = root.style.scrollBehavior
+    root.style.scrollBehavior = 'auto'
+    window.scrollTo({ top, behavior: 'auto' })
+    requestAnimationFrame(() => {
+      root.style.scrollBehavior = previous
+    })
+  } else {
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
+
+  const nextHash = `#${id}`
+  if (window.location.hash !== nextHash) {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}${nextHash}`)
+  }
+}
+
+function onHashChange() {
+  const id = decodeURIComponent(window.location.hash.replace(/^#/, ''))
+  if (id) scrollToSection(id)
+}
+
+function onScroll() {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    const max = document.documentElement.scrollHeight - window.innerHeight
+    const next = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
+    if (Math.abs(next - progress.value) > 0.002) progress.value = next
+    showTop.value = window.scrollY > 640
+    ticking = false
+  })
+}
+
+function toTop() {
+  window.scrollTo({ top: 0, behavior: reducedMotion() ? 'auto' : 'smooth' })
+}
+
+onMounted(async () => {
+  window.addEventListener('hashchange', onHashChange)
+  window.addEventListener('scroll', onScroll, { passive: true })
+
+  const cancelAlign = () => {
+    initialAlignCancelled = true
+  }
+  window.addEventListener('wheel', cancelAlign, { passive: true, once: true })
+  window.addEventListener('touchstart', cancelAlign, { passive: true, once: true })
+  window.addEventListener('keydown', cancelAlign, { once: true })
+
+  await nextTick()
+
+  const hash = decodeURIComponent(route.hash.replace(/^#/, ''))
+  const tab = typeof route.query.tab === 'string' ? route.query.tab : ''
+  let target: string | null = null
+
+  if (hash && resolveSection(hash)) {
+    target = hash
+  } else if (tab && resolveSection(tab)) {
+    target = resolveSection(tab)
+    if (target) history.replaceState(null, '', `${window.location.pathname}#${target}`)
+  }
+
+  if (target) {
+    // Fonts and the first paint can change section heights; re-align a few
+    // times until the page settles, unless the user has already scrolled.
+    const align = () => {
+      if (!initialAlignCancelled && target) {
+        scrollToSection(target, { animate: false, initial: true })
+      }
+    }
+    align()
+    if (document.fonts?.ready) {
+      await document.fonts.ready.catch(() => undefined)
+    }
+    align()
+    requestAnimationFrame(align)
+    for (const delay of [200, 600, 1200]) {
+      alignTimers.push(window.setTimeout(align, delay))
+    }
+    window.addEventListener('load', align, { once: true })
+  }
+
+  onScroll()
 })
 
-function setTab(id: TabId) {
-  const query = { ...route.query }
-  if (id === 'overview') delete query.tab
-  else query.tab = id
-  router.replace({ query, hash: '' })
-}
+onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', onHashChange)
+  window.removeEventListener('scroll', onScroll)
+  for (const timer of alignTimers) window.clearTimeout(timer)
+})
 
 const notFound = computed(() => route.params.slug !== 'phoenix')
 </script>
 
 <template>
   <div v-if="!notFound" class="agent-page">
-    <AgentHero :agent="agent" />
+    <a class="skip-link" href="#content">跳到正文</a>
 
-    <div class="tabs">
-      <div class="tabs__inner container" role="tablist" aria-label="代理人内容">
-        <button
-          v-for="(tab, index) in tabs"
-          :key="tab.id"
-          class="tabs__item"
-          :class="{ 'is-active': active === tab.id }"
-          role="tab"
-          :aria-selected="active === tab.id"
-          @click="setTab(tab.id)"
-        >
-          <span class="tabs__index num">0{{ index + 1 }}</span>
-          <span class="tabs__label">{{ tab.label }}</span>
-          <span class="tabs__en">{{ tab.en }}</span>
-        </button>
-      </div>
-    </div>
+    <AgentHero :agent="agent" @jump="scrollToSection" />
+    <SectionNav
+      :sections="AGENT_SECTIONS"
+      :active="active"
+      :progress="progress"
+      @navigate="scrollToSection"
+    />
 
-    <div class="container agent-page__body">
-      <OverviewSection v-if="active === 'overview'" :agent="agent" />
-      <SkillsSection v-else-if="active === 'skills'" :agent="agent" />
-      <CinemasSection v-else-if="active === 'cinemas'" :agent="agent" />
-      <GuideSection v-else-if="active === 'guide'" :agent="agent" />
-      <PanelSection v-else :agent="agent" />
-    </div>
+    <main id="content" class="container agent-body" tabindex="-1">
+      <section id="overview" class="chapter chapter--overview" aria-labelledby="overview-title">
+        <h2 id="overview-title" class="sr-only">概览</h2>
+        <OverviewSection :agent="agent" />
+      </section>
+
+      <section id="skills" class="chapter" aria-labelledby="skills-title">
+        <ChapterHead
+          index="02"
+          title="技能"
+          title-id="skills-title"
+          :lede="AGENT_SECTIONS[1].lede"
+        />
+        <SkillsSection :agent="agent" />
+      </section>
+
+      <section id="cinemas" class="chapter" aria-labelledby="cinemas-title">
+        <ChapterHead
+          index="03"
+          title="影画"
+          title-id="cinemas-title"
+          :lede="AGENT_SECTIONS[2].lede"
+        />
+        <CinemasSection :agent="agent" />
+      </section>
+
+      <section id="guide" class="chapter" aria-labelledby="guide-title">
+        <ChapterHead
+          index="04"
+          title="攻略"
+          title-id="guide-title"
+          :lede="AGENT_SECTIONS[3].lede"
+        />
+        <GuideSection :agent="agent" />
+      </section>
+
+      <section id="build" class="chapter" aria-labelledby="build-title">
+        <ChapterHead
+          index="05"
+          title="配装"
+          title-id="build-title"
+          :lede="AGENT_SECTIONS[4].lede"
+        />
+        <PanelSection :agent="agent" />
+      </section>
+    </main>
+
+    <Transition name="fade">
+      <button v-if="showTop" class="to-top" aria-label="回到顶部" @click="toTop">↑</button>
+    </Transition>
   </div>
 
   <div v-else class="container empty">
@@ -84,77 +222,64 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
   min-height: 60vh;
 }
 
-.tabs {
-  position: sticky;
-  top: var(--header-h);
-  z-index: 40;
-  background: rgba(8, 8, 11, 0.9);
-  border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
-}
-
-.tabs__inner {
-  display: flex;
-  gap: 30px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.tabs__inner::-webkit-scrollbar {
-  display: none;
-}
-
-.tabs__item {
-  position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 16px 0 14px;
-  color: var(--muted);
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.tabs__item:hover {
-  color: var(--text-2);
-}
-
-.tabs__item.is-active {
-  color: var(--text);
-}
-
-.tabs__item.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: var(--gutter);
+  z-index: 100;
+  padding: 10px 16px;
   background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-13);
+  font-weight: 600;
+  transition: top var(--dur-fast) var(--ease-out);
 }
 
-.tabs__index {
+.skip-link:focus {
+  top: 12px;
+}
+
+.agent-body {
+  padding-bottom: var(--s12);
+}
+
+.agent-body:focus {
+  outline: none;
+}
+
+.chapter--overview {
+  padding-top: var(--s9);
+}
+
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 45;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  background: rgba(16, 16, 21, 0.9);
+  color: var(--text-2);
+  font-family: var(--font-display);
+  font-size: 20px;
+  backdrop-filter: blur(8px);
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.to-top:hover {
+  border-color: var(--accent);
   color: var(--accent);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  opacity: 0.7;
 }
 
-.tabs__label {
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.06em;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--dur) var(--ease-out);
 }
 
-.tabs__en {
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-}
-
-.agent-page__body {
-  padding-top: 34px;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .empty {
@@ -178,13 +303,13 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
   color: var(--accent);
 }
 
-@media (max-width: 620px) {
-  .tabs__inner {
-    gap: 20px;
-  }
-
-  .tabs__en {
-    display: none;
+@media (max-width: 600px) {
+  .to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 40px;
+    height: 40px;
   }
 }
 </style>
+

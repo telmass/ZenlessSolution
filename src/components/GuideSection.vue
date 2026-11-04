@@ -50,13 +50,19 @@ const effectiveCount = computed(() => {
     .filter((item) => effective.has(item.id))
     .reduce((total, item) => total + item.count, 0)
 })
+
+function graduationLabel(item: GuideGraduation): string {
+  const budget = item.spec.budget
+  if (budget === 54) return '满配 · 54 词条'
+  if (budget === 30) return '小毕业 · 30 词条'
+  return item.title
+}
 </script>
 
 <template>
   <div class="guide">
-    <section class="guide__hero">
+    <section class="guide__lead">
       <div>
-        <p class="eyebrow">Build Guide · Phoenix</p>
         <h2>{{ guide.role }}</h2>
         <p class="guide__oneliner">{{ guide.oneLiner }}</p>
         <ul class="guide__tags">
@@ -64,17 +70,13 @@ const effectiveCount = computed(() => {
         </ul>
       </div>
       <div v-if="effectiveCount" class="guide__effective">
-        <span class="num">{{ effectiveCount }}</span>
-        <small>满配有效词条<br />（异常精通 + 攻击力%）</small>
+        <b class="num">{{ effectiveCount }}</b>
+        <span>满配有效词条<br />异常精通 + 攻击力%</span>
       </div>
     </section>
 
     <section class="block">
-      <header class="block__head">
-        <span class="block__index num">01</span>
-        <h3>技能加点</h3>
-        <small>PRIORITY</small>
-      </header>
+      <h3>技能加点</h3>
       <div class="priority">
         <div v-for="(item, index) in guide.skillPriority" :key="item.key" class="priority__item">
           <img :src="`/assets/ui/skills/${item.key}.webp`" alt="" aria-hidden="true" />
@@ -90,13 +92,9 @@ const effectiveCount = computed(() => {
     </section>
 
     <section class="block">
-      <header class="block__head">
-        <span class="block__index num">02</span>
-        <h3>音擎推荐</h3>
-        <small>W-ENGINE</small>
-      </header>
+      <h3>音擎推荐</h3>
       <div class="weapons">
-        <article v-for="tier in guide.weapons" :key="tier.tier" class="weapon-tier card">
+        <article v-for="tier in guide.weapons" :key="tier.tier" class="weapon-tier">
           <header>
             <h4>{{ tier.tier }}</h4>
             <p v-if="tier.note">{{ tier.note }}</p>
@@ -107,7 +105,7 @@ const effectiveCount = computed(() => {
               <div>
                 <div class="weapon__name">
                   <b>{{ item.name }}</b>
-                  <span class="tag">精 {{ item.refinement }}</span>
+                  <span class="weapon__refine num">精 {{ item.refinement }}</span>
                 </div>
                 <p>{{ item.stats }}</p>
               </div>
@@ -118,13 +116,9 @@ const effectiveCount = computed(() => {
     </section>
 
     <section v-if="firstBuild" class="block">
-      <header class="block__head">
-        <span class="block__index num">03</span>
-        <h3>驱动盘</h3>
-        <small>DRIVE DISC · 4+2</small>
-      </header>
+      <h3>驱动盘</h3>
 
-      <div class="build card">
+      <div class="build">
         <h4 class="build__name">{{ firstBuild.name }}</h4>
 
         <div class="build__sets">
@@ -136,7 +130,7 @@ const effectiveCount = computed(() => {
               <p>{{ firstBuild.set4.label }}</p>
             </div>
           </div>
-          <div class="set-card set-card--two">
+          <div class="set-card">
             <img v-if="firstBuild.set2[0] && media(firstBuild.set2[0].icon)" :src="media(firstBuild.set2[0].icon)" alt="" />
             <div>
               <span class="set-card__tag">2 件套</span>
@@ -147,11 +141,9 @@ const effectiveCount = computed(() => {
         </div>
 
         <div class="build__effects">
-          <div>
-            <span class="build__label">4 件套效果</span>
-            <p>{{ firstBuild.set4.effect4 }}</p>
-            <p v-if="firstBuild.set4.scene" class="build__scene">搭配：{{ firstBuild.set4.scene }}</p>
-          </div>
+          <span class="build__label">4 件套效果</span>
+          <p>{{ firstBuild.set4.effect4 }}</p>
+          <p v-if="firstBuild.set4.scene" class="build__scene">搭配：{{ firstBuild.set4.scene }}</p>
         </div>
 
         <div class="build__stats">
@@ -193,15 +185,11 @@ const effectiveCount = computed(() => {
     </section>
 
     <section v-if="graduationCards.length" class="block">
-      <header class="block__head">
-        <span class="block__index num">04</span>
-        <h3>毕业面板</h3>
-        <small>REFERENCE PANEL</small>
-      </header>
+      <h3>毕业面板</h3>
       <div class="graduations">
-        <article v-for="item in graduationCards" :key="item.title" class="graduation card">
+        <article v-for="item in graduationCards" :key="item.title" class="graduation">
           <header class="graduation__head">
-            <h4>{{ item.title }}</h4>
+            <h4>{{ graduationLabel(item) }}</h4>
             <span v-if="item.spec.budget" class="tag tag--accent">{{ item.spec.budget }} 词条</span>
           </header>
           <div class="graduation__totals">
@@ -231,13 +219,9 @@ const effectiveCount = computed(() => {
     </section>
 
     <section class="block">
-      <header class="block__head">
-        <span class="block__index num">05</span>
-        <h3>队伍参考</h3>
-        <small>TEAM</small>
-      </header>
+      <h3>队伍参考</h3>
       <div class="teams">
-        <article v-for="team in guide.teams" :key="team.name" class="team card">
+        <article v-for="team in guide.teams" :key="team.name" class="team">
           <h4>{{ team.name }}</h4>
           <ul class="team__members">
             <li v-for="member in team.members" :key="member.agentId">
@@ -262,13 +246,9 @@ const effectiveCount = computed(() => {
     </section>
 
     <section class="block">
-      <header class="block__head">
-        <span class="block__index num">06</span>
-        <h3>文字攻略</h3>
-        <small>ROTATION &amp; NOTES</small>
-      </header>
+      <h3>文字攻略</h3>
       <div class="texts">
-        <article v-for="text in guide.texts" :key="text.title" class="text card">
+        <article v-for="text in guide.texts" :key="text.title" class="text">
           <h4>{{ text.title }}</h4>
           <ol>
             <li v-for="(line, index) in text.lines" :key="index">{{ line }}</li>
@@ -277,12 +257,8 @@ const effectiveCount = computed(() => {
       </div>
     </section>
 
-    <section class="block">
-      <header class="block__head">
-        <span class="block__index num">07</span>
-        <h3>数据来源</h3>
-        <small>SOURCES</small>
-      </header>
+    <section class="block block--sources">
+      <h3>数据来源</h3>
       <div class="sources">
         <a
           v-for="source in agent.sources"
@@ -308,103 +284,89 @@ const effectiveCount = computed(() => {
 <style scoped>
 .guide {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 48px;
+  gap: var(--s8);
 }
 
-.guide > * {
-  min-width: 0;
-}
-
-.guide__hero {
+.guide__lead {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
-  padding: 8px 0 4px;
+  gap: var(--s8);
+  padding-bottom: var(--s5);
+  border-bottom: 1px solid var(--line);
 }
 
-.guide__hero h2 {
-  margin-top: 10px;
+.guide__lead h2 {
   font-family: var(--font-display);
-  font-size: clamp(30px, 4vw, 44px);
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-weight: 700;
   letter-spacing: 0.03em;
+  line-height: var(--lh-tight);
 }
 
 .guide__oneliner {
   max-width: 58ch;
-  margin-top: 10px;
+  margin-top: var(--s3);
   color: var(--text-2);
+  font-size: var(--fs-15);
 }
 
 .guide__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
+  margin-top: var(--s4);
 }
 
 .guide__effective {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   flex-shrink: 0;
-  padding: 14px 20px;
-  border: 1px solid rgba(242, 225, 76, 0.3);
-  background: var(--accent-soft);
+  text-align: right;
+}
+
+.guide__effective b {
+  display: block;
+  color: var(--accent);
+  font-size: var(--fs-52);
+  font-weight: 700;
+  line-height: 0.9;
 }
 
 .guide__effective span {
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 42px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.guide__effective small {
-  color: var(--text-2);
-  font-size: 11px;
+  color: var(--muted);
+  font-size: var(--fs-11);
   line-height: 1.5;
 }
 
-.block__head {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 18px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
+.block {
+  min-width: 0;
 }
 
-.block__index {
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+.block + .block {
+  padding-top: var(--s6);
+  border-top: 1px solid var(--line);
 }
 
-.block__head h3 {
+.block h3 {
+  margin-bottom: var(--s5);
   font-family: var(--font-display);
-  font-size: 21px;
+  font-size: var(--fs-22);
+  font-weight: 600;
   letter-spacing: 0.04em;
 }
 
-.block__head small {
-  margin-left: auto;
-  color: var(--muted);
+.block h4 {
   font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.18em;
+  font-size: var(--fs-18);
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
+/* priority sequence */
 .priority {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 2px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .priority__item {
@@ -412,13 +374,17 @@ const effectiveCount = computed(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px;
-  background: var(--surface);
+  padding: 14px 12px;
+}
+
+.priority__item + .priority__item {
+  border-left: 1px solid var(--line);
 }
 
 .priority__item img {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .priority__text {
@@ -428,175 +394,181 @@ const effectiveCount = computed(() => {
 }
 
 .priority__text b {
-  font-size: 12px;
+  font-size: var(--fs-12);
   font-weight: 500;
 }
 
 .priority__text span {
   color: var(--accent);
-  font-size: 14px;
+  font-size: var(--fs-15);
 }
 
 .priority__text span i {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-11);
   font-style: normal;
 }
 
 .priority__next {
   position: absolute;
-  right: -8px;
+  right: -7px;
   z-index: 1;
+  padding: 0 2px;
+  background: var(--bg);
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: var(--fs-13);
 }
 
+/* engines */
 .weapons {
-  display: grid;
-  gap: 12px;
+  border-top: 1px solid var(--line);
 }
 
 .weapon-tier {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 24px;
-  padding: 20px 22px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--s6);
+  padding: var(--s5) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-.weapon-tier header h4 {
+.weapon-tier h4 {
   color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-15);
 }
 
 .weapon-tier header p {
-  margin-top: 8px;
+  margin-top: var(--s2);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-12);
   line-height: 1.75;
 }
 
 .weapon-tier__items {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--s5);
 }
 
 .weapon {
   display: flex;
   flex: 1 1 260px;
-  gap: 12px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  background: var(--bg-soft);
+  gap: var(--s3);
+  align-items: flex-start;
 }
 
 .weapon img {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .weapon__name {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: var(--s2);
 }
 
 .weapon__name b {
-  font-size: 13px;
+  font-size: var(--fs-15);
+  font-weight: 500;
+}
+
+.weapon__refine {
+  color: var(--muted);
+  font-size: var(--fs-11);
 }
 
 .weapon p {
-  margin-top: 3px;
+  margin-top: 2px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
 }
 
+/* drive discs */
 .build {
-  padding: 24px 26px;
+  display: grid;
+  gap: var(--s5);
+  min-width: 0;
 }
 
 .build__name {
-  font-family: var(--font-display);
-  font-size: 19px;
-  letter-spacing: 0.03em;
+  font-size: var(--fs-18);
 }
 
 .build__sets {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 16px;
+  gap: var(--s7);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+  min-width: 0;
 }
 
 .set-card {
   display: flex;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  background: var(--bg-soft);
+  gap: var(--s3);
 }
 
 .set-card img {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }
 
 .set-card__tag {
   display: block;
   color: var(--fire);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-11);
+  letter-spacing: 0.1em;
 }
 
 .set-card b {
   display: block;
   margin-top: 2px;
-  font-size: 14px;
+  font-size: var(--fs-15);
+  font-weight: 500;
 }
 
 .set-card p {
-  margin-top: 3px;
+  margin-top: 2px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
 }
 
 .build__effects {
-  margin-top: 16px;
-  padding: 14px 16px;
-  border-left: 2px solid var(--fire);
-  background: rgba(255, 106, 61, 0.04);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
 }
 
 .build__label {
   display: block;
   margin-bottom: 6px;
   color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: var(--fs-11);
+  letter-spacing: 0.1em;
 }
 
 .build__effects p {
+  max-width: 80ch;
   color: var(--text-2);
-  font-size: 13px;
+  font-size: var(--fs-13);
   line-height: 1.8;
 }
 
 .build__scene {
   margin-top: 4px;
   color: var(--muted) !important;
-  font-size: 12px !important;
+  font-size: var(--fs-12) !important;
 }
 
-.build__stats {
-  margin-top: 20px;
+.build__stats,
+.build__subs {
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+  min-width: 0;
 }
 
 .build__table-wrap {
@@ -606,9 +578,9 @@ const effectiveCount = computed(() => {
 
 .build__stats table {
   width: 100%;
-  min-width: 460px;
+  min-width: 520px;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--fs-12);
 }
 
 .build__stats th,
@@ -622,15 +594,11 @@ const effectiveCount = computed(() => {
 .build__stats th {
   color: var(--muted);
   font-weight: 500;
-  font-size: 11px;
+  font-size: var(--fs-11);
 }
 
 .build__stats .is-main {
   color: var(--accent);
-}
-
-.build__subs {
-  margin-top: 20px;
 }
 
 .subs {
@@ -647,10 +615,8 @@ const effectiveCount = computed(() => {
 }
 
 .subs li span {
-  padding: 4px 10px;
-  border: 1px solid var(--line-strong);
-  border-radius: 2px;
-  font-size: 12px;
+  color: var(--text-2);
+  font-size: var(--fs-12);
 }
 
 .subs li i {
@@ -658,34 +624,35 @@ const effectiveCount = computed(() => {
   font-style: normal;
 }
 
+/* graduation */
 .graduations {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s8);
 }
 
 .graduation {
-  padding: 22px 24px;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
 }
 
 .graduation__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--s3);
 }
 
 .graduation__head h4 {
-  font-family: var(--font-display);
-  font-size: 17px;
+  font-size: var(--fs-15);
 }
 
 .graduation__totals {
   display: flex;
   flex-wrap: wrap;
-  gap: 26px;
-  margin: 16px 0;
-  padding: 14px 0;
+  gap: var(--s6);
+  margin: var(--s4) 0;
+  padding: var(--s4) 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -697,26 +664,26 @@ const effectiveCount = computed(() => {
 
 .graduation__totals span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-11);
 }
 
 .graduation__totals b {
   color: var(--accent);
-  font-size: 26px;
+  font-size: var(--fs-28);
   font-weight: 700;
   line-height: 1.2;
 }
 
 .graduation__rows {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .graduation__rows > div {
   display: grid;
-  grid-template-columns: 68px 1fr;
-  gap: 8px;
-  font-size: 12px;
+  grid-template-columns: 64px 1fr;
+  gap: var(--s2);
+  font-size: var(--fs-12);
 }
 
 .graduation__rows dt {
@@ -729,9 +696,9 @@ const effectiveCount = computed(() => {
 }
 
 .graduation__subs {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--line);
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line);
 }
 
 .graduation__subs ul {
@@ -741,55 +708,58 @@ const effectiveCount = computed(() => {
 }
 
 .graduation__subs li {
-  padding: 3px 8px;
-  border: 1px solid var(--line);
-  font-size: 11px;
   color: var(--text-2);
+  font-size: var(--fs-11);
   white-space: nowrap;
 }
 
+.graduation__subs li + li::before {
+  content: "·";
+  margin-right: 6px;
+  color: var(--line-strong);
+}
+
 .graduation__subs li b {
+  margin-left: 3px;
   color: var(--accent);
-  margin-left: 4px;
 }
 
 .graduation__note {
-  margin-top: 12px;
+  margin-top: var(--s3);
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-11);
 }
 
+/* teams */
 .teams {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s8);
 }
 
 .team {
-  padding: 20px 22px;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
 }
 
 .team > h4 {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--fs-15);
 }
 
 .team__members {
   display: grid;
-  gap: 14px;
-  margin-top: 14px;
 }
 
 .team__members > li {
   display: flex;
-  gap: 12px;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .team__members img {
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
   object-fit: cover;
@@ -798,17 +768,18 @@ const effectiveCount = computed(() => {
 
 .team__member-head {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: var(--s2);
 }
 
 .team__member-head b {
-  font-size: 13px;
+  font-size: var(--fs-13);
+  font-weight: 500;
 }
 
 .team__member-body p {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
   line-height: 1.7;
 }
 
@@ -816,7 +787,7 @@ const effectiveCount = computed(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .team__set {
@@ -824,45 +795,44 @@ const effectiveCount = computed(() => {
   align-items: center;
   gap: 4px;
   color: var(--text-2);
-  font-size: 10px;
+  font-size: var(--fs-11);
 }
 
 .team__set img {
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
+  width: 16px;
+  height: 16px;
   border: 0;
 }
 
+/* text guide */
 .texts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: var(--s7);
 }
 
 .text {
-  padding: 20px 22px;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
 }
 
 .text h4 {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-display);
-  font-size: 15px;
+  font-size: var(--fs-15);
 }
 
 .text ol {
   display: grid;
-  gap: 9px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: var(--s3);
 }
 
 .text li {
   color: var(--text-2);
-  font-size: 12px;
+  font-size: var(--fs-13);
   line-height: 1.8;
 }
 
+/* sources */
 .sources {
   display: flex;
   flex-wrap: wrap;
@@ -872,13 +842,13 @@ const effectiveCount = computed(() => {
 
 .sources a {
   color: var(--accent);
-  font-size: 12px;
-  border-bottom: 1px solid rgba(242, 225, 76, 0.35);
+  font-size: var(--fs-12);
+  border-bottom: 1px solid rgba(240, 223, 78, 0.35);
 }
 
 .sources p {
   width: 100%;
-  font-size: 11px;
+  font-size: var(--fs-11);
   line-height: 1.8;
 }
 
@@ -886,13 +856,19 @@ const effectiveCount = computed(() => {
   color: #c9a94a;
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1080px) {
   .priority {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .priority__item + .priority__item {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
   .weapon-tier {
     grid-template-columns: 1fr;
+    gap: var(--s3);
   }
 
   .texts {
@@ -901,18 +877,18 @@ const effectiveCount = computed(() => {
 }
 
 @media (max-width: 820px) {
-  .guide__hero {
+  .guide__lead {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .guide__effective {
+    text-align: left;
   }
 
   .build__sets,
   .graduations,
   .teams {
-    grid-template-columns: 1fr;
-  }
-
-  .weapon-tier__items {
     grid-template-columns: 1fr;
   }
 }
@@ -922,11 +898,8 @@ const effectiveCount = computed(() => {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .build,
-  .team,
-  .text,
-  .graduation {
-    padding: 16px;
+  .build__stats table {
+    min-width: 460px;
   }
 }
 </style>

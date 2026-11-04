@@ -7,22 +7,20 @@ defineProps<{ agent: Agent }>()
 </script>
 
 <template>
-  <div class="cinemas">
-    <header class="cinemas__intro">
-      <p class="cinemas__note">
-        {{ agent.guide.cinemaPriority.note || '影画 1–6，标注为关键节点的是收益最高的档位。' }}
-      </p>
+  <div class="cinema-timeline">
+    <header class="cinema-timeline__intro">
+      <p>{{ agent.guide.cinemaPriority.note || '影画 1–6，按解锁顺序阅读；标注关键的是收益最高的档位。' }}</p>
     </header>
 
-    <div class="cinemas__grid">
-      <article
+    <ol class="cinema-list">
+      <li
         v-for="cinema in agent.cinemas"
         :id="`cinema-${cinema.level}`"
         :key="cinema.level"
-        class="cinema card"
+        class="cinema"
         :class="{ 'is-key': cinema.keyLevel }"
       >
-        <div class="cinema__mark">
+        <div class="cinema__marker">
           <span class="cinema__level num">L{{ cinema.level }}</span>
           <img
             v-if="media(agent.assets.film)"
@@ -32,143 +30,136 @@ defineProps<{ agent: Agent }>()
             aria-hidden="true"
             loading="lazy"
           />
-          <small>CINEMA</small>
-          <span v-if="cinema.keyLevel" class="cinema__key">关键影画</span>
         </div>
 
         <div class="cinema__body">
-          <h3>{{ cinema.name }}</h3>
+          <header class="cinema__head">
+            <h3>{{ cinema.name }}</h3>
+            <span v-if="cinema.keyLevel" class="cinema__key">关键</span>
+          </header>
           <RichText :text="cinema.effect" class="cinema__effect" />
           <details v-if="cinema.story" class="cinema__story">
             <summary>影画故事</summary>
             <p>{{ cinema.story }}</p>
           </details>
         </div>
-      </article>
-    </div>
+      </li>
+    </ol>
   </div>
 </template>
 
 <style scoped>
-.cinemas__intro {
-  margin-bottom: 18px;
-}
-
-.cinemas__note {
+.cinema-timeline__intro {
+  max-width: var(--measure);
+  margin-bottom: var(--s6);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-13);
 }
 
-.cinemas__grid {
+.cinema-list {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+}
+
+.cinema-list::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 47px;
+  width: 1px;
+  background: var(--line);
 }
 
 .cinema {
-  overflow: hidden;
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--s5);
+  padding: var(--s5) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-.cinema.is-key {
-  border-color: rgba(242, 225, 76, 0.35);
-  box-shadow: 0 0 0 1px rgba(242, 225, 76, 0.08), var(--shadow);
+.cinema:first-child {
+  border-top: 1px solid var(--line);
 }
 
-.cinema__mark {
+.cinema__marker {
   position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 18px 16px;
-  border-right: 1px solid var(--line);
-  background:
-    linear-gradient(160deg, rgba(255, 106, 61, 0.16), rgba(242, 225, 76, 0.03) 55%),
-    var(--surface-3);
-}
-
-.cinema__mark::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    180deg,
-    transparent 0 6px,
-    rgba(0, 0, 0, 0.16) 6px 8px
-  );
-  opacity: 0.35;
-  pointer-events: none;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .cinema__level {
-  position: relative;
-  z-index: 1;
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 38px;
-  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  height: 56px;
+  background: var(--bg);
+  color: var(--line-strong);
+  font-size: var(--fs-28);
+  font-weight: 700;
   line-height: 1;
 }
 
-.cinema__mark small {
-  position: relative;
-  z-index: 1;
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 9px;
-  letter-spacing: 0.24em;
+.cinema.is-key .cinema__level {
+  color: var(--accent);
 }
 
 .cinema__film {
-  position: absolute;
-  right: 8px;
-  top: 10px;
-  width: 48px;
-  height: 48px;
+  width: 30px;
+  height: 30px;
+  margin-top: 4px;
   object-fit: contain;
-  opacity: 0.75;
-  filter: saturate(0.9);
+  opacity: 0.45;
+  filter: saturate(0.8);
   transform: rotate(-8deg);
-  z-index: 0;
+}
+
+.cinema.is-key .cinema__film {
+  opacity: 0.8;
+}
+
+.cinema__body {
+  max-width: 78ch;
+  padding-top: 2px;
+}
+
+.cinema__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+}
+
+.cinema__head h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 .cinema__key {
-  position: relative;
-  z-index: 1;
-  align-self: flex-start;
-  padding: 3px 7px;
+  padding: 1px 6px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: 10px;
+  font-size: var(--fs-11);
   font-weight: 700;
   letter-spacing: 0.08em;
 }
 
-.cinema__body {
-  padding: 20px 22px;
-}
-
-.cinema__body h3 {
-  font-family: var(--font-display);
-  font-size: 18px;
-  letter-spacing: 0.03em;
-}
-
 .cinema__effect {
-  margin-top: 8px;
+  margin-top: var(--s2);
 }
 
 .cinema__story {
-  margin-top: 14px;
-  border-top: 1px dashed var(--line);
-  padding-top: 10px;
+  margin-top: var(--s3);
 }
 
 .cinema__story summary {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-12);
   cursor: pointer;
   list-style: none;
 }
@@ -188,32 +179,35 @@ defineProps<{ agent: Agent }>()
 }
 
 .cinema__story p {
-  margin-top: 8px;
+  margin-top: var(--s2);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-12);
   line-height: 1.9;
   white-space: pre-line;
 }
 
-@media (max-width: 820px) {
-  .cinemas__grid {
-    grid-template-columns: 1fr;
+@media (max-width: 720px) {
+  .cinema-list::before {
+    left: 27px;
   }
 
   .cinema {
-    grid-template-columns: 1fr;
-  }
-
-  .cinema__mark {
-    flex-direction: row;
-    align-items: center;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    padding: 12px 16px;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: var(--s4);
   }
 
   .cinema__level {
-    font-size: 26px;
+    min-width: 44px;
+    height: 44px;
+    font-size: var(--fs-22);
+  }
+
+  .cinema__film {
+    display: none;
+  }
+
+  .cinema__head h3 {
+    font-size: var(--fs-18);
   }
 }
 </style>

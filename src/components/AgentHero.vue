@@ -5,6 +5,8 @@ import { media, mediaColor } from '@/lib/media'
 
 const props = defineProps<{ agent: Agent }>()
 
+defineEmits<{ jump: [id: string] }>()
+
 const elementIcon = computed(() => {
   const map: Record<string, string> = {
     火: 'fire',
@@ -83,31 +85,23 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
           <ul class="hero__tags">
             <li v-for="tag in agent.tags" :key="tag" class="tag">{{ tag }}</li>
           </ul>
+
+          <div class="hero__actions">
+            <a href="#guide" class="hero__jump" @click.prevent="$emit('jump', 'guide')">
+              查看攻略
+              <span aria-hidden="true">↓</span>
+            </a>
+            <a
+              href="#build"
+              class="hero__jump hero__jump--muted"
+              @click.prevent="$emit('jump', 'build')"
+            >
+              打开配装
+              <span aria-hidden="true">↓</span>
+            </a>
+          </div>
         </div>
       </div>
-
-      <dl class="hero__meta">
-        <div>
-          <dt>阵营</dt>
-          <dd>{{ agent.faction }}</dd>
-        </div>
-        <div>
-          <dt>生日</dt>
-          <dd class="num">{{ agent.profile.birthday || '—' }}</dd>
-        </div>
-        <div>
-          <dt>身高</dt>
-          <dd class="num">{{ agent.profile.height || '—' }}<small>cm</small></dd>
-        </div>
-        <div>
-          <dt>属性 / 职业</dt>
-          <dd>{{ agent.element }} · {{ agent.specialty }}</dd>
-        </div>
-        <div>
-          <dt>影画关键</dt>
-          <dd class="num">1 / 6</dd>
-        </div>
-      </dl>
     </div>
   </section>
 </template>
@@ -140,7 +134,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 }
 
 .hero__inner {
-  padding: 28px 0 34px;
+  padding: 24px 0 40px;
 }
 
 .crumbs {
@@ -165,13 +159,13 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   display: flex;
   gap: 26px;
   align-items: flex-start;
-  margin-top: 46px;
+  margin-top: 40px;
 }
 
 .hero__avatar {
   flex-shrink: 0;
-  width: 96px;
-  height: 96px;
+  width: 88px;
+  height: 88px;
   overflow: hidden;
   border: 1px solid var(--line-strong);
   border-radius: 50%;
@@ -186,27 +180,25 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 
 .hero__faction {
   color: var(--fire);
-  font-family: var(--font-display);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-size: var(--fs-12);
+  letter-spacing: 0.14em;
 }
 
 .hero__text h1 {
   display: flex;
   align-items: baseline;
   gap: 14px;
-  margin: 8px 0 14px;
+  margin: 10px 0 14px;
   font-family: var(--font-display);
-  font-size: clamp(40px, 5vw, 64px);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.02em;
+  font-size: clamp(3rem, 5vw, 4.25rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
 }
 
 .hero__text h1 span {
   color: var(--text-2);
-  font-size: clamp(15px, 1.6vw, 20px);
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
   font-weight: 400;
   letter-spacing: 0.28em;
 }
@@ -241,7 +233,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 }
 
 .badge--rank {
-  border-color: rgba(242, 225, 76, 0.5);
+  border-color: rgba(240, 223, 78, 0.5);
   color: var(--accent);
 }
 
@@ -249,8 +241,8 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   max-width: 62ch;
   margin-top: 16px;
   color: var(--text-2);
-  font-size: 14px;
-  line-height: 1.85;
+  font-size: var(--fs-15);
+  line-height: 1.8;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -264,40 +256,51 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   margin-top: 14px;
 }
 
-.hero__meta {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-  margin: 38px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid rgba(58, 58, 72, 0.5);
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s5);
+  margin-top: var(--s5);
 }
 
-.hero__meta dt {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+.hero__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(240, 223, 78, 0.4);
+  color: var(--accent);
+  font-size: var(--fs-13);
+  letter-spacing: 0.06em;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
-.hero__meta dd {
-  margin: 3px 0 0;
+.hero__jump span {
+  color: var(--accent);
+  font-family: var(--font-display);
+}
+
+.hero__jump:hover {
+  border-color: var(--accent);
+}
+
+.hero__jump--muted {
+  border-color: var(--line-strong);
   color: var(--text-2);
-  font-size: 13px;
 }
 
-.hero__meta dd small {
-  margin-left: 2px;
+.hero__jump--muted span {
   color: var(--muted);
-  font-size: 10px;
+}
+
+.hero__jump--muted:hover {
+  border-color: var(--text-2);
+  color: var(--text);
 }
 
 @media (max-width: 900px) {
-  .hero__meta {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .hero__content {
-    margin-top: 30px;
+    margin-top: 28px;
   }
 
   .hero__avatar {
@@ -310,10 +313,6 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   .hero__content {
     flex-direction: column;
     gap: 16px;
-  }
-
-  .hero__meta {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>
