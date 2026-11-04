@@ -3,7 +3,8 @@ import { computed, ref } from 'vue'
 import type { Agent } from '@/types/agent'
 import type { PanelResult } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
-import { graduation30, graduation54, inputFromSpec, type BuildSpec } from '@/core/panel/presets'
+import { graduation30, graduation54, inputFromSpec, coreBonusFor, type BuildSpec } from '@/core/panel/presets'
+import { engines } from '@/core/panel/data'
 import {
   computePhoenixDamage,
   computeSingleRelease,
@@ -114,6 +115,15 @@ const CONFIGS: DamageConfig[] = [
     spec: graduation54,
     note: '双生泣星精 5',
   },
+  {
+    id: '0+1 嵌合',
+    label: '0+1 嵌合',
+    cinema: 0,
+    engineId: 'ep-214',
+    refinement: 3,
+    spec: graduation54,
+    note: '嵌合编译器精 3',
+  },
 ]
 
 const selected = ref(['0+1', '2+1', '4+1', '6+1'])
@@ -127,11 +137,17 @@ const all = computed<ComputedConfig[]>(() =>
   CONFIGS.map((config) => {
     const spec = { ...config.spec, engineId: config.engineId }
     const panel = computePanel(inputFromSpec(props.agent, spec))
+    const engine = engines.find((item) => item.id === config.engineId)
+    const baseAtk =
+      props.agent.base.atk +
+      (engine?.baseAtk ?? 0) +
+      coreBonusFor(props.agent, spec.coreLevel).atkBase
     const build: DamageBuild = {
       cinema: config.cinema,
       refinement: config.refinement,
       coreLevel: spec.coreLevel,
       engineId: config.engineId,
+      baseAtk,
     }
     return {
       ...config,
@@ -152,6 +168,7 @@ const ENGINE_NAMES: Record<string, string> = {
   'ep-1883': '壳中之灵',
   'ep-1964': '朔月裁霜',
   'ep-212': '双生泣星',
+  'ep-214': '嵌合编译器',
 }
 
 function engineName(item: ComputedConfig) {
@@ -163,6 +180,7 @@ function engineNote(item: ComputedConfig) {
   if (item.id === '0+0') return '无专武 · 白板'
   if (item.id === '0+1 朔月') return '限定下位 · 纯白板'
   if (item.id === 'A5') return 'A 级 · 零氪'
+  if (item.id === '0+1 嵌合') return '常驻下位'
   return item.note
 }
 const single = computed(() =>
@@ -232,7 +250,7 @@ const metricRows = computed(() =>
 )
 
 const engineRows = computed(() => {
-  const ids = ['0+1', '0+0', '0+1 朔月', 'A5']
+  const ids = ['0+1', '0+0', '0+1 朔月', 'A5', '0+1 嵌合']
   return ids
     .map((id) => all.value.find((item) => item.id === id))
     .filter((item): item is ComputedConfig => Boolean(item))
@@ -350,7 +368,10 @@ async function copyMarkdown() {
         </table>
       </div>
       <p class="damage-meta">
-        同为 0 影画、54 词条、标准木桩、20s 参考轴；不带入其他未推荐音擎。
+        同为 0 影画、54 词条、标准木桩、20s 参考轴；不带入其他未推荐音擎。局内 effect 已计入：
+        壳中之灵 +90 精通，双生泣星按 4 层 +192 精通，嵌合编译器按 3 层 +111 精通与 +18% 攻击，
+        涅槃初翎 +90 精通与 +40% 火伤；朔月裁霜的冰伤/异放增伤对火属性不触发。以上是 100% 覆盖上限，
+        不等同于抽取推荐顺序；双生泣星需要维持 4 层。
       </p>
     </section>
 

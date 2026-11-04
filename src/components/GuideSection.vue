@@ -5,7 +5,8 @@ import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
 import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
 import { computePanel } from '@/core/panel/compute'
-import { graduation54, inputFromSpec } from '@/core/panel/presets'
+import { graduation54, inputFromSpec, coreBonusFor } from '@/core/panel/presets'
+import { engines } from '@/core/panel/data'
 import { computePhoenixDamage, enemyById } from '@/core/damage'
 
 const props = defineProps<{ agent: Agent }>()
@@ -75,11 +76,14 @@ function graduationAnalysis(item: GuideGraduation, includePenValue = false) {
 const cinemaGains = computed(() => {
   const enemy = enemyById('standard')
   const panel = computePanel(inputFromSpec(props.agent, graduation54))
+  const engine = engines.find((item) => item.id === 'ep-2259')
+  const baseAtk =
+    props.agent.base.atk + (engine?.baseAtk ?? 0) + coreBonusFor(props.agent, 'F').atkBase
   const totals = [0, 1, 2, 4, 6].map((cinema) =>
     computePhoenixDamage(
       props.agent,
       panel.stats,
-      { cinema, refinement: 1, coreLevel: 'F', engineId: 'ep-2259' },
+      { cinema, refinement: 1, coreLevel: 'F', engineId: 'ep-2259', baseAtk },
       enemy,
     ).axis.total,
   )

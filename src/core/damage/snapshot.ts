@@ -5,19 +5,61 @@ import { searCritRate } from './zones'
 import type { CombatStats } from './types'
 
 const CORE_LEVELS: BuildSpec['coreLevel'][] = ['none', 'A', 'B', 'C', 'D', 'E', 'F']
-const WEAPON_AP = [90, 99, 108, 117, 126]
-const WEAPON_FIRE_DMG = [40, 44, 48, 52, 56]
 const NIRVANA = 'ep-2259'
+
+interface EngineEffect {
+  ap: number
+  fireDmg: number
+  atkPct: number
+}
+
+function engineEffect(engineId: string | null, refinement: number): EngineEffect {
+  const index = Math.min(4, Math.max(0, refinement - 1))
+  const apByLevel = (values: number[]) => values[index] ?? values[0]
+  if (engineId === NIRVANA) {
+    return { ap: apByLevel([90, 99, 108, 117, 126]), fireDmg: [40, 44, 48, 52, 56][index] ?? 40, atkPct: 0 }
+  }
+  if (engineId === 'ep-1883') {
+    // 壳中之灵：以太专属增伤不触发，但 90/103/117/130/144 异常精通对所有装备者生效。
+    return { ap: apByLevel([90, 103, 117, 130, 144]), fireDmg: 0, atkPct: 0 }
+  }
+  if (engineId === 'ep-212') {
+    // 双生泣星：每层异常精通 30/34/38/42/48，最多 4 层，按 100% 覆盖。
+    return { ap: apByLevel([30, 34, 38, 42, 48]) * 4, fireDmg: 0, atkPct: 0 }
+  }
+  if (engineId === 'ep-214') {
+    // 嵌合编译器：攻击力 12/15/18/21/24%，异常精通 25/31/37/43/50 × 3 层。
+    return {
+      ap: apByLevel([25, 31, 37, 43, 50]) * 3,
+      fireDmg: 0,
+      atkPct: [12, 15, 18, 21, 24][index] ?? 12,
+    }
+  }
+  // 朔月裁霜的冰伤/异放增伤对火属性菲欧妮不生效。
+  return { ap: 0, fireDmg: 0, atkPct: 0 }
+}
 
 export interface DamageBuild {
   cinema: number
   refinement: number
   coreLevel: BuildSpec['coreLevel']
   engineId: string | null
+  /** 角色 + 音擎 + 核心的局外基础攻击，用于计算局内攻击%效果。 */
+  baseAtk: number
 }
 
 function coreIndex(level: BuildSpec['coreLevel']): number {
   return CORE_LEVELS.indexOf(level)
+}
+
+/**
+ * 官方文本的 A–F 数组带一个额外的末位（F = 85 / 25 / 50），
+ * 与 `coreBonus` 的 6 项不是同一索引：A–E 取 index-1，F 取末位。
+ */
+export function coreValue(values: number[], index: number): number {
+  if (index <= 0) return 0
+  if (index >= 6) return values[values.length - 1] ?? 0
+  return values[index - 1] ?? 0
 }
 
 /**
@@ -34,23 +76,22 @@ export function buildCombatStats(
   build: DamageBuild,
 ): CombatStats {
   const index = coreIndex(build.coreLevel)
-  const amFlat = index > 0 ? (agent.corePassive.amFlat[index - 1] ?? 0) : 0
-  const coreCritDmg = index > 0 ? (agent.corePassive.critDmg[index - 1] ?? 0) : 0
+  const amFlat = coreValue(agent.corePassive.amFlat, index)
+  const coreCritDmg = coreValue(agent.corePassive.critDmg, index)
   const cinema = Math.min(6, Math.max(0, build.cinema))
-  const weapon = build.engineId === NIRVANA
-  const weaponAp = weapon ? (WEAPON_AP[build.refinement - 1] ?? WEAPON_AP[0]) : 0
-  const weaponFire = weapon ? (WEAPON_FIRE_DMG[build.refinement - 1] ?? WEAPON_FIRE_DMG[0]) : 0
+  const effect = engineEffect(build.engineId, build.refinement)
 
   const searCritDmg = (coreCritDmg + 15 + (cinema >= 1 ? 25 : 0)) / 100
   const releaseCritDmg = searCritDmg + 0.4
-  const dmgBonus = 1 + (panel.dmgBonus + weaponFire + (cinema >= 2 ? 30 : 0)) / 100
+  const dmgBonus = 1 + (panel.dmgBonus + effect.fireDmg + (cinema >= 2 ? 30 : 0)) / 100
+  const atk = panel.atk + (build.baseAtk * effect.atkPct) / 100
 
   return {
-    atk: panel.atk,
+    atk,
     dmgBonus,
     penRatio: panel.penRatio,
     penValue: panel.penValue,
-    ap: panel.anomalyProficiency + amFlat + weaponAp,
+    ap: panel.anomalyProficiency + amFlat + effect.ap,
     anomalyMastery: panel.anomalyMastery,
     critRate: panel.critRate,
     critDmg: panel.critDmg,
