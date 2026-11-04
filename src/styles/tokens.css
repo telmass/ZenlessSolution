@@ -1,0 +1,27 @@
+:root {
+  --bg: #08080b;
+  --bg-soft: #0c0c11;
+  --surface: #111117;
+  --surface-2: #17171f;
+  --surface-3: #1d1d27;
+  --line: #262631;
+  --line-strong: #3a3a48;
+  --text: #f3f3f6;
+  --text-2: #bcbcc7;
+  --muted: #85858f;
+  --accent: #f2e14c;
+  --accent-soft: rgba(242, 225, 76, 0.12);
+  --accent-ink: #14140a;
+  --fire: #ff6a3d;
+  --fire-soft: rgba(255, 106, 61, 0.14);
+  --danger: #ff4d4f;
+  --ok: #55d6a0;
+  --radius-sm: 3px;
+  --radius: 6px;
+  --radius-lg: 12px;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --maxw: 1280px;
+  --header-h: 64px;
+  --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-display: "Bahnschrift", "DIN Alternate", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}

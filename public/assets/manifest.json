@@ -1,0 +1,146 @@
+{
+ "agent:phoenix:avatar": {
+  "src": "/assets/media/9440961c4c-avatar.webp",
+  "width": 256,
+  "height": 256,
+  "color": "#9a8c87",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/16/71319299/0c6fe6449ebd56b87745a332ade80e1f_5954047325411114795.png",
+  "variant": "avatar"
+ },
+ "agent:phoenix:tachie": {
+  "src": "/assets/media/587d2d0604-portrait.webp",
+  "width": 720,
+  "height": 720,
+  "color": "#605153",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/14/82500917/18d1edb371088161b9ef37d6043576de_7445320364134582903.png",
+  "variant": "portrait"
+ },
+ "agent:phoenix:full": {
+  "src": "/assets/media/b1df507921-full.webp",
+  "width": 1440,
+  "height": 1767,
+  "color": "#3e3536",
+  "source": "https://i.gachabase.net/EYmENBuHcerI7PCnpvo5Yflh8MBPJwQPx6C79KmH5KQ/q:50/f:webp/plain/zzz/assets/8000849831ef282230a0403845820fae.png",
+  "variant": "full"
+ },
+ "agent:phoenix:cinema:1": {
+  "src": "/assets/media/e859bc0f3a-cinema.webp",
+  "width": 720,
+  "height": 397,
+  "color": "#927980",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/6c45212fd0b14e14556991389fcacfd3_2512902174911162122.png?x-oss-process=image/format,webp",
+  "variant": "cinema"
+ },
+ "agent:phoenix:cinema:4": {
+  "src": "/assets/media/ddc34e1c78-cinema.webp",
+  "width": 720,
+  "height": 397,
+  "color": "#ccabad",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/0c1b6fba15c8ea02bf03be2ec579d687_6327523380981810275.png?x-oss-process=image/format,webp",
+  "variant": "cinema"
+ },
+ "engine:ep-2259:icon": {
+  "src": "/assets/media/4177b5b52f-icon.webp",
+  "width": 160,
+  "height": 160,
+  "color": "#4f2728",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/12/233874762/0d237081fd0f184e4fc22abbbf5a4641_3451218840361264643.png",
+  "variant": "icon"
+ },
+ "engine:ep-1883:icon": {
+  "src": "/assets/media/ad4a10f1ee-icon.webp",
+  "width": 160,
+  "height": 160,
+  "color": "#614f51",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/02/24/141353238/3214160dc64637a1823af2cef51d505b_6802413686352293170.png",
+  "variant": "icon"
+ },
+ "engine:ep-1964:icon": {
+  "src": "/assets/media/979d58921b-icon.webp",
+  "width": 160,
+  "height": 160,
+  "color": "#515560",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/04/30/15559334/39c79cd0e48bff218c74eec559e116f2_6669784355888716200.png",
+  "variant": "icon"
+ },
+ "engine:ep-212:icon": {
+  "src": "/assets/media/6f9d9955c6-icon.webp",
+  "width": 160,
+  "height": 160,
+  "color": "#393a3b",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b8c620882b72deab5a23c7cdd_3200938913040663318.png",
+  "variant": "icon"
+ },
+ "set:法厄同之歌:icon": {
+  "src": "/assets/media/46c4d85c72-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#6d6672",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png",
+  "variant": "icon"
+ },
+ "set:自由蓝调:4pc": {
+  "src": "/assets/media/06b547a57a-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#a8b1a8",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png",
+  "variant": "icon"
+ },
+ "set:自由蓝调:icon": {
+  "src": "/assets/media/06b547a57a-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#a8b1a8",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png",
+  "variant": "icon"
+ },
+ "agent:ep-1960:avatar": {
+  "src": "/assets/media/65ca3a5273-avatar.webp",
+  "width": 256,
+  "height": 256,
+  "color": "#88868f",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/15/76099754/11878922b3ca137a99bf3906b74cb5df_3794220973506474405.png",
+  "variant": "avatar"
+ },
+ "set:呼啸沙龙:icon": {
+  "src": "/assets/media/a2d0138c91-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#acadaf",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/18/76099754/7589a4b9181ef956d0b22e3a60fc3908_2366218006868139587.png",
+  "variant": "icon"
+ },
+ "agent:ep-2076:avatar": {
+  "src": "/assets/media/baa2d7aa86-avatar.webp",
+  "width": 256,
+  "height": 256,
+  "color": "#8f6c78",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/15559334/13b7b06627a8a99ffdf1f397b1daf7d1_5495460923605178593.png",
+  "variant": "avatar"
+ },
+ "set:谶羽之誓:icon": {
+  "src": "/assets/media/112201954b-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#b9b2b5",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png",
+  "variant": "icon"
+ },
+ "agent:ep-1386:avatar": {
+  "src": "/assets/media/f12e75b7e3-avatar.webp",
+  "width": 256,
+  "height": 256,
+  "color": "#ae565f",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/10/76099754/f288f8b22deafa2493c389fc4465d77b_8800233381222281203.png",
+  "variant": "avatar"
+ },
+ "set:月光骑士颂:icon": {
+  "src": "/assets/media/81ede6affc-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#78766f",
+  "source": "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG",
+  "variant": "icon"
+ }
+}

@@ -1,0 +1,18 @@
+[
+ {
+  "slug": "phoenix",
+  "name": "菲欧妮",
+  "fullName": "菲欧妮·蕾法爱菈",
+  "rarity": "S",
+  "element": "火",
+  "specialty": "异常",
+  "faction": "坎卜斯黑枝",
+  "avatar": "agent:phoenix:avatar",
+  "tags": [
+   "火属性异常",
+   "异常暴击",
+   "驻场输出",
+   "异放"
+  ]
+ }
+]
