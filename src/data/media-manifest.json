@@ -142,5 +142,13 @@
   "color": "#78766f",
   "source": "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG",
   "variant": "icon"
+ },
+ "agent:phoenix:film": {
+  "src": "/assets/media/c7c026dc11-icon.webp",
+  "width": 156,
+  "height": 156,
+  "color": "#555153",
+  "source": "https://static.nanoka.cc/assets/zzz/IconRolePiece1641.webp",
+  "variant": "icon"
  }
 }

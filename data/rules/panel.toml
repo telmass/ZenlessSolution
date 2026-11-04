@@ -1,0 +1,291 @@
+# Panel rules for the out-of-combat calculator.
+# Single source for stat ids, main stats, substats and 2-piece set effects.
+# Generated data lives in src/data/panel.json; compute logic in src/core/panel.
+
+[discFixed]
+hp = 2200
+atk = 316
+def = 184
+
+[[substats]]
+id = "hp_flat"
+label = "小生命"
+stat = "hp"
+value = 112
+kind = "flat"
+
+[[substats]]
+id = "hp_pct"
+label = "大生命%"
+stat = "hp"
+value = 3
+kind = "pct"
+
+[[substats]]
+id = "atk_flat"
+label = "小攻击"
+stat = "atk"
+value = 19
+kind = "flat"
+
+[[substats]]
+id = "atk_pct"
+label = "大攻击%"
+stat = "atk"
+value = 3
+kind = "pct"
+
+[[substats]]
+id = "def_flat"
+label = "小防御"
+stat = "def"
+value = 15
+kind = "flat"
+
+[[substats]]
+id = "def_pct"
+label = "大防御%"
+stat = "def"
+value = 4.8
+kind = "pct"
+
+[[substats]]
+id = "crit_rate"
+label = "暴击率"
+stat = "critRate"
+value = 2.4
+kind = "pct"
+
+[[substats]]
+id = "crit_dmg"
+label = "暴击伤害"
+stat = "critDmg"
+value = 4.8
+kind = "pct"
+
+[[substats]]
+id = "pen_value"
+label = "穿透值"
+stat = "penValue"
+value = 9
+kind = "flat"
+
+[[substats]]
+id = "anomaly_proficiency"
+label = "异常精通"
+stat = "anomalyProficiency"
+value = 9
+kind = "flat"
+
+[[mainStats]]
+id = "atk_pct_30"
+slot = 4
+label = "攻击力 +30%"
+stat = "atk"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "hp_pct_30"
+slot = 4
+label = "生命值 +30%"
+stat = "hp"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "def_pct_48"
+slot = 4
+label = "防御力 +48%"
+stat = "def"
+value = 48
+kind = "pct"
+
+[[mainStats]]
+id = "crit_rate_24"
+slot = 4
+label = "暴击率 +24%"
+stat = "critRate"
+value = 24
+kind = "pct"
+
+[[mainStats]]
+id = "crit_dmg_48"
+slot = 4
+label = "暴击伤害 +48%"
+stat = "critDmg"
+value = 48
+kind = "pct"
+
+[[mainStats]]
+id = "anomaly_proficiency_92"
+slot = 4
+label = "异常精通 +92"
+stat = "anomalyProficiency"
+value = 92
+kind = "flat"
+
+[[mainStats]]
+id = "atk_pct_30_d5"
+slot = 5
+label = "攻击力 +30%"
+stat = "atk"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "hp_pct_30_d5"
+slot = 5
+label = "生命值 +30%"
+stat = "hp"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "def_pct_48_d5"
+slot = 5
+label = "防御力 +48%"
+stat = "def"
+value = 48
+kind = "pct"
+
+[[mainStats]]
+id = "pen_ratio_24"
+slot = 5
+label = "穿透率 +24%"
+stat = "penRatio"
+value = 24
+kind = "pct"
+
+[[mainStats]]
+id = "dmg_bonus_30"
+slot = 5
+label = "属性伤害 +30%"
+stat = "dmgBonus"
+value = 30
+kind = "flat"
+
+[[mainStats]]
+id = "atk_pct_30_d6"
+slot = 6
+label = "攻击力 +30%"
+stat = "atk"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "hp_pct_30_d6"
+slot = 6
+label = "生命值 +30%"
+stat = "hp"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "def_pct_48_d6"
+slot = 6
+label = "防御力 +48%"
+stat = "def"
+value = 48
+kind = "pct"
+
+[[mainStats]]
+id = "impact_pct_18"
+slot = 6
+label = "冲击力 +18%"
+stat = "impact"
+value = 18
+kind = "pct"
+
+[[mainStats]]
+id = "anomaly_mastery_30"
+slot = 6
+label = "异常掌控 +30%"
+stat = "anomalyMastery"
+value = 30
+kind = "pct"
+
+[[mainStats]]
+id = "energy_regen_60"
+slot = 6
+label = "能量自动回复 +60%"
+stat = "energyRegen"
+value = 60
+kind = "pct"
+
+[[setEffects]]
+id = "am_30"
+stat = "anomalyProficiency"
+value = 30
+kind = "flat"
+label = "异常精通 +30"
+
+[[setEffects]]
+id = "ac_pct_8"
+stat = "anomalyMastery"
+value = 8
+kind = "pct"
+label = "异常掌控 +8%"
+
+[[setEffects]]
+id = "er_pct_20"
+stat = "energyRegen"
+value = 20
+kind = "pct"
+label = "能量自动回复 +20%"
+
+[[setEffects]]
+id = "atk_pct_10"
+stat = "atk"
+value = 10
+kind = "pct"
+label = "攻击力 +10%"
+
+[[setEffects]]
+id = "hp_pct_10"
+stat = "hp"
+value = 10
+kind = "pct"
+label = "生命值 +10%"
+
+[[setEffects]]
+id = "def_pct_16"
+stat = "def"
+value = 16
+kind = "pct"
+label = "防御力 +16%"
+
+[[setEffects]]
+id = "cr_8"
+stat = "critRate"
+value = 8
+kind = "pct"
+label = "暴击率 +8%"
+
+[[setEffects]]
+id = "cd_16"
+stat = "critDmg"
+value = 16
+kind = "pct"
+label = "暴击伤害 +16%"
+
+[[setEffects]]
+id = "impact_pct_6"
+stat = "impact"
+value = 6
+kind = "pct"
+label = "冲击力 +6%"
+
+[[setEffects]]
+id = "dmg_10"
+stat = "dmgBonus"
+value = 10
+kind = "flat"
+label = "属性伤害 +10%"
+
+[[setEffects]]
+id = "pr_8"
+stat = "penRatio"
+value = 8
+kind = "pct"
+label = "穿透率 +8%"

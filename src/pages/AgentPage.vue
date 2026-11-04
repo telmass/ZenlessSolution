@@ -8,6 +8,7 @@ import OverviewSection from '@/components/OverviewSection.vue'
 import SkillsSection from '@/components/SkillsSection.vue'
 import CinemasSection from '@/components/CinemasSection.vue'
 import GuideSection from '@/components/GuideSection.vue'
+import PanelSection from '@/components/PanelSection.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +20,7 @@ const tabs = [
   { id: 'skills', label: '技能', en: 'SKILLS' },
   { id: 'cinemas', label: '影画', en: 'CINEMA' },
   { id: 'guide', label: '攻略', en: 'GUIDE' },
+  { id: 'build', label: '配装', en: 'BUILD' },
 ] as const
 
 type TabId = (typeof tabs)[number]['id']
@@ -64,7 +66,8 @@ const notFound = computed(() => route.params.slug !== 'phoenix')
       <OverviewSection v-if="active === 'overview'" :agent="agent" />
       <SkillsSection v-else-if="active === 'skills'" :agent="agent" />
       <CinemasSection v-else-if="active === 'cinemas'" :agent="agent" />
-      <GuideSection v-else :agent="agent" />
+      <GuideSection v-else-if="active === 'guide'" :agent="agent" />
+      <PanelSection v-else :agent="agent" />
     </div>
   </div>
 

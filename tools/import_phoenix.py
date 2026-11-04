@@ -140,6 +140,13 @@ def main() -> None:
     tachie_key = add_media("agent:phoenix:tachie", phoenix["assets"].get("tachie"), "portrait", 720, 720)
     full_key = add_media("agent:phoenix:full", strategy.get("background"), "full", 1440, 810)
     agent_avatar_key = avatar_key
+    film_key = add_media(
+        "agent:phoenix:film",
+        "https://static.nanoka.cc/assets/zzz/IconRolePiece1641.webp",
+        "icon",
+        160,
+        160,
+    )
 
     cinemas = []
     seen_cinema: dict[str, str] = {}
@@ -395,6 +402,7 @@ def main() -> None:
             "avatar": avatar_key,
             "tachie": tachie_key,
             "full": full_key,
+            "film": film_key,
         },
         "guide": guide,
         "sources": [

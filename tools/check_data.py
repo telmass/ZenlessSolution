@@ -126,6 +126,30 @@ def main() -> None:
     if missing:
         fail(errors, f"media keys missing from manifest: {sorted(missing)}")
 
+    panel = json.loads((ROOT / "src" / "data" / "panel.json").read_text(encoding="utf-8"))
+    if len(panel["engines"]) != 4:
+        fail(errors, f"panel engines = {len(panel['engines'])}, expected 4")
+    if len(panel["sets"]) != 30:
+        fail(errors, f"panel sets = {len(panel['sets'])}, expected 30")
+    if len(panel["substats"]) != 10:
+        fail(errors, f"panel substats = {len(panel['substats'])}, expected 10")
+    if {item["slot"] for item in panel["mainStats"]} != {4, 5, 6}:
+        fail(errors, "panel mainStats slots mismatch")
+    for item in panel["mainStats"]:
+        if item["stat"] not in {
+            "hp", "atk", "def", "impact", "critRate", "critDmg", "dmgBonus",
+            "penRatio", "penValue", "anomalyProficiency", "anomalyMastery", "energyRegen",
+        }:
+            fail(errors, f"panel main stat unknown target: {item['stat']}")
+    if panel["discFixed"] != {"hp": 2200, "atk": 316, "def": 184}:
+        fail(errors, f"panel discFixed mismatch: {panel['discFixed']}")
+
+    for graduation_key in ("graduation", "graduationAlt"):
+        graduation = guide.get(graduation_key)
+        if graduation and graduation["spec"].get("disc5MainId") == "dmg_30":
+            if "dmgBonus" not in {item["stat"] for item in panel["mainStats"]}:
+                fail(errors, "panel missing damage-bonus main stat")
+
     payload = json.dumps(agent, ensure_ascii=False)
     if "TODO" in payload or "TODO" in json.dumps(guide, ensure_ascii=False):
         fail(errors, "generated data contains TODO")

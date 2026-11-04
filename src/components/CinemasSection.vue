@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Agent } from '@/types/agent'
+import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
 
 defineProps<{ agent: Agent }>()
@@ -23,6 +24,14 @@ defineProps<{ agent: Agent }>()
       >
         <div class="cinema__mark">
           <span class="cinema__level num">L{{ cinema.level }}</span>
+          <img
+            v-if="media(agent.assets.film)"
+            class="cinema__film"
+            :src="media(agent.assets.film)"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
           <small>CINEMA</small>
           <span v-if="cinema.keyLevel" class="cinema__key">关键影画</span>
         </div>
@@ -110,6 +119,19 @@ defineProps<{ agent: Agent }>()
   font-family: var(--font-display);
   font-size: 9px;
   letter-spacing: 0.24em;
+}
+
+.cinema__film {
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  opacity: 0.75;
+  filter: saturate(0.9);
+  transform: rotate(-8deg);
+  z-index: 0;
 }
 
 .cinema__key {

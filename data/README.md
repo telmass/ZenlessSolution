@@ -6,12 +6,16 @@
 | --- | --- | --- |
 | `sources/phoenix.json` | 官方 WIKI 代理人页抓取快照（技能、影画、档案、素材 URL） | 抓取脚本产物，人工不改 |
 | `sources/agents.json` | 基础面板与核心技档位的目录子集 | 从旧目录抽取 |
+| `sources/engines.json` | 菲欧妮相关音擎子集（4 把） | 从旧目录抽取 |
+| `sources/drive-sets.json` | 驱动盘套装（30 套，含二件套效果 id） | 从旧目录抽取 |
 | `guides/phoenix.toml` | 攻略人工编辑源（加点、音擎、驱动盘、队伍、文字、毕业 spec） | **人工维护** |
+| `rules/panel.toml` | 面板规则（10 副词条、17 主词条、12 种二件套、固定值） | **人工维护** |
 
 ## 生成链路
 
 ```bash
 python tools/import_phoenix.py   # data/ -> src/data/agents/phoenix.json + media.json
+python tools/import_panel.py     # rules + sources -> src/data/panel.json
 python tools/sync_assets.py      # media.json -> public/assets/media/*.webp + manifest
 python tools/check_data.py       # 数据契约校验
 python tools/check_assets.py     # 资产清单 / 引用 / 预算校验

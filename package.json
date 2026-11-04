@@ -8,11 +8,12 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
-    "data:build": "python tools/import_phoenix.py",
+    "test": "vitest run",
+    "data:build": "python tools/import_phoenix.py && python tools/import_panel.py",
     "data:check": "python tools/check_data.py",
     "assets:sync": "python tools/sync_assets.py",
     "assets:check": "python tools/check_assets.py",
-    "verify": "pnpm data:check && pnpm assets:check && pnpm typecheck && pnpm build"
+    "verify": "pnpm data:check && pnpm assets:check && pnpm test && pnpm typecheck && pnpm build"
   },
   "dependencies": {
     "vue": "^3.5.13",
@@ -22,6 +23,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
+    "vitest": "^5.1.0",
     "vue-tsc": "^2.2.0"
   }
 }

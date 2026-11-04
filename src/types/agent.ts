@@ -180,7 +180,7 @@ export interface Agent {
   }
   skills: AgentSkill[]
   cinemas: AgentCinema[]
-  assets: { avatar: string; tachie: string; full: string }
+  assets: { avatar: string; tachie: string; full: string; film?: string }
   guide: AgentGuide
   sources: { label: string; url: string }[]
   repairs?: string[]

@@ -21,6 +21,13 @@
   "height": 810
  },
  {
+  "key": "agent:phoenix:film",
+  "url": "https://static.nanoka.cc/assets/zzz/IconRolePiece1641.webp",
+  "variant": "icon",
+  "width": 160,
+  "height": 160
+ },
+ {
   "key": "agent:phoenix:cinema:1",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/10/21/71319299/6c45212fd0b14e14556991389fcacfd3_2512902174911162122.png?x-oss-process=image/format,webp",
   "variant": "cinema",
