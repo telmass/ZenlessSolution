@@ -30,7 +30,8 @@ HEADERS = {
     "x-rpc-language": "zh-cn",
 }
 API = "https://act-api-takumi.mihoyo.com/hoyowiki/zzz/wapi/entry_page_v2?entry_page_id={}"
-ALIASES = {"飚速布": "飙速布"}
+# The 545 index table spells 飚速布 as 飙速布; its own entry (287) uses 飚速布.
+INDEX_ALIASES = {"飚速布": "飙速布"}
 
 
 def fetch(page_id: int) -> dict:
@@ -120,7 +121,7 @@ def extract_profile(page: dict) -> str:
 
 def main() -> None:
     bangboo = json.loads(BANGBOO.read_text(encoding="utf-8"))
-    target_names = {ALIASES.get(item["name"], item["name"]) for item in bangboo}
+    target_names = {item["name"] for item in bangboo}
     index_skills = parse_index_skills()
 
     hits: dict[str, int] = {}
@@ -150,17 +151,18 @@ def main() -> None:
         }
 
     for item in bangboo:
-        name = ALIASES.get(item["name"], item["name"])
+        name = item["name"]
         if name in by_name:
             continue
-        if name in index_skills:
+        index_name = INDEX_ALIASES.get(name, name)
+        if index_name in index_skills:
             by_name[name] = {
                 "wikiId": 545,
                 "skills": [
                     {
                         "tab": "技能",
                         "title": "",
-                        "desc": index_skills[name],
+                        "desc": index_skills[index_name],
                         "detail": "",
                         "levels": 1,
                     }
@@ -168,7 +170,7 @@ def main() -> None:
                 "description": "",
             }
 
-    missing = [item["name"] for item in bangboo if ALIASES.get(item["name"], item["name"]) not in by_name]
+    missing = [item["name"] for item in bangboo if item["name"] not in by_name]
     OUT.write_text(
         json.dumps({"byName": by_name, "missing": missing}, ensure_ascii=False, indent=1),
         encoding="utf-8",

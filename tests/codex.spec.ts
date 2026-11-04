@@ -32,6 +32,6 @@ describe('codex datasets', () => {
   })
 
   it('has Chinese profiles for the released bangboo', () => {
-    expect(bangboo.filter((item) => item.descriptionZh).length).toBeGreaterThanOrEqual(40)
+    expect(bangboo.filter((item) => item.descriptionZh).length).toBe(41)
   })
 })
