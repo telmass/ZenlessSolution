@@ -34,11 +34,12 @@ brand-fidelity: 8
 
 | 顺序 | id | 内容 |
 | --- | --- | --- |
-| 01 | `overview` | 档案、60 级基础面板、核心技 A–F |
-| 02 | `skills` | 6 类 18 招式，默认展开「普通攻击：裁生」 |
+| 01 | `overview` | 档案、60 级基础面板 |
+| 02 | `skills` | 6 类 18 招式 + 核心技 A–F 数值面板（含额外能力），默认展开「普通攻击：裁生」 |
 | 03 | `cinemas` | L1–L6 时间轴；`#cinema-1..6` 保留 |
-| 04 | `guide` | 加点、音擎、驱动盘、毕业面板、队伍、文字攻略、来源 |
+| 04 | `guide` | 加点、音擎、驱动盘、毕业面板、队伍、文字攻略 |
 | 05 | `build` | 局外面板计算器（预设 / 表单 / sticky 结果） |
+| 06 | `damage` | 20s 参考轴、单次异放、0+1/2+1/4+1/6+1 对比 |
 
 - 章节导航 `SectionNav` 固定在 header 下：桌面 52px、移动 48px；底部 1px 阅读进度线在顶部边缘，避免与 active 下划线冲突。
 - 点击导航用 `window.scrollTo`，落点 = 章节顶 −（header + nav + 16）；**不使用 `scrollIntoView`**。
@@ -66,8 +67,9 @@ brand-fidelity: 8
 | `constants/sections.ts` | 新增：章节清单、旧 tab 映射、`resolveSection` |
 | `components/ChapterHead.vue` | 新增：章节数字 + 标题 + 导语；无英文微标签 |
 | `components/AgentHero.vue` | 删除重复 meta；增加攻略/配装锚点；降低高度 |
-| `components/OverviewSection.vue` | 去卡片：档案定义表 + 面板账本 + 核心机制块 |
-| `components/SkillsSection.vue` | 重写：6 类全展开 + 单招式手风琴 + 12 级预览；≥1200px 时说明与成长表两栏 |
+| `components/OverviewSection.vue` | 去卡片：档案定义表 + 面板账本；核心技移至技能章节 |
+| `components/CorePassive.vue` | 核心技 A–F 数值面板：等级切换 + 机制数值 + 额外能力 |
+| `components/SkillsSection.vue` | 重写：6 类全展开 + 单招式手风琴 + 12 级预览；核心技改用 `CorePassive` |
 | `core/skills/preview.ts` | 新增：从成长表提取 12 级伤害/失衡/段数 |
 | `components/CinemasSection.vue` | 重写：纵向时间轴 + 右侧影画故事栏；保留 `cinema-N` |
 | `components/GuideSection.vue` | 去卡片/去内部编号；音擎推荐改 2×2 规格格，长文/表格填满宽度 |

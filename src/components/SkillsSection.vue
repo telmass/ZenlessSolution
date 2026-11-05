@@ -4,6 +4,7 @@ import type { Agent, CoreTable, GrowthTable as GrowthTableData } from '@/types/a
 import { movePreview } from '@/core/skills/preview'
 import GrowthTable from '@/components/GrowthTable.vue'
 import RichText from '@/components/RichText.vue'
+import CorePassive from '@/components/CorePassive.vue'
 import { publicUrl } from '@/lib/url'
 
 const props = defineProps<{ agent: Agent }>()
@@ -49,7 +50,9 @@ const categories = computed(() => props.agent.skills)
         </span>
       </header>
 
-      <ul class="move-list">
+      <CorePassive v-if="category.key === 'core'" :agent="agent" />
+
+      <ul v-else class="move-list">
         <li
           v-for="(move, moveIndex) in category.moves"
           :key="move.title"
