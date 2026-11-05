@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Agent, GuideGraduation } from '@/types/agent'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
+import GuideCardActions from '@/components/GuideCardActions.vue'
 import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
 import { computePanel } from '@/core/panel/compute'
 import { graduation54, inputFromSpec } from '@/core/panel/presets'
@@ -114,6 +115,7 @@ function graduationLabel(item: GuideGraduation): string {
         <ul class="guide__tags">
           <li v-for="tag in guide.tags" :key="tag" class="tag tag--fire">{{ tag }}</li>
         </ul>
+        <GuideCardActions :agent="agent" class="guide__actions" />
       </div>
       <div v-if="effectiveCount" class="guide__effective">
         <b class="num">{{ effectiveCount }}</b>
@@ -270,7 +272,6 @@ function graduationLabel(item: GuideGraduation): string {
               含穿透 {{ graduationAnalysis(item, true).effective }} 有效
             </em>
           </div>
-          <p class="graduation__note">{{ item.note }}</p>
         </article>
       </div>
     </section>
@@ -339,13 +340,6 @@ function graduationLabel(item: GuideGraduation): string {
         >
           {{ source.label }} <span aria-hidden="true">↗</span>
         </a>
-        <p class="muted">
-          攻略内容整理自官方 WIKI 与官方玩法合集，并与旧版本地项目交叉核对；毕业面板为旧版计算器实算记录，
-          新面板引擎接入后将重新复算。更新于 {{ agent.updatedAt }}。
-        </p>
-        <p v-for="repair in agent.repairs" :key="repair" class="sources__repair">
-          数据修复：{{ repair }}
-        </p>
       </div>
     </section>
   </div>
@@ -368,23 +362,28 @@ function graduationLabel(item: GuideGraduation): string {
 
 .guide__lead h2 {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-size: var(--fs-28);
   font-weight: 700;
-  letter-spacing: 0.03em;
-  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
+  line-height: var(--lh-title);
 }
 
 .guide__oneliner {
-  max-width: 58ch;
+  max-width: var(--measure);
   margin-top: var(--s3);
   color: var(--text-2);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
+  line-height: 1.8;
 }
 
 .guide__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: var(--s4);
+}
+
+.guide__actions {
   margin-top: var(--s4);
 }
 
@@ -396,14 +395,14 @@ function graduationLabel(item: GuideGraduation): string {
 .guide__effective b {
   display: block;
   color: var(--accent);
-  font-size: var(--fs-52);
+  font-size: var(--fs-36);
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 0.95;
 }
 
 .guide__effective span {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   line-height: 1.5;
 }
 
@@ -421,14 +420,14 @@ function graduationLabel(item: GuideGraduation): string {
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .block h4 {
   font-family: var(--font-display);
   font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 /* priority sequence */
@@ -464,18 +463,18 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .priority__text b {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
 .priority__text span {
   color: var(--accent);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
 }
 
 .priority__text span i {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   font-style: normal;
 }
 
@@ -487,7 +486,7 @@ function graduationLabel(item: GuideGraduation): string {
   background: var(--bg);
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
 }
 
 /* engines */
@@ -517,13 +516,13 @@ function graduationLabel(item: GuideGraduation): string {
 
 .weapon-row__tier span {
   color: var(--accent);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   opacity: 0.7;
 }
 
 .weapon-row__tier b {
   color: var(--text);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 500;
   line-height: 1.35;
   white-space: normal;
@@ -556,23 +555,25 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .weapon__name b {
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
   font-weight: 500;
 }
 
 .weapon__refine {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .weapon p {
   margin-top: 2px;
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
+  line-height: 1.6;
 }
 
 .weapon-row__note {
   grid-column: 2;
+  max-width: var(--measure-wide);
   margin-top: 2px;
   color: var(--muted);
   font-size: var(--fs-12);
@@ -612,22 +613,23 @@ function graduationLabel(item: GuideGraduation): string {
 
 .set-card__tag {
   display: block;
-  color: var(--fire);
-  font-size: var(--fs-11);
-  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .set-card b {
   display: block;
   margin-top: 2px;
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
   font-weight: 500;
 }
 
 .set-card p {
   margin-top: 2px;
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
+  line-height: 1.6;
 }
 
 .build__effects {
@@ -639,14 +641,14 @@ function graduationLabel(item: GuideGraduation): string {
   display: block;
   margin-bottom: 6px;
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   letter-spacing: 0.1em;
 }
 
 .build__effects p {
-  max-width: 80ch;
+  max-width: var(--measure);
   color: var(--text-2);
-  font-size: var(--fs-13);
+  font-size: var(--fs-16);
   line-height: 1.8;
 }
 
@@ -672,7 +674,7 @@ function graduationLabel(item: GuideGraduation): string {
   width: 100%;
   min-width: 520px;
   border-collapse: collapse;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .build__stats th,
@@ -686,7 +688,7 @@ function graduationLabel(item: GuideGraduation): string {
 .build__stats th {
   color: var(--muted);
   font-weight: 500;
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .build__stats .is-main {
@@ -708,7 +710,7 @@ function graduationLabel(item: GuideGraduation): string {
 
 .subs li span {
   color: var(--text-2);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .subs li i {
@@ -728,14 +730,15 @@ function graduationLabel(item: GuideGraduation): string {
   border-top: 1px solid var(--line);
 }
 
-.graduation__head {  display: flex;
+.graduation__head {
+  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s3);
 }
 
 .graduation__head h4 {
-  font-size: var(--fs-15);
+  font-size: var(--fs-18);
 }
 
 .graduation__totals {
@@ -755,7 +758,7 @@ function graduationLabel(item: GuideGraduation): string {
 
 .graduation__totals span {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .graduation__totals b {
@@ -774,7 +777,7 @@ function graduationLabel(item: GuideGraduation): string {
   display: grid;
   grid-template-columns: 64px 1fr;
   gap: var(--s2);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .graduation__rows dt {
@@ -800,14 +803,14 @@ function graduationLabel(item: GuideGraduation): string {
 
 .graduation__subs li {
   color: var(--text-2);
-  font-size: var(--fs-11);
+  font-size: var(--fs-14);
   white-space: nowrap;
 }
 
 .graduation__subs li + li::before {
   content: "·";
   margin-right: 6px;
-  color: var(--line-strong);
+  color: var(--muted);
 }
 
 .graduation__subs li b {
@@ -824,27 +827,21 @@ function graduationLabel(item: GuideGraduation): string {
   padding-top: var(--s2);
   border-top: 1px dashed var(--line);
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-14);
 }
 
 .graduation__effective b {
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: var(--fs-16);
+  font-size: var(--fs-18);
   font-weight: 600;
 }
 
 .graduation__effective em {
   margin-left: auto;
-  color: var(--line-strong);
-  font-size: 10px;
-  font-style: normal;
-}
-
-.graduation__note {
-  margin-top: var(--s3);
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
+  font-style: normal;
 }
 
 /* teams */
@@ -860,7 +857,7 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .team > h4 {
-  font-size: var(--fs-15);
+  font-size: var(--fs-18);
 }
 
 .team__members {
@@ -878,7 +875,7 @@ function graduationLabel(item: GuideGraduation): string {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -890,13 +887,14 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .team__member-head b {
-  font-size: var(--fs-13);
+  font-size: var(--fs-16);
   font-weight: 500;
 }
 
 .team__member-body p {
+  max-width: var(--measure);
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   line-height: 1.7;
 }
 
@@ -912,7 +910,7 @@ function graduationLabel(item: GuideGraduation): string {
   align-items: center;
   gap: 4px;
   color: var(--text-2);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .team__set img {
@@ -934,7 +932,7 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .text h4 {
-  font-size: var(--fs-15);
+  font-size: var(--fs-18);
 }
 
 .text ol {
@@ -945,7 +943,7 @@ function graduationLabel(item: GuideGraduation): string {
 
 .text li {
   color: var(--text-2);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   line-height: 1.8;
 }
 
@@ -963,9 +961,10 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 .cinema-gain-note {
+  max-width: var(--measure);
   margin-top: var(--s2);
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   line-height: 1.7;
 }
 
@@ -974,23 +973,16 @@ function graduationLabel(item: GuideGraduation): string {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 18px;
+  gap: 8px 18px;
 }
 
 .sources a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   color: var(--accent);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   border-bottom: 1px solid rgba(240, 223, 78, 0.35);
-}
-
-.sources p {
-  width: 100%;
-  font-size: var(--fs-11);
-  line-height: 1.8;
-}
-
-.sources__repair {
-  color: #c9a94a;
 }
 
 @media (max-width: 1080px) {
@@ -1026,6 +1018,10 @@ function graduationLabel(item: GuideGraduation): string {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--s4);
+  }
+
+  .sources a {
+    min-height: 44px;
   }
 
   .guide__effective {

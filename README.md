@@ -2,7 +2,7 @@
 
 绝区零（Zenless Zone Zero）**官方图鉴复刻 + 代理人攻略 + 面板/配置对比**。
 
-> 当前：**菲欧妮（Phoenix）先行复刻**。重建计划 [docs/00-rebuild-plan.md](docs/00-rebuild-plan.md) · 面板规则 [docs/02-panel-rules.md](docs/02-panel-rules.md) · 图鉴说明 [docs/04-codex.md](docs/04-codex.md)。
+> 当前：**菲欧妮（Phoenix）先行复刻**。重建计划 [docs/00-rebuild-plan.md](docs/00-rebuild-plan.md) · 面板规则 [docs/02-panel-rules.md](docs/02-panel-rules.md) · 图鉴说明 [docs/04-codex.md](docs/04-codex.md) · UI 与排版 [docs/07-ui-system.md](docs/07-ui-system.md)。
 
 ## 当前进度
 
@@ -13,7 +13,7 @@
 | 菲欧妮 · 技能（6 类全展开 / 18 招式手风琴 / 1–16 级成长） | ✅ |
 | 菲欧妮 · 影画（L1–L6 时间轴，关键影画 1 / 6，film 图标） | ✅ |
 | 菲欧妮 · 攻略（加点、音擎、驱动盘、毕业面板、队伍、文字攻略） | ✅ |
-| 代理人图鉴（61 位全量 / 菲欧妮已开放，其余施工中 / 属性·职业·评级·阵营筛选） | ✅ |
+| 代理人图鉴（61 位全量 / 菲欧妮已开放，其余未开放 / 属性·职业·评级·阵营筛选） | ✅ |
 | 音擎图鉴（101 把 / 精炼 1–5 / 筛选） | ✅ |
 | 驱动盘图鉴（30 套 / 2·4 件套 / 主词条池） | ✅ |
 | 邦布图鉴（42 只 / 基础属性 / 41 只中文档案与技能） | ✅ |
@@ -21,6 +21,8 @@
 | 本地 WebP 资产（182 个媒体键，1.70 MiB）与自托管展示字体 | ✅ |
 | 有效词条（41 有效 + 12 小 + 1 无效 / 含穿透 / 预算提示） | ✅ |
 | 20s 伤害参考轴、单次异放、0+1 / 2+1 / 4+1 / 6+1 对比 | ✅ |
+| 攻略卡导出（PNG 保存 / 复制剪贴板） | ✅ |
+| UI 与排版系统（九档字号 / 34em 行宽 / 对比度 / 移动端 44px 触控） | ✅ |
 | 发布打磨（M7：空状态 / a11y / SEO / 部署） | ⏳ 下一步 |
 | 其余 60 位代理人档案 | ⏳ 施工中（图鉴条目已收录） |
 
@@ -29,7 +31,7 @@
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
-pnpm test       # Vitest：面板 / 词条 / 伤害 / 图鉴 / 页面结构（33 条）
+pnpm test       # Vitest：面板 / 词条 / 伤害 / 图鉴 / 页面结构 / 排版守卫（37 条）
 pnpm build      # 静态产物 dist/
 pnpm preview
 ```
@@ -76,7 +78,7 @@ src/
 ├─ core/damage/    乘区、20s 轴、单次异放
 ├─ core/skills/    招式预览提取
 ├─ data/           生成的 JSON（agent / codex / panel / enemies / media manifest）
-├─ lib/            media 解析
+├─ lib/            media 解析 / guide-card 攻略卡绘制
 ├─ styles/         fonts / tokens / base / codex
 └─ types/          数据契约
 tools/
@@ -101,7 +103,8 @@ docs/
 ├─ 03-agent-page-redesign.md 单页档案流与视觉系统
 ├─ 04-codex.md               音擎 / 驱动盘 / 邦布图鉴数据与页面
 ├─ 05-substats.md            有效词条 41+12+1 口径与页面
-└─ 06-damage.md              20s 参考轴、伤害乘区与 0+1 对比
+├─ 06-damage.md              20s 参考轴、伤害乘区与 0+1 对比
+└─ 07-guide-card.md          攻略卡 Canvas 导出与剪贴板
 ```
 
 ## 数据来源
@@ -111,6 +114,7 @@ docs/
 - 三方素材（立绘 / 背景 / film 图标）：<https://zzz.nanoka.cc/>、<https://zzz.gachabase.net/>
 
 > 非商业资料整理；游戏素材版权归 miHoYo 所有。
+
 
 
 

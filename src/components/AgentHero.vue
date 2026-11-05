@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import type { Agent } from '@/types/agent'
 import { media, mediaColor } from '@/lib/media'
+import GuideCardActions from '@/components/GuideCardActions.vue'
 
 const props = defineProps<{ agent: Agent }>()
 
@@ -99,6 +100,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
               打开配装
               <span aria-hidden="true">↓</span>
             </a>
+            <GuideCardActions :agent="agent" />
           </div>
         </div>
       </div>
@@ -134,16 +136,23 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 }
 
 .hero__inner {
-  padding: 24px 0 40px;
+  padding: var(--s5) 0 var(--s8);
 }
 
 .crumbs {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.04em;
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .crumbs a:hover {
@@ -159,7 +168,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   display: flex;
   gap: 26px;
   align-items: flex-start;
-  margin-top: 40px;
+  margin-top: var(--s8);
 }
 
 .hero__avatar {
@@ -167,7 +176,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   width: 88px;
   height: 88px;
   overflow: hidden;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: 50%;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
@@ -181,26 +190,27 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 .hero__faction {
   color: var(--fire);
   font-size: var(--fs-12);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
 }
 
 .hero__text h1 {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 14px;
   margin: 10px 0 14px;
   font-family: var(--font-display);
-  font-size: clamp(3rem, 5vw, 4.25rem);
+  font-size: clamp(var(--fs-36), 4.2vw, var(--fs-52));
   font-weight: 700;
-  line-height: var(--lh-tight);
+  line-height: var(--lh-title);
   letter-spacing: 0.01em;
 }
 
 .hero__text h1 span {
   color: var(--text-2);
-  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  font-size: var(--fs-18);
   font-weight: 400;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
 }
 
 .hero__badges {
@@ -213,13 +223,14 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 28px;
   padding: 3px 10px 3px 6px;
-  border: 1px solid var(--line-strong);
-  border-radius: 2px;
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius-sm);
   background: rgba(17, 17, 23, 0.7);
   color: var(--text-2);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.04em;
 }
 
 .badge img {
@@ -229,7 +240,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 
 .badge--element {
   border-color: rgba(255, 106, 61, 0.5);
-  color: #ffb59d;
+  color: var(--fire-ink);
 }
 
 .badge--rank {
@@ -238,22 +249,19 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 }
 
 .hero__intro {
-  max-width: 62ch;
-  margin-top: 16px;
+  max-width: var(--measure);
+  margin-top: var(--s4);
   color: var(--text-2);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
   line-height: 1.8;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .hero__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
+  margin-top: var(--s3);
 }
 
 .hero__actions {
@@ -265,14 +273,18 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 
 .hero__jump {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  padding-bottom: 4px;
+  min-height: 44px;
+  padding-top: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px solid rgba(240, 223, 78, 0.4);
   color: var(--accent);
-  font-size: var(--fs-13);
-  letter-spacing: 0.06em;
-  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  font-size: var(--fs-14);
+  letter-spacing: 0.04em;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 .hero__jump span {
@@ -285,7 +297,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 }
 
 .hero__jump--muted {
-  border-color: var(--line-strong);
+  border-color: var(--line-control);
   color: var(--text-2);
 }
 
@@ -300,7 +312,7 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
 
 @media (max-width: 900px) {
   .hero__content {
-    margin-top: 28px;
+    margin-top: var(--s6);
   }
 
   .hero__avatar {
@@ -313,6 +325,23 @@ const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
   .hero__content {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .crumbs a {
+    min-height: 44px;
+  }
+
+  .hero__text h1 {
+    gap: 10px;
+  }
+
+  .hero__text h1 span {
+    font-size: var(--fs-14);
+    letter-spacing: 0.16em;
+  }
+
+  .hero__intro {
+    font-size: var(--fs-14);
   }
 }
 </style>
