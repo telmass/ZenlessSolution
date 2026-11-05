@@ -10,6 +10,7 @@
 - `vite.config.ts` 支持 `VITE_BASE`（默认 `/`）；`createWebHistory(import.meta.env.BASE_URL)` 与 `src/lib/url.ts` 让图片 / 字体 / 技能图标跟随 base，修复子路径部署 404。
 - 构建时把 `index.html` 复制为 `404.html`，GitHub Pages 深链回退到 SPA。
 - 新增 `tests/url.spec.ts` 覆盖 base 拼接与重复前缀。
+- `public/sitemap.xml` 的 6 条 `<loc>` 改为 `https://telmass.github.io/ZenlessSolution/`。
 
 ### 异常代理人全量接入（13 / 13）
 

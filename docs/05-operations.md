@@ -39,7 +39,7 @@ pnpm assets:check   # 离线校验
   - 仓库必须是 public（或账号支持私有 Pages）；默认分支若不是 `master`，改 workflow 的 `on.push.branches`。
 - 也可部署到任意静态托管（Netlify / Vercel / Nginx），直接上传 `dist/`；根路径部署无需设置 `VITE_BASE`。
 - 缓存约定：`index.html` no-cache；hash 资源与 `/assets/`、`/fonts/` immutable。
-- `public/sitemap.xml` 中的域名需替换为实际 Pages 域名（当前仍是 `zenless-solution.pages.dev`）。
+- `public/sitemap.xml` 已指向 `https://telmass.github.io/ZenlessSolution/`；换账号 / 仓库名 / 自定义域名时同步修改这 6 条 `<loc>`。
 
 ## 4. 发布检查单
 
