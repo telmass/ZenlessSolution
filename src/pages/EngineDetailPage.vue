@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import enginesData from '@/data/codex/engines.json'
 import type { EngineDetail } from '@/types/codex'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
+import { setPageMeta } from '@/lib/seo'
 
 const route = useRoute()
 const engines = enginesData as unknown as EngineDetail[]
 const engine = computed(() => engines.find((item) => item.id === route.params.id))
 const refinement = ref(1)
+
+watchEffect(() => {
+  if (engine.value) setPageMeta(engine.value.name, engine.value.effect.text.slice(0, 120))
+})
 
 const effectText = computed(() => {
   const effect = engine.value?.effect
@@ -82,9 +87,6 @@ const hasRefinements = computed(() => (engine.value?.effect.refinements.length ?
 
         <p class="effect-name">{{ engine.effect.name }}</p>
         <RichText :text="effectText" class="detail-prose" />
-        <p v-if="!hasRefinements" class="detail-note">
-          该音擎的官方文本未按精炼拆分，上方为 1–5 阶合并描述。
-        </p>
         <p class="detail-note">
           音擎特效仅在局内生效；基础攻击力与高级属性计入局外面板。精炼提升特效数值，不改变白值与高级属性。
         </p>
@@ -99,9 +101,13 @@ const hasRefinements = computed(() => (engine.value?.effect.refinements.length ?
       </section>
     </template>
 
-    <div v-else class="codex-empty">
-      <p>没有找到该音擎。</p>
-      <RouterLink to="/engines">返回音擎图鉴 →</RouterLink>
+    <div v-else class="empty-state">
+      <p class="eyebrow">Not Found</p>
+      <p class="empty-state__title">没有找到该音擎</p>
+      <p class="empty-state__copy">该链接可能已失效，或音擎尚未收录。返回图鉴重新选择。</p>
+      <div class="empty-state__actions">
+        <RouterLink to="/engines" class="empty-state__link">返回音擎图鉴 →</RouterLink>
+      </div>
     </div>
   </div>
 </template>

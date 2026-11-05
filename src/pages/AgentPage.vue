@@ -6,6 +6,7 @@ import index from '@/data/agents/index.json'
 import type { Agent, AgentIndexItem } from '@/types/agent'
 import { AGENT_SECTIONS, SECTION_IDS, resolveSection } from '@/constants/sections'
 import { useSectionSpy } from '@/composables/useSectionSpy'
+import { setPageMeta } from '@/lib/seo'
 import AgentHero from '@/components/AgentHero.vue'
 import SectionNav from '@/components/SectionNav.vue'
 import ChapterHead from '@/components/ChapterHead.vue'
@@ -92,6 +93,7 @@ function toTop() {
 }
 
 onMounted(async () => {
+  setPageMeta(agent.name, agent.intro)
   window.addEventListener('hashchange', onHashChange)
   window.addEventListener('scroll', onScroll, { passive: true })
 
@@ -152,8 +154,6 @@ const requested = computed(() =>
 
 <template>
   <div v-if="!notFound" class="agent-page">
-    <a class="skip-link" href="#content">跳到正文</a>
-
     <AgentHero :agent="agent" @jump="scrollToSection" />
     <SectionNav
       :sections="AGENT_SECTIONS"
@@ -162,7 +162,7 @@ const requested = computed(() =>
       @navigate="scrollToSection"
     />
 
-    <div id="content" class="container agent-body" tabindex="-1">
+    <div class="container agent-body">
       <section id="overview" class="chapter chapter--overview" aria-labelledby="overview-title">
         <h2 id="overview-title" class="sr-only">概览</h2>
         <OverviewSection :agent="agent" />

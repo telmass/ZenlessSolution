@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import setsData from '@/data/codex/sets.json'
 import type { DriveSetDetail } from '@/types/codex'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
 import { mainStatsFor } from '@/core/panel/data'
+import { setPageMeta } from '@/lib/seo'
 
 const route = useRoute()
 const sets = setsData as unknown as DriveSetDetail[]
 const set = computed(() => sets.find((item) => item.id === route.params.id))
 const slots = [4, 5, 6] as const
+
+watchEffect(() => {
+  if (set.value) setPageMeta(set.value.name, set.value.effect4.slice(0, 120))
+})
 </script>
 
 <template>
@@ -80,9 +85,13 @@ const slots = [4, 5, 6] as const
       </section>
     </template>
 
-    <div v-else class="codex-empty">
-      <p>没有找到该驱动盘套装。</p>
-      <RouterLink to="/drives">返回驱动盘图鉴 →</RouterLink>
+    <div v-else class="empty-state">
+      <p class="eyebrow">Not Found</p>
+      <p class="empty-state__title">没有找到该驱动盘套装</p>
+      <p class="empty-state__copy">该链接可能已失效，或套装尚未收录。返回图鉴重新选择。</p>
+      <div class="empty-state__actions">
+        <RouterLink to="/drives" class="empty-state__link">返回驱动盘图鉴 →</RouterLink>
+      </div>
     </div>
   </div>
 </template>
@@ -103,7 +112,7 @@ const slots = [4, 5, 6] as const
   gap: var(--s6);
 }
 
-@media (max-width: 820px) {
+@media (max-width: 720px) {
   .mainstat-grid {
     grid-template-columns: 1fr;
   }

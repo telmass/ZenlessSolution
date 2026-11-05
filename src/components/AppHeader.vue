@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const isAgent = computed(() => route.path.startsWith('/agents'))
-const headerLabel = computed(() => {
-  if (route.path === '/agents/phoenix') return 'PHOENIX'
-  if (isAgent.value) return 'AGENTS'
-  return 'PREVIEW'
-})
 
 const nav = [
   { label: '首页', to: '/', match: (p: string) => p === '/' },
@@ -16,7 +9,6 @@ const nav = [
   { label: '音擎', to: '/engines', match: (p: string) => p.startsWith('/engines') },
   { label: '驱动盘', to: '/drives', match: (p: string) => p.startsWith('/drives') },
   { label: '邦布', to: '/bangboo', match: (p: string) => p.startsWith('/bangboo') },
-  { label: '计算器', to: '/calculator', soon: true },
 ]
 </script>
 
@@ -32,27 +24,17 @@ const nav = [
       </RouterLink>
 
       <nav class="nav" aria-label="主导航">
-        <template v-for="item in nav" :key="item.label">
-          <RouterLink
-            v-if="!item.soon"
-            :to="item.to"
-            class="nav__link"
-            :class="{ 'is-active': item.match?.(route.path) }"
-          >
-            {{ item.label }}
-          </RouterLink>
-          <span v-else class="nav__link is-soon" :title="`${item.label} · 建设中`">
-            {{ item.label }}
-            <em>soon</em>
-          </span>
-        </template>
+        <RouterLink
+          v-for="item in nav"
+          :key="item.label"
+          :to="item.to"
+          class="nav__link"
+          :class="{ 'is-active': item.match(route.path) }"
+          :aria-current="item.match(route.path) ? 'page' : undefined"
+        >
+          {{ item.label }}
+        </RouterLink>
       </nav>
-
-      <div class="header__meta">
-        <span class="dot" aria-hidden="true"></span>
-        <span>{{ headerLabel }}</span>
-        <b>v0.1</b>
-      </div>
     </div>
   </header>
 </template>
@@ -62,15 +44,15 @@ const nav = [
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(8, 8, 11, 0.78);
+  background: rgba(8, 8, 11, 0.82);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(14px);
 }
 
 .header__inner {
   display: flex;
-  align-items: center;
-  gap: 36px;
+  align-items: stretch;
+  gap: 32px;
   height: var(--header-h);
 }
 
@@ -86,7 +68,7 @@ const nav = [
   height: 22px;
   background: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 62%, 62% 100%, 0 100%);
-  box-shadow: 0 0 22px rgba(242, 225, 76, 0.35);
+  box-shadow: 0 0 22px var(--accent-glow);
 }
 
 .brand__text {
@@ -97,29 +79,33 @@ const nav = [
 
 .brand__text b {
   font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.16em;
+  font-size: var(--fs-16);
+  letter-spacing: 0.14em;
 }
 
 .brand__text i {
+  margin-top: 2px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--fs-12);
   font-style: normal;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.14em;
 }
 
 .nav {
   display: flex;
-  align-items: center;
-  gap: 26px;
+  align-items: stretch;
+  gap: 24px;
   flex: 1;
+  min-width: 0;
 }
 
 .nav__link {
   position: relative;
-  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--text-2);
-  font-size: 14px;
+  font-size: var(--fs-14);
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
@@ -137,48 +123,16 @@ const nav = [
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -19px;
+  bottom: 0;
   height: 2px;
   background: var(--accent);
 }
 
-.nav__link.is-soon {
-  color: #5d5d68;
-  cursor: not-allowed;
-}
-
-.nav__link.is-soon em {
-  margin-left: 4px;
-  font-size: 9px;
-  font-style: normal;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.header__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-}
-
-.header__meta b {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--fire);
-  box-shadow: 0 0 10px var(--fire);
-}
-
 @media (max-width: 900px) {
+  .header__inner {
+    gap: 20px;
+  }
+
   .nav {
     gap: 16px;
     overflow-x: auto;
@@ -186,10 +140,6 @@ const nav = [
   }
 
   .nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .header__meta {
     display: none;
   }
 }
@@ -200,7 +150,7 @@ const nav = [
   }
 
   .nav {
-    gap: 12px;
+    gap: 14px;
   }
 
   .brand__text i {
@@ -208,11 +158,7 @@ const nav = [
   }
 
   .nav__link {
-    font-size: 12px;
-  }
-
-  .nav__link.is-soon {
-    display: none;
+    font-size: var(--fs-14);
   }
 }
 
@@ -222,15 +168,7 @@ const nav = [
   }
 
   .nav {
-    gap: 9px;
-  }
-
-  .nav__link {
-    font-size: 11px;
-  }
-
-  .brand__text b {
-    font-size: 13px;
+    gap: 10px;
   }
 }
 </style>

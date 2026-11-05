@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import bangbooData from '@/data/codex/bangboo.json'
 import type { BangbooDetail } from '@/types/codex'
 import { media } from '@/lib/media'
 import RichText from '@/components/RichText.vue'
+import { setPageMeta } from '@/lib/seo'
 
 const route = useRoute()
 const bangboo = bangbooData as unknown as BangbooDetail[]
 const item = computed(() => bangboo.find((entry) => entry.slug === route.params.slug))
+
+watchEffect(() => {
+  if (item.value) setPageMeta(item.value.name, item.value.descriptionZh || item.value.description)
+})
 
 const stats = computed(() => {
   if (!item.value) return []
@@ -91,7 +96,7 @@ function rankClass(value: string) {
       </section>
 
       <section class="detail-section">
-        <h2>档案与来源</h2>
+        <h2>档案</h2>
         <p v-if="item.description" class="detail-note detail-note--en" lang="en">{{ item.description }}</p>
         <p v-if="item.wikiId" class="detail-note">
           <a
@@ -102,13 +107,16 @@ function rankClass(value: string) {
             官方 WIKI 条目 ↗
           </a>
         </p>
-        <p v-else class="detail-note">该邦布暂无官方 WIKI 条目，技能与中文档案待补。</p>
       </section>
     </template>
 
-    <div v-else class="codex-empty">
-      <p>没有找到该邦布。</p>
-      <RouterLink to="/bangboo">返回邦布图鉴 →</RouterLink>
+    <div v-else class="empty-state">
+      <p class="eyebrow">Not Found</p>
+      <p class="empty-state__title">没有找到该邦布</p>
+      <p class="empty-state__copy">该链接可能已失效，或邦布尚未收录。返回图鉴重新选择。</p>
+      <div class="empty-state__actions">
+        <RouterLink to="/bangboo" class="empty-state__link">返回邦布图鉴 →</RouterLink>
+      </div>
     </div>
   </div>
 </template>
