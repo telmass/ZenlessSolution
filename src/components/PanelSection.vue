@@ -14,6 +14,7 @@ import {
   discRolls,
   fromCounts,
   maxRollsFor,
+  emptyDiscs,
   toCounts,
   totalRolls as sumDiscRolls,
   type Disc,
@@ -56,7 +57,18 @@ const presetList = computed(() =>
   }),
 )
 
-const presetError = ref('')
+let initialDiscs: Disc[] = emptyDiscs()
+let initialError = ''
+try {
+  initialDiscs = fromCounts(startSpec.substats, substats, mains.value)
+} catch (error) {
+  initialError =
+    `该毕业预算无法按「每盘选满 4 条副词条后再强化」展开：` +
+    `${error instanceof Error ? error.message : String(error)}。` +
+    '已切换为手动分配，请按 4 条/盘 自行选择。'
+}
+
+const presetError = ref(initialError)
 
 function mainFor(slot: number) {
   return mains.value.find((item) => item.slot === slot)
@@ -71,7 +83,7 @@ function mainLabel(slot: number) {
   return rule?.label ?? '未选择'
 }
 
-const discs = ref<Disc[]>(fromCounts(startSpec.substats, substats, mains.value))
+const discs = ref<Disc[]>(initialDiscs)
 
 // 单盘分配是编辑口径，面板计算仍吃聚合条数。
 watch(

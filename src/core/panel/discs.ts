@@ -130,75 +130,205 @@ export function fromCounts(
     }
   }
 
-  // 1) 决定每种词条占几条副词条槽位；槽位总数必须 = 4 × 6 = 24。
+  // 1) 先按「尽量铺满」给每种词条最多 6 条槽位，再压回 24 条：
+  //    优先从「每条平均条数最低」的词条上撤槽位，避免把强化次数挤到一两条线上。
   const lineCounts = new Map<string, number>()
   for (const [id, count] of entries) {
-    lineCounts.set(id, Math.max(1, Math.ceil(count / MAX_ROLLS_PER_LINE)))
+    const rule = rules.find((item) => item.id === id)
+    const maxLines = rule ? Math.min(MAX_ROLLS_PER_LINE, allowedSlots(rule, mains).length) : 1
+    lineCounts.set(id, Math.max(1, Math.min(maxLines, Math.ceil(count / MAX_ROLLS_PER_LINE))))
   }
   let slots = [...lineCounts.values()].reduce((sum, value) => sum + value, 0)
   while (slots < DISC_SLOTS.length * MAX_LINES_PER_DISC) {
-    const candidates = entries
-      .filter(([id, count]) => {
-        const rule = rules.find((item) => item.id === id)
-        const used = lineCounts.get(id) ?? 0
-        if (!rule) return false
-        if (used >= MAX_ROLLS_PER_LINE) return false
-        if (used >= allowedSlots(rule, mains).length) return false
-        return count > used
-      })
-      .sort((a, b) => b[1] / (lineCounts.get(b[0]) ?? 1) - a[1] / (lineCounts.get(a[0]) ?? 1))
-    const next = candidates[0]
+    const candidates = entries.filter(([id, count]) => {
+      const rule = rules.find((item) => item.id === id)
+      if (!rule) return false
+      const used = lineCounts.get(id) ?? 0
+      return used < MAX_ROLLS_PER_LINE && used < allowedSlots(rule, mains).length && count > used
+    })
+    const next = candidates.sort((a, b) => b[1] - a[1])[0]
     if (!next) break
     lineCounts.set(next[0], (lineCounts.get(next[0]) ?? 0) + 1)
     slots += 1
+  }
+  while (slots > DISC_SLOTS.length * MAX_LINES_PER_DISC) {
+    const candidates = entries.filter(([id, count]) => {
+      const used = lineCounts.get(id) ?? 0
+      return used > 1 && used > Math.ceil(count / MAX_ROLLS_PER_LINE)
+    })
+    const next = candidates.sort(
+      (a, b) =>
+        a[1] / (lineCounts.get(a[0]) ?? 1) - b[1] / (lineCounts.get(b[0]) ?? 1),
+    )[0]
+    if (!next) break
+    lineCounts.set(next[0], (lineCounts.get(next[0]) ?? 0) - 1)
+    slots -= 1
   }
   if (slots !== DISC_SLOTS.length * MAX_LINES_PER_DISC) {
     throw new Error(`无法把 ${entries.length} 种词条铺满 24 条副词条槽位（当前 ${slots}）`)
   }
 
   // 2) 槽位分到 6 件盘：同名每盘最多 1 条、每盘最多 4 条、避开主词条盘。
-  for (const [id] of [...lineCounts.entries()].sort((a, b) => b[1] - a[1])) {
-    const rule = rules.find((item) => item.id === id)
-    if (!rule) continue
-    let remaining = lineCounts.get(id) ?? 0
-    const allowed = allowedSlots(rule, mains)
-    while (remaining > 0 && allowed.length) {
-      const disc = discs
-        .filter(
-          (item) =>
-            allowed.includes(item.slot) &&
-            item.lines.length < MAX_LINES_PER_DISC &&
-            !item.lines.some((line) => line.id === id),
-        )
-        .sort((a, b) => a.lines.length - b.lines.length || a.slot - b.slot)[0]
-      if (!disc) break
-      disc.lines.push({ id, rolls: 1 })
-      remaining -= 1
+  const remaining = new Map(lineCounts)
+  const place = (): boolean => {
+    const pending = [...remaining.entries()].filter(([, value]) => value > 0)
+    if (!pending.length) return true
+    // 先放「可去盘最少」的词条，降低死角概率。
+    const [nextId] = pending.sort((a, b) => {
+      const ruleA = rules.find((item) => item.id === a[0])
+      const ruleB = rules.find((item) => item.id === b[0])
+      const slotsA = ruleA ? allowedSlots(ruleA, mains).length : 0
+      const slotsB = ruleB ? allowedSlots(ruleB, mains).length : 0
+      return slotsA - slotsB || b[1] - a[1]
+    })[0]
+    const rule = rules.find((item) => item.id === nextId)
+    if (!rule) return false
+    const candidates = discs
+      .filter(
+        (disc) =>
+          allowedSlots(rule, mains).includes(disc.slot) &&
+          disc.lines.length < MAX_LINES_PER_DISC &&
+          !disc.lines.some((line) => line.id === nextId),
+      )
+      .sort((a, b) => a.lines.length - b.lines.length || a.slot - b.slot)
+    for (const disc of candidates) {
+      disc.lines.push({ id: nextId, rolls: 1 })
+      remaining.set(nextId, (remaining.get(nextId) ?? 0) - 1)
+      if (place()) return true
+      remaining.set(nextId, (remaining.get(nextId) ?? 0) + 1)
+      disc.lines.pop()
     }
-    if (remaining > 0) throw new Error(`${id} 还有 ${remaining} 条槽位放不下`)
+    return false
+  }
+  if (!place()) {
+    throw new Error('副词条槽位无法分到 6 件盘（每盘 4 条、同盘不能重复）')
   }
 
-  // 3) 分配强化次数：每条最多 +5，每盘正好 5 次。
-  const upgrades = new Map<number, number>(DISC_SLOTS.map((slot) => [slot, 5]))
+  // 3) 分配强化次数：每条最多 +5、每盘正好 5 次。
+  const needs = new Map<string, number>()
   for (const [id, count] of entries) {
-    let need = count - (lineCounts.get(id) ?? 0)
-    const withStat = discs.filter((disc) => disc.lines.some((line) => line.id === id))
-    for (const disc of withStat) {
-      const line = disc.lines.find((item) => item.id === id)!
-      const roomByLine = MAX_ROLLS_PER_LINE - line.rolls
-      const roomByDisc = upgrades.get(disc.slot) ?? 0
-      const add = Math.min(need, roomByLine, roomByDisc)
-      if (add <= 0) continue
-      line.rolls += add
-      need -= add
-      upgrades.set(disc.slot, roomByDisc - add)
+    needs.set(id, count - (lineCounts.get(id) ?? 0))
+  }
+  const flows = allocateUpgrades(discs, needs)
+  if (!flows) {
+    throw new Error('强化次数无法在 6 件盘之间分配（每盘 5 次、每条 5 次）')
+  }
+  for (const disc of discs) {
+    for (const line of disc.lines) {
+      line.rolls += flows.get(`${disc.slot}:${line.id}`) ?? 0
     }
-    if (need > 0) throw new Error(`${id} 还有 ${need} 次强化分配不出去`)
   }
 
   const errors = validateDiscs(discs, rules, mains)
   if (errors.length) throw new Error(errors.join('; '))
   return discs
+}
+
+
+/**
+ * 每条词条最多 5 次强化、每盘最多 5 次。
+ * 用最大流求解 line -> disc 的分配，避免贪心把次数卡死。
+ */
+function allocateUpgrades(
+  discs: Disc[],
+  needs: Map<string, number>,
+): Map<string, number> | null {
+  const stats = [...needs.entries()].filter(([, value]) => value > 0)
+  const total = stats.reduce((sum, [, value]) => sum + value, 0)
+  if (total === 0) return new Map()
+
+  const lines: { discSlot: number; id: string }[] = []
+  for (const disc of discs) {
+    for (const line of disc.lines) {
+      if ((needs.get(line.id) ?? 0) > 0) {
+        lines.push({ discSlot: disc.slot, id: line.id })
+      }
+    }
+  }
+
+  const nodeCount = 2 + stats.length + lines.length + DISC_SLOTS.length
+  const source = 0
+  const sink = nodeCount - 1
+  const statNode = new Map<string, number>()
+  stats.forEach(([id], index) => statNode.set(id, 1 + index))
+  const lineNode = new Map<number, number>()
+  lines.forEach((line, index) => lineNode.set(index, 1 + stats.length + index))
+  const discNode = new Map<number, number>()
+  DISC_SLOTS.forEach((slot, index) =>
+    discNode.set(slot, 1 + stats.length + lines.length + index),
+  )
+
+  const graph: number[][] = Array.from({ length: nodeCount }, () => [])
+  const to: number[] = []
+  const cap: number[] = []
+
+  const addEdge = (from: number, target: number, capacity: number) => {
+    graph[from].push(to.length)
+    to.push(target)
+    cap.push(capacity)
+    graph[target].push(to.length)
+    to.push(from)
+    cap.push(0)
+  }
+
+  for (const [id, value] of stats) addEdge(source, statNode.get(id)!, value)
+  lines.forEach((line, index) => {
+    addEdge(statNode.get(line.id)!, lineNode.get(index)!, 5)
+    addEdge(lineNode.get(index)!, discNode.get(line.discSlot)!, 5)
+  })
+  for (const slot of DISC_SLOTS) addEdge(discNode.get(slot)!, sink, 5)
+
+  let flow = 0
+  const level = new Array(nodeCount).fill(-1)
+  const iter = new Array(nodeCount).fill(0)
+  const bfs = () => {
+    level.fill(-1)
+    level[source] = 0
+    const queue = [source]
+    for (let head = 0; head < queue.length; head += 1) {
+      const node = queue[head]
+      for (const edge of graph[node]) {
+        if (cap[edge] > 0 && level[to[edge]] < 0) {
+          level[to[edge]] = level[node] + 1
+          queue.push(to[edge])
+        }
+      }
+    }
+    return level[sink] >= 0
+  }
+  const dfs = (node: number, limit: number): number => {
+    if (node === sink) return limit
+    for (; iter[node] < graph[node].length; iter[node] += 1) {
+      const edge = graph[node][iter[node]]
+      const next = to[edge]
+      if (cap[edge] > 0 && level[next] === level[node] + 1) {
+        const pushed = dfs(next, Math.min(limit, cap[edge]))
+        if (pushed > 0) {
+          cap[edge] -= pushed
+          cap[edge ^ 1] += pushed
+          return pushed
+        }
+      }
+    }
+    return 0
+  }
+  while (bfs()) {
+    iter.fill(0)
+    let pushed = 0
+    while ((pushed = dfs(source, Number.POSITIVE_INFINITY)) > 0) flow += pushed
+  }
+  if (flow !== total) return null
+
+  const result = new Map<string, number>()
+  lines.forEach((line, index) => {
+    const edge = graph[statNode.get(line.id)!].find(
+      (item) => to[item] === lineNode.get(index),
+    )
+    if (edge === undefined) return
+    const used = 5 - cap[edge]
+    if (used > 0) result.set(`${line.discSlot}:${line.id}`, used)
+  })
+  return result
 }
 
 /** 校验单件盘的合法分配；返回错误列表（空 = 合法）。 */

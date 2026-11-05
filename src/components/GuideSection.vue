@@ -54,6 +54,12 @@ function substatLabel(id: string): string {
 const builds = computed(() => guide.value.builds)
 const firstBuild = computed(() => builds.value[0])
 
+/** 2 件套可能是多个等效选项（都加同一条属性），效果只展示一次。 */
+const set2Effect = computed(() => {
+  const labels = [...new Set((firstBuild.value?.set2 ?? []).map((item) => item.label).filter(Boolean))]
+  return labels.join('；')
+})
+
 const graduationCards = computed(() =>
   [guide.value.graduation, guide.value.graduationAlt].filter((item): item is GuideGraduation => Boolean(item)),
 )
@@ -215,13 +221,17 @@ function graduationLabel(item: GuideGraduation): string {
               <p>{{ firstBuild.set4.label }}</p>
             </div>
           </div>
-          <div class="set-card">
-            <img v-if="firstBuild.set2[0] && media(firstBuild.set2[0].icon)" :src="media(firstBuild.set2[0].icon)" alt="" />
-            <div>
-              <span class="set-card__tag">2 件套</span>
-              <b>{{ firstBuild.set2.map((s) => s.name).join(' / ') }}</b>
-              <p>{{ firstBuild.set2.map((s) => s.label).join('；') }}</p>
+          <div class="set-card set-card--multi">
+            <span class="set-card__tag">
+              2 件套{{ firstBuild.set2.length > 1 ? ' · 任选其一' : '' }}
+            </span>
+            <div class="set-card__list">
+              <div v-for="option in firstBuild.set2" :key="option.name" class="set-card__option">
+                <img v-if="media(option.icon)" :src="media(option.icon)" alt="" />
+                <span>{{ option.name }}</span>
+              </div>
             </div>
+            <p v-if="set2Effect" class="set-card__effect">{{ set2Effect }}</p>
           </div>
         </div>
 
@@ -642,6 +652,41 @@ function graduationLabel(item: GuideGraduation): string {
   margin-top: 2px;
   font-size: var(--fs-16);
   font-weight: 500;
+}
+
+.set-card--multi {
+  display: grid;
+  gap: 4px;
+}
+
+.set-card__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 4px;
+}
+
+.set-card__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.set-card__option img {
+  width: 34px;
+  height: 34px;
+}
+
+.set-card__option span {
+  color: var(--text-2);
+  font-size: var(--fs-14);
+}
+
+.set-card__effect {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--fs-14);
+  line-height: 1.6;
 }
 
 .set-card p {
