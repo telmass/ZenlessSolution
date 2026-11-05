@@ -359,7 +359,7 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
 
 function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[], y: number) {
   rowLabel(ctx, '面板参考', y)
-  const width = W - VALUE_X - 56
+  const width = 600
   cards.slice(0, 2).forEach((card, index) => {
     const top = y - 2 + index * 124
     const x = VALUE_X
