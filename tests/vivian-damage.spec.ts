@@ -14,6 +14,7 @@ import {
   CORRUPTION_UNIT,
 } from '@/core/damage'
 import { graduationTotals } from '@/lib/graduation'
+import { analyzeSubstats } from '@/core/substats'
 import { damageProfileFor } from '@/core/damage/profiles'
 import panelData from '@/data/panel.json'
 
@@ -49,8 +50,8 @@ describe('vivian damage model', () => {
 
   it('adds the signature six-stack AP in combat, not in the panel', () => {
     const stats = buildVivianStats(panel.stats, agent, build)
-    expect(panel.stats.anomalyProficiency).toBe(582)
-    expect(stats.ap).toBe(582 + 120)
+    expect(panel.stats.anomalyProficiency).toBe(600)
+    expect(stats.ap).toBe(600 + 120)
     // 异放/侵蚀不吃暴击。
     expect(stats.searCritRate).toBe(0)
     expect(stats.releaseCritDmg).toBe(0)
@@ -124,9 +125,35 @@ describe('vivian damage model', () => {
     }
   })
 
+  it('matches the 41-effective / 12-small / 1-invalid allocation', () => {
+    const analysis = analyzeSubstats(spec.substats, agent.substatProfile, { budget: 54 })
+    expect(analysis.effective).toBe(41)
+    expect(analysis.small).toBe(12)
+    expect(analysis.invalid).toBe(1)
+  })
+
+  it('marks C2 / C6 as key cinemas and lists all three mastery 2-piece sets', () => {
+    expect(agent.guide.cinemaPriority.keyLevels).toEqual([2, 6])
+    expect(agent.cinemas.filter((cinema) => cinema.keyLevel).map((cinema) => cinema.level)).toEqual([
+      2, 6,
+    ])
+    const build = agent.guide.builds[0]
+    const names = build.set2.map((item) => item.name)
+    expect(names).toEqual(expect.arrayContaining(['自由蓝调', '混沌爵士']))
+  })
+
+  it('splits the core-passive element table into separate lines', () => {
+    const core = agent.skills.find((skill) => skill.key === 'core')!
+    const lines = core.moves[0].text.split('\n').filter(Boolean)
+    expect(lines.length).toBeGreaterThanOrEqual(8)
+    expect(core.moves[0].text).not.toContain('6.15%/3.2%')
+    expect(lines).toContain('以太 6.15%')
+    expect(lines).toContain('火 8%')
+  })
+
   it('computes graduation totals from the panel spec', () => {
     const totals = graduationTotals(agent, agent.guide.graduation!)
     expect(totals[0].value).toBeGreaterThan(2000)
-    expect(totals[1].value).toBe(582)
+    expect(totals[1].value).toBe(600)
   })
 })

@@ -96,6 +96,9 @@ CORE_TO_FIELD = {
 # Phoenix is the only agent with a hand-modelled damage kit in v1; the
 # per-rank numbers below are the official core-passive values used by
 # core/damage (amFlat 43–85, sear crit DMG 12.5–25%, tick 25–50% ATK).
+# Vivian 核心被动的异放系数（A–F，每 10 点异常精通的百分比）。
+VIVIAN_RELEASE_COEF = ["3.59%", "4.11%", "4.63%", "5.15%", "5.65%", "6.15%"]
+
 PHOENIX_MECHANICS = {
     "amFlat": [43, 50, 57, 64, 71, 78, 85],
     "critDmg": [12.5, 14.6, 16.7, 18.8, 20.8, 22.9, 25],
@@ -369,13 +372,18 @@ def main() -> None:
                 }
             )
 
+        core_text_override = (guide_src.get("_meta") or {}).get("coreText")
+
         skills = []
         for category in snapshot["skills"]:
             key = category["key"]
             moves = []
-            for move in category["moves"]:
+            for move_index, move in enumerate(category["moves"]):
                 table = build_core_table(move) if key == "core" else build_table(move)
-                moves.append({"title": move["title"], "text": move.get("text", ""), "table": table})
+                text = move.get("text", "")
+                if key == "core" and move_index == 0 and core_text_override:
+                    text = core_text_override
+                moves.append({"title": move["title"], "text": text, "table": table})
             skills.append(
                 {
                     "key": key,
@@ -599,7 +607,12 @@ def main() -> None:
                 "name": passive_name,
                 "levels": ["A", "B", "C", "D", "E", "F"],
                 "coreBonus": bonus,
-                "effects": core_effects(item),
+                "effects": core_effects(item)
+                + (
+                    [{"label": "异放系数（以太）", "values": VIVIAN_RELEASE_COEF}]
+                    if slug == "vivian"
+                    else []
+                ),
                 **(PHOENIX_MECHANICS if slug == "phoenix" else {}),
             },
             "substatProfile": {"effective": effective, "small": small},

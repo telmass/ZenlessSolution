@@ -65,7 +65,7 @@ const coreRows = computed(() =>
           </template>
           <div v-for="row in coreRows" :key="row.label">
             <dt>{{ row.label }}</dt>
-            <dd class="num">+{{ row.value }}</dd>
+            <dd class="num">{{ row.value.includes('%') ? row.value : `+${row.value}` }}</dd>
           </div>
         </dl>
       </aside>

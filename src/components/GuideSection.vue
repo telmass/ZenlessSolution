@@ -8,7 +8,7 @@ import GuideCardActions from '@/components/GuideCardActions.vue'
 import { analyzeSubstats } from '@/core/substats'
 import { computePanel } from '@/core/panel/compute'
 import { inputFromSpec, specFromGraduation } from '@/core/panel/presets'
-import { computePhoenixDamage, enemyById } from '@/core/damage'
+import { computeAgentDamage, enemyById } from '@/core/damage'
 import { graduationTotals } from '@/lib/graduation'
 
 const props = defineProps<{ agent: Agent }>()
@@ -101,16 +101,16 @@ function graduationAnalysis(item: GuideGraduation, includePenValue = false) {
 }
 
 const cinemaGains = computed(() => {
-  if (props.agent.damageModel !== 'phoenix' || !guide.value.graduation) return {}
+  if (!props.agent.damageModel || !guide.value.graduation?.panel) return {}
   const enemy = enemyById('standard')
-  const panel = computePanel(
-    inputFromSpec(props.agent, specFromGraduation(props.agent, guide.value.graduation)),
-  )
+  const spec = specFromGraduation(props.agent, guide.value.graduation)
+  const panel = computePanel(inputFromSpec(props.agent, spec))
+  const engineId = guide.value.graduation.panel.engineId
   const totals = [0, 1, 2, 4, 6].map((cinema) =>
-    computePhoenixDamage(
+    computeAgentDamage(
       props.agent,
       panel.stats,
-      { cinema, refinement: 1, coreLevel: 'F', engineId: 'ep-2259' },
+      { cinema, refinement: 1, coreLevel: 'F', engineId },
       enemy,
     ).axis.total,
   )
