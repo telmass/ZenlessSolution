@@ -74,7 +74,7 @@ id = "dodge"
 
 [[weapons]]
 tier = "首选"
-note = "薇薇安专武（WIKI 音擎页 double_col_table 推荐代理人表列薇薇安）：S 级异常音擎，基础攻击 713、副词条异常精通 90。薇薇安的 [落羽生花] 异放按异常精通结算，专武精通直接提升异放倍率。"
+note = "专武：异常精通 90，造成以太伤害时叠 6 层精通（精 1 每层 +20，共 +120），属性异常积蓄效率 +40%；精华全部落在异放与侵蚀上。"
 
 [[weapons.items]]
 name = "飞鸟星梦"
@@ -85,14 +85,7 @@ refinement = 1
 
 [[weapons]]
 tier = "下位"
-note = "异常音擎下位，需按 WIKI 音擎详情页补全特效文本。"
-
-[[weapons.items]]
-name = "淬锋钳刺"
-stats = "S 级 · 基础攻击 713 · 异常精通 90"
-icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/27/160824341/15a02c67d9bcb3ba4b5727280adfb8fe_5211590432320608838.png"
-engineId = "ep-760"
-refinement = 1
+note = "嵌合编译器给穿透率 24% 与攻击 12%，特殊技叠 3 层精通（+75）；壳中之灵给异常掌控 30% 与精通 90，并对异常目标增伤、异常/紊乱伤害 +10%，以太角色可用。"
 
 [[weapons.items]]
 name = "嵌合编译器"
@@ -101,9 +94,16 @@ icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a
 engineId = "ep-214"
 refinement = 1
 
+[[weapons.items]]
+name = "壳中之灵"
+stats = "S 级 · 基础攻击 713 · 异常掌控 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/02/24/141353238/3214160dc64637a1823af2cef51d505b_6802413686352293170.png"
+engineId = "ep-1883"
+refinement = 1
+
 [[weapons]]
 tier = "备选"
-note = "备选异常音擎，需按 WIKI 音擎详情页补全特效文本。"
+note = "双生泣星靠队友施加异常叠 4 层精通；触电唇彩提供精通 75 与对异常目标的增伤，A 级里最稳。"
 
 [[weapons.items]]
 name = "双生泣星"
@@ -142,10 +142,10 @@ mainId = "am_92"
 
 [[driveBuilds.mainStats]]
 slot = "5 号位"
-main = "攻击力 +30%"
+main = "以太属性伤害 +30%"
 alt = "攻击力 +30%"
-note = ""
-mainId = "atk_pct_30"
+note = "增伤区已较高时换攻击力"
+mainId = "dmg_30"
 altId = "atk_pct_30"
 
 [[driveBuilds.mainStats]]
@@ -278,8 +278,9 @@ lines = [
 
 [graduationPanel]
 totals = [
-    { label = "攻击力", value = 3007.6, unit = "" },
-    { label = "异常精通", value = 552, unit = "" },
+    { label = "攻击力", value = 2529.7, unit = "" },
+    { label = "异常精通", value = 582, unit = "" },
+    { label = "异常掌控", value = 198.7, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
 computedAt = "2026-10-16T07:53:25+00:00"
@@ -290,7 +291,7 @@ weapon = "飞鸟星梦"
 core = "异常掌控 +36、基础攻击力 +75"
 set4 = "法厄同之歌"
 set2 = "自由蓝调"
-mainStats = "4 号位异常精通 +92，5 号位攻击力 +30%，6 号位异常掌控 +30%"
+mainStats = "4 号位异常精通 +92，5 号位以太属性伤害 +30%，6 号位异常掌控 +30%"
 subStats = "54 条满配：异常精通 ×28、攻击力% ×11、小攻击 ×5、穿透值 ×6、小生命 ×4（填充）"
 
 [graduationPanel.spec]
@@ -300,7 +301,7 @@ refinement = 1
 set4Id = "ep-1194"
 set2Id = "ep-191"
 disc4MainId = "am_92"
-disc5MainId = "atk_pct_30"
+disc5MainId = "dmg_30"
 disc6MainId = "ac_pct_30"
 core = [
     "ac",
@@ -318,8 +319,9 @@ filler = 0
 
 [graduationPanelAlt]
 totals = [
-    { label = "攻击力", value = 2845.2, unit = "" },
-    { label = "异常精通", value = 390, unit = "" },
+    { label = "攻击力", value = 2367.3, unit = "" },
+    { label = "异常精通", value = 420, unit = "" },
+    { label = "异常掌控", value = 198.7, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
 computedAt = "2026-10-16T07:53:25+00:00"
@@ -331,7 +333,7 @@ weapon = "飞鸟星梦"
 core = "异常掌控 +36、基础攻击力 +75"
 set4 = "法厄同之歌"
 set2 = "自由蓝调"
-mainStats = "4 号位异常精通 +92，5 号位攻击力 +30%，6 号位异常掌控 +30%"
+mainStats = "4 号位异常精通 +92，5 号位以太属性伤害 +30%，6 号位异常掌控 +30%"
 subStats = "低词条参考：异常精通 ×10、攻击力% ×8、小攻击 ×4、穿透值 ×3、填充 5 条"
 
 [graduationPanelAlt.spec]
@@ -343,7 +345,7 @@ weaponId = "ep-1277"
 set4Id = "ep-1194"
 set2Id = "ep-191"
 disc4MainId = "am_92"
-disc5MainId = "atk_pct_30"
+disc5MainId = "dmg_30"
 disc6MainId = "ac_pct_30"
 subStats = [
   { id = "am", count = 10 },

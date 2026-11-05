@@ -1,4 +1,5 @@
 import type { PanelStats } from '@/core/panel/types'
+import type { DamageBuild } from './snapshot'
 
 export interface EnemyPreset {
   id: string
@@ -26,6 +27,14 @@ export interface CombatStats {
   searCritDmg: number
   releaseCritDmg: number
   resPen: number
+  /** Attribute-anomaly damage multiplier (1 = no bonus). */
+  anomalyDamageBonus?: number
+  /** Disorder damage multiplier. */
+  disorderDamageBonus?: number
+  /** Release (异放) damage multiplier. */
+  releaseDamageBonus?: number
+  /** Extra resistance penetration for release only (C2-style). */
+  releaseResPen?: number
 }
 
 export interface DamageZones {
@@ -66,3 +75,10 @@ export interface DamageOptions {
 }
 
 export type DamagePanel = PanelStats
+
+export interface AgentDamage {
+  axis: DamageResult
+  single: DamageResult
+  stats: CombatStats
+  build: DamageBuild
+}

@@ -54,7 +54,7 @@ describe('agent page structure', () => {
   })
 
   it('drops the damage chapter for agents without a damage model', async () => {
-    mockRoute.params.slug = 'vivian'
+    mockRoute.params.slug = 'grace'
     const wrapper = shallowMount(AgentPage, {
       global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
     })
@@ -63,6 +63,13 @@ describe('agent page structure', () => {
     await vi.waitFor(() => expect(wrapper.find('section#overview').exists()).toBe(true))
     const ids = wrapper.findAll('section[id]').map((section) => section.attributes('id'))
     expect(ids).toEqual(['overview', 'skills', 'cinemas', 'guide', 'build'])
+
+    mockRoute.params.slug = 'vivian'
+    const vivian = shallowMount(AgentPage, {
+      global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
+    })
+    await vi.waitFor(() => expect(vivian.find('section#damage').exists()).toBe(true))
+    expect(vivian.findAll('section[id]')).toHaveLength(6)
   })
 })
 

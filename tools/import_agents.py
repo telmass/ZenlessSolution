@@ -603,7 +603,7 @@ def main() -> None:
                 **(PHOENIX_MECHANICS if slug == "phoenix" else {}),
             },
             "substatProfile": {"effective": effective, "small": small},
-            "damageModel": "phoenix" if slug == "phoenix" else None,
+            "damageModel": {"phoenix": "phoenix", "vivian": "vivian"}.get(slug),
             "skills": skills,
             "cinemas": cinemas,
             "assets": {"avatar": avatar, "tachie": tachie, "full": full, "film": film},

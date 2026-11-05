@@ -4,6 +4,13 @@
 
 ## 2026-11-05
 
+### 薇薇安 05/06 修正与重构
+
+- 配装（05）：5 号位主词条由「攻击力 +30%」修正为「以太属性伤害 +30%」（备选攻击力），`graduationPanel` / `graduationPanelAlt` 的 spec 同步改为 `dmg_30`；音擎推荐改为飞鸟星梦 / 嵌合编译器 / 壳中之灵 / 双生泣星 / 触电唇彩，移除不适配的淬锋钳刺。
+- 伤害（06）：新增薇薇安伤害模型——异放比例 = 精通 / 10 × 核心系数%（F 以太 6.15%，C2 ×1.3），侵蚀 0.625 × 20 跳、侵蚀紊乱 4.5 + 20 × 0.625；覆盖专武 6 层精通、额外能力 +12%、C1/C2/C4/C6。
+- 伤害骨架重构：新增 `events.ts`（事件构造）、`models.ts`（按 `damageModel` 分派）、`profiles.ts`（每个角色的对比配置/高亮指标），`DamageSection` 不再写死菲欧妮文案与配置；新增「口径」区块。
+- 测试：新增 `tests/vivian-damage.spec.ts`（对齐开源异放比例 oracle 2.0172 / C2 2.62236），`agent-sections` 覆盖薇薇安六章节。
+
 ### GitHub Pages 部署
 
 - 新增 `.github/workflows/deploy.yml`：push `master` → `pnpm build` → GitHub Pages（项目页子路径）。

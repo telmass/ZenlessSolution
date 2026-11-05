@@ -101,5 +101,9 @@ export function buildCombatStats(
     searCritDmg,
     releaseCritDmg,
     resPen: cinema >= 6 ? 0.15 : 0,
+    anomalyDamageBonus: 1,
+    disorderDamageBonus: 1,
+    releaseDamageBonus: 1,
+    releaseResPen: 0,
   }
 }

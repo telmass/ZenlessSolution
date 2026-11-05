@@ -5,130 +5,39 @@ import type { PanelResult } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
 import { inputFromSpec, specFromGraduation, type BuildSpec } from '@/core/panel/presets'
 import {
-  computePhoenixDamage,
-  computeSingleRelease,
+  computeAgentDamage,
+  computeAgentSingle,
+  damageProfileFor,
   enemies,
   enemyById,
+  type AgentDamage,
   type CritMode,
   type DamageBuild,
-  type PhoenixDamage,
+  type DamageConfigSpec,
 } from '@/core/damage'
 
 const props = defineProps<{ agent: Agent }>()
 
-interface DamageConfig {
-  id: string
-  label: string
-  cinema: number
-  engineId: string
-  refinement: number
+interface DamageConfig extends DamageConfigSpec {
   spec: BuildSpec
-  note: string
 }
 
 interface ComputedConfig extends DamageConfig {
   panel: PanelResult
   build: DamageBuild
-  damage: PhoenixDamage
+  damage: AgentDamage
 }
 
+const profile = damageProfileFor(props.agent)
 const graduation54 = specFromGraduation(props.agent, props.agent.guide.graduation!)
 const graduation30 = props.agent.guide.graduationAlt?.panel
   ? specFromGraduation(props.agent, props.agent.guide.graduationAlt)
   : graduation54
 
-const CONFIGS: DamageConfig[] = [
-  {
-    id: '0+1',
-    label: '0+1',
-    cinema: 0,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation54,
-    note: '0 影画 + 专武精 1',
-  },
-  {
-    id: '1+1',
-    label: '1+1',
-    cinema: 1,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation54,
-    note: '关键影画 C1',
-  },
-  {
-    id: '2+1',
-    label: '2+1',
-    cinema: 2,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation54,
-    note: '主流毕业 C2',
-  },
-  {
-    id: '4+1',
-    label: '4+1',
-    cinema: 4,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation54,
-    note: 'C4 额外异放',
-  },
-  {
-    id: '6+1',
-    label: '6+1',
-    cinema: 6,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation54,
-    note: '上限 C6',
-  },
-  {
-    id: '0+0',
-    label: '0+0',
-    cinema: 0,
-    engineId: 'ep-1883',
-    refinement: 1,
-    spec: graduation54,
-    note: '壳中之灵，无专武',
-  },
-  {
-    id: '0+1 朔月',
-    label: '0+1 朔月',
-    cinema: 0,
-    engineId: 'ep-1964',
-    refinement: 1,
-    spec: graduation54,
-    note: '朔月裁霜，限定下位',
-  },
-  {
-    id: '0+1 平民',
-    label: '0+1 平民',
-    cinema: 0,
-    engineId: 'ep-2259',
-    refinement: 1,
-    spec: graduation30,
-    note: '30 词条',
-  },
-  {
-    id: 'A5',
-    label: 'A5',
-    cinema: 0,
-    engineId: 'ep-212',
-    refinement: 5,
-    spec: graduation54,
-    note: '双生泣星精 5',
-  },
-  {
-    id: '0+1 嵌合',
-    label: '0+1 嵌合',
-    cinema: 0,
-    engineId: 'ep-214',
-    refinement: 3,
-    spec: graduation54,
-    note: '嵌合编译器精 3',
-  },
-]
+const CONFIGS: DamageConfig[] = profile.configs.map((item) => ({
+  ...item,
+  spec: item.budget === 30 ? graduation30 : graduation54,
+}))
 
 const selected = ref(['0+1', '2+1', '4+1', '6+1'])
 const enemyId = ref('standard')
@@ -146,45 +55,51 @@ const all = computed<ComputedConfig[]>(() =>
       refinement: config.refinement,
       coreLevel: spec.coreLevel,
       engineId: config.engineId,
-      // 自由蓝调 4 件套不给攻击%；若换其他 4 件套，按 panel.atk 计入这里。
+      // 4 件套的局内攻击% 不在本轴启用；如需（例如激素朋克 4 件）在这里计入。
       set4AtkPct: 0,
     }
     return {
       ...config,
       panel,
       build,
-      damage: computePhoenixDamage(props.agent, panel.stats, build, enemy.value),
+      damage: computeAgentDamage(props.agent, panel.stats, build, enemy.value),
     }
   }),
 )
 
-const baseline = computed(() => all.value.find((item) => item.id === '0+1')!)
-const visible = computed(() =>
-  selected.value.map((id) => all.value.find((item) => item.id === id)).filter(Boolean) as ComputedConfig[],
+const baseline = computed(
+  () => all.value.find((item) => item.id === '0+1') ?? all.value[0]!,
+)
+const visible = computed(
+  () =>
+    selected.value
+      .map((id) => all.value.find((item) => item.id === id))
+      .filter(Boolean) as ComputedConfig[],
 )
 const singleConfig = computed(() => visible.value[0] ?? baseline.value)
+
 const ENGINE_NAMES: Record<string, string> = {
   'ep-2259': '涅槃初翎',
+  'ep-1277': '飞鸟星梦',
   'ep-1883': '壳中之灵',
   'ep-1964': '朔月裁霜',
   'ep-212': '双生泣星',
   'ep-214': '嵌合编译器',
+  'ep-210': '触电唇彩',
 }
 
 function engineName(item: ComputedConfig) {
   return ENGINE_NAMES[item.engineId] ?? item.label
 }
 
-function engineEffectText(item: ComputedConfig) {
-  if (item.id === '0+1') return '+90 精通 / +40% 火伤'
-  if (item.id === '0+0') return '+90 精通'
-  if (item.id === '0+1 朔月') return '无生效效果'
-  if (item.id === 'A5') return '+192 精通（4 层）'
-  if (item.id === '0+1 嵌合') return '+111 精通（3 层）/ +18% 攻击'
-  return '—'
-}
 const single = computed(() =>
-  computeSingleRelease(props.agent, singleConfig.value.panel.stats, singleConfig.value.build, enemy.value, singleMode.value),
+  computeAgentSingle(
+    props.agent,
+    singleConfig.value.panel.stats,
+    singleConfig.value.build,
+    enemy.value,
+    singleMode.value,
+  ),
 )
 
 function toggle(id: string) {
@@ -215,18 +130,15 @@ function relative(item: ComputedConfig) {
   return total(item) / total(baseline.value)
 }
 
-function tick(item: ComputedConfig) {
-  return item.damage.axis.events.find((event) => event.id === 'sear-tick')?.total ?? 0
+function highlightValue(item: ComputedConfig) {
+  const event = item.damage.axis.events.find((entry) => entry.id === profile.highlight.eventId)
+  if (!event) return 0
+  return profile.highlight.mode === 'perHit' ? event.perHit : event.total
 }
 
 const attribution = computed(() => {
   const map = new Map(all.value.map((item) => [item.id, item]))
-  return [
-    { from: '0+1', to: '1+1', label: 'C1' },
-    { from: '1+1', to: '2+1', label: 'C2' },
-    { from: '2+1', to: '4+1', label: 'C4' },
-    { from: '4+1', to: '6+1', label: 'C6' },
-  ].map((step) => {
+  return profile.attribution.map((step) => {
     const before = map.get(step.from)
     const after = map.get(step.to)
     return {
@@ -243,22 +155,18 @@ const metricRows = computed(() =>
     ap: item.panel.stats.anomalyProficiency,
     am: item.panel.stats.anomalyMastery,
     single: item.damage.single.total,
-    tick: tick(item),
+    highlight: highlightValue(item),
     total: total(item),
     relative: relative(item),
   })),
 )
 
-const engineRows = computed(() => {
-  const ids = ['0+1', '0+0', '0+1 朔月', 'A5', '0+1 嵌合']
-  return ids
-    .map((id) => all.value.find((item) => item.id === id))
-    .filter((item): item is ComputedConfig => Boolean(item))
-    .map((item) => ({
-      ...item,
-      relative: total(item) / total(baseline.value),
-    }))
-})
+const engineRows = computed(() =>
+  [baseline.value, ...all.value.filter((item) => item.kind === 'engine')].map((item) => ({
+    ...item,
+    relative: total(item) / total(baseline.value),
+  })),
+)
 
 function markdown() {
   const header = ['指标', ...visible.value.map((item) => item.label)]
@@ -267,7 +175,7 @@ function markdown() {
     ['异常精通', ...visible.value.map((item) => format(item.panel.stats.anomalyProficiency, 1))],
     ['异常掌控', ...visible.value.map((item) => format(item.panel.stats.anomalyMastery, 1))],
     ['单次异放', ...visible.value.map((item) => format(item.damage.single.total))],
-    ['灼蚀 tick', ...visible.value.map((item) => format(tick(item)))],
+    [profile.highlight.label, ...visible.value.map((item) => format(highlightValue(item)))],
     ['轴总伤', ...visible.value.map((item) => format(total(item)))],
     ['相对基准', ...visible.value.map((item) => percent(relative(item)))],
   ]
@@ -317,10 +225,10 @@ async function copyMarkdown() {
     <section class="damage-single">
       <div class="damage-single__head">
         <div>
-          <span class="damage-kicker">单次焚罪异放 · 失衡 1.5×</span>
+          <span class="damage-kicker">{{ profile.singleTitle }}</span>
           <b class="num">{{ format(single.total) }}</b>
         </div>
-        <div class="damage-modes" role="group" aria-label="暴击计算方式">
+        <div v-if="profile.critModes" class="damage-modes" role="group" aria-label="暴击计算方式">
           <button
             v-for="mode in (['expected', 'crit', 'none'] as const)"
             :key="mode"
@@ -332,7 +240,14 @@ async function copyMarkdown() {
         </div>
       </div>
       <p class="damage-meta">
-        {{ singleConfig.label }} · {{ enemy.label }} · {{ singleMode === 'expected' ? '期望' : singleMode === 'crit' ? '必暴' : '不暴' }}
+        {{ singleConfig.label }} · {{ enemy.label }} ·
+        {{ profile.critModes
+          ? singleMode === 'expected'
+            ? '期望'
+            : singleMode === 'crit'
+              ? '必暴'
+              : '不暴'
+          : '异放不吃暴击' }}
       </p>
     </section>
 
@@ -358,7 +273,7 @@ async function copyMarkdown() {
                 {{ engineName(item) }}
                 <small>精 {{ item.refinement }}</small>
               </th>
-              <td class="effect-cell">{{ engineEffectText(item) }}</td>
+              <td class="effect-cell">{{ item.engineEffect }}</td>
               <td class="num">{{ format(item.damage.single.total) }}</td>
               <td class="num">{{ format(total(item)) }}</td>
               <td class="num">{{ percent(item.relative) }}</td>
@@ -366,6 +281,7 @@ async function copyMarkdown() {
           </tbody>
         </table>
       </div>
+      <p class="damage-note">{{ profile.engineNote }}</p>
     </section>
 
     <div class="damage-table-wrap">
@@ -397,8 +313,10 @@ async function copyMarkdown() {
             <td v-for="item in metricRows" :key="item.id" class="num">{{ format(item.single) }}</td>
           </tr>
           <tr>
-            <th>灼蚀 tick</th>
-            <td v-for="item in metricRows" :key="item.id" class="num">{{ format(item.tick) }}</td>
+            <th>{{ profile.highlight.label }}</th>
+            <td v-for="item in metricRows" :key="item.id" class="num">
+              {{ format(item.highlight) }}
+            </td>
           </tr>
           <tr class="is-total">
             <th>轴总伤</th>
@@ -425,6 +343,13 @@ async function copyMarkdown() {
           </b>
         </div>
       </div>
+    </section>
+
+    <section class="damage-assumptions">
+      <h3>口径</h3>
+      <ul>
+        <li v-for="line in baseline.damage.axis.assumptions" :key="line">{{ line }}</li>
+      </ul>
     </section>
 
     <details class="damage-events">
@@ -751,6 +676,35 @@ async function copyMarkdown() {
 
 .damage-steps b.is-negative {
   color: var(--danger);
+}
+
+.damage-note {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.7;
+}
+
+.damage-assumptions {
+  padding: var(--s4) var(--s5);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.damage-assumptions h3 {
+  margin-bottom: var(--s2);
+  font-family: var(--font-display);
+  font-size: var(--fs-18);
+  font-weight: 600;
+}
+
+.damage-assumptions ul {
+  display: grid;
+  gap: 4px;
+  max-width: var(--measure-wide);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 .damage-events summary {

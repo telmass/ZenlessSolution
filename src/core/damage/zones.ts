@@ -23,8 +23,12 @@ export function defenseZone(enemy: EnemyPreset, stats: CombatStats, defIgnore = 
   return 794 / (794 + effectiveDefense(enemy, stats, defIgnore))
 }
 
-export function resistanceZone(enemy: EnemyPreset, stats: CombatStats): number {
-  return 1 - enemy.resistance / 100 + stats.resPen
+export function resistanceZone(
+  enemy: EnemyPreset,
+  stats: CombatStats,
+  extraResPen = 0,
+): number {
+  return 1 - enemy.resistance / 100 + stats.resPen + extraResPen
 }
 
 export function stunZone(enemy: EnemyPreset, stunned?: boolean): number {
@@ -64,10 +68,11 @@ interface SharedOptions {
 
 function commonZones({ type, mode, enemy, options }: SharedOptions, stats: CombatStats) {
   const defIgnore = type === 'release' ? (options.defIgnore ?? 0) : 0
+  const extraResPen = type === 'release' ? (stats.releaseResPen ?? 0) : 0
   return {
     dmgBonus: stats.dmgBonus,
     defZone: defenseZone(enemy, stats, defIgnore),
-    resZone: resistanceZone(enemy, stats),
+    resZone: resistanceZone(enemy, stats, extraResPen),
     stunZone: stunZone(enemy, options.stunned),
     apZone: stats.ap / 100,
     levelZone: 2,
@@ -113,6 +118,7 @@ export function damageAnomaly(
     zones.apZone *
     zones.levelZone *
     multiplier *
+    (stats.anomalyDamageBonus ?? 1) *
     zones.anomalyCritZone
   return { perHit, zones }
 }
@@ -134,6 +140,7 @@ export function damageRelease(
     zones.apZone *
     zones.levelZone *
     multiplier *
+    (stats.releaseDamageBonus ?? 1) *
     zones.releaseCritZone
   return { perHit, zones }
 }
@@ -153,6 +160,7 @@ export function damageDisorder(
     zones.stunZone *
     zones.apZone *
     zones.levelZone *
-    multiplier
+    multiplier *
+    (stats.disorderDamageBonus ?? 1)
   return { perHit, zones }
 }
