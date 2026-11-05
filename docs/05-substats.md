@@ -15,15 +15,18 @@
 
 ## 2. 计数器
 
-`src/core/substats/index.ts`
+`src/core/panel/discs.ts`（逐件盘） + `src/core/substats/index.ts`（展示口径）
 
 ```ts
-countRolls(value, step) // 单件盘：value / step 必须是 1–6 的整数，否则 null
-analyzeSubstats(counts, profile, { includePenValue, budget })
+// 逐件盘：6 件，每件 9 条、最多 4 种词条、单条 1–6 次
+fromCounts(counts)  // 聚合条数 → 6 件盘（预设用，不可分配时直接报错）
+toCounts(discs)     // 6 件盘 → 聚合条数（面板计算吃这个）
+validateDiscs(discs, rules)
 ```
 
-- `counts` 是当前配装的**聚合条数**（不是单件盘的存储值）；`countRolls` 用于未来导入单件盘时验证步长。
-- 默认预算 54；超出时 `overBudget = true`，页面给出提示，不静默截断。
+- 编辑器以**单件盘**为最小单位：每件盘单独选 4 条词条与每条条数，合计由 6 件盘相加得到。
+- `counts` 是聚合条数，只作为面板计算输入与预设交换格式；页面不再直接编辑聚合值。
+- 默认预算 54（6 × 9）；不足 54 是合法的部分配装，超出时 `overBudget = true`，不静默截断。
 - 穿透值单独统计：`includePenValue=false` 时计入小词条；`true` 时移入有效。
 
 ## 3. 菲欧妮基准
@@ -44,7 +47,8 @@ analyzeSubstats(counts, profile, { includePenValue, budget })
 
 - 结果卡顶部固定展示：有效 / 小 / 无效 / 总条数、比例条、「穿透值计入」开关。
 - 「口径与分配」展开后逐条列出当前分配，并声明不进入计算。
-- 副词条列表每一行带 `有效 / 小 / 无效` 标签，切换穿透值开关时穿透值行同步变化。
+- 副词条区是 6 张盘卡：每张卡 4 个词条槽 + 每条 1–6 的加减；卡头显示「本盘 X / 9 条」，切换预设时按 `fromCounts` 还原成逐盘分配。
+- 每件盘内不允许重复词条；单盘超过 9 条或单条超过 6 次会被输入约束拦住。
 
 ### 毕业卡（`#guide`）
 

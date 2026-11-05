@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import type { Agent } from '@/types/agent'
 import type { StatId } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
 import { engines, mainStatsFor, sets, STAT_LABELS, STAT_UNITS, substats } from '@/core/panel/data'
 import { formatStat } from '@/core/panel/format'
 import { coreBonusFor, presetsFor, type BuildSpec } from '@/core/panel/presets'
+import {
+  MAX_ROLLS_PER_LINE,
+  ROLLS_PER_DISC,
+  discRolls,
+  fromCounts,
+  toCounts,
+  totalRolls as sumDiscRolls,
+  type Disc,
+} from '@/core/panel/discs'
 import { analyzeSubstats } from '@/core/substats'
 import { media } from '@/lib/media'
 
@@ -22,6 +31,17 @@ const spec = reactive<BuildSpec>({
   mainStats: { ...startSpec.mainStats },
   substats: { ...startSpec.substats },
 })
+
+const discs = ref<Disc[]>(fromCounts(startSpec.substats))
+
+// 单盘分配是编辑口径，面板计算仍吃聚合条数。
+watch(
+  discs,
+  (value) => {
+    spec.substats = toCounts(value)
+  },
+  { deep: true, immediate: true },
+)
 
 const profile = computed(() => props.agent.substatProfile)
 
@@ -86,17 +106,61 @@ function applyPreset(preset: BuildSpec) {
   spec.set4 = preset.set4
   spec.set2 = preset.set2
   spec.mainStats = { ...preset.mainStats }
-  spec.substats = { ...preset.substats }
+  discs.value = fromCounts(preset.substats)
 }
 
-function setCount(id: string, delta: number) {
-  const current = spec.substats[id] ?? 0
-  spec.substats[id] = Math.min(36, Math.max(0, current + delta))
+function lineAt(discIndex: number, lineIndex: number) {
+  return discs.value[discIndex]?.lines[lineIndex]
 }
 
-const totalRolls = computed(() =>
-  Object.values(spec.substats).reduce((total, count) => total + Math.max(0, count), 0),
-)
+function usedRolls(disc: Disc) {
+  return discRolls(disc)
+}
+
+function lineRoom(disc: Disc, lineIndex: number) {
+  const line = disc.lines[lineIndex]
+  const used = usedRolls(disc) - (line?.rolls ?? 0)
+  return Math.min(MAX_ROLLS_PER_LINE, ROLLS_PER_DISC - used)
+}
+
+function optionsFor(disc: Disc, lineIndex: number) {
+  const current = disc.lines[lineIndex]?.id
+  return substats.filter(
+    (rule) =>
+      rule.id === current || !disc.lines.some((line) => line.id === rule.id),
+  )
+}
+
+function setStat(discIndex: number, lineIndex: number, event: Event) {
+  const id = (event.target as HTMLSelectElement).value
+  const disc = discs.value[discIndex]
+  if (!disc) return
+  if (!id) {
+    disc.lines.splice(lineIndex, 1)
+    return
+  }
+  const existing = disc.lines[lineIndex]
+  if (existing) {
+    existing.id = id
+    existing.rolls = Math.min(existing.rolls, lineRoom(disc, lineIndex))
+    return
+  }
+  if (disc.lines.length >= 4 || usedRolls(disc) >= ROLLS_PER_DISC) return
+  disc.lines.push({ id, rolls: 1 })
+}
+
+function bumpRolls(discIndex: number, lineIndex: number, delta: number) {
+  const disc = discs.value[discIndex]
+  const line = disc?.lines[lineIndex]
+  if (!disc || !line) return
+  line.rolls = Math.max(1, Math.min(lineRoom(disc, lineIndex), line.rolls + delta))
+}
+
+function clearLine(discIndex: number, lineIndex: number) {
+  discs.value[discIndex]?.lines.splice(lineIndex, 1)
+}
+
+const totalRolls = computed(() => sumDiscRolls(discs.value))
 
 const result = computed(() =>
   computePanel({
@@ -259,26 +323,63 @@ const summaryStats = computed(() =>
 
         <section class="form__group">
           <header class="form__head">
-            <h3>副词条</h3>
+            <h3>副词条（逐件盘）</h3>
             <span class="form__hint">
               合计 <b class="num" :class="{ 'is-over': totalRolls > 54 }">{{ totalRolls }}</b> / 54 条
             </span>
           </header>
 
-          <div class="subs">
-            <div v-for="rule in substats" :key="rule.id" class="sub">
-              <div class="sub__label">
-                <b>{{ rule.label }}</b>
-                <em class="sub__tier" :class="`sub__tier--${tierFor(rule.id)}`">{{ tierLabel(rule.id) }}</em>
-                <small>+{{ rule.value }}{{ rule.kind === 'pct' ? '%' : '' }}/条</small>
-              </div>
-              <div class="stepper">
-                <button :aria-label="`减少${rule.label}`" @click="setCount(rule.id, -1)">−</button>
-                <span class="num">{{ spec.substats[rule.id] ?? 0 }}</span>
-                <button :aria-label="`增加${rule.label}`" @click="setCount(rule.id, 1)">＋</button>
-              </div>
-            </div>
+          <div class="discs">
+            <article v-for="(disc, discIndex) in discs" :key="disc.slot" class="disc">
+              <header class="disc__head">
+                <b>{{ disc.slot }} 号位</b>
+                <span class="num" :class="{ 'is-over': usedRolls(disc) > 9 }">
+                  {{ usedRolls(disc) }} / 9 条
+                </span>
+              </header>
+
+              <label v-for="slot in 4" :key="slot" class="disc__line">
+                <select
+                  :value="lineAt(discIndex, slot - 1)?.id ?? ''"
+                  @change="setStat(discIndex, slot - 1, $event)"
+                >
+                  <option value="">未选择</option>
+                  <option v-for="rule in optionsFor(disc, slot - 1)" :key="rule.id" :value="rule.id">
+                    {{ rule.label }}
+                  </option>
+                </select>
+                <span v-if="lineAt(discIndex, slot - 1)" class="disc__rolls">
+                  <button
+                    type="button"
+                    :aria-label="`减少${disc.slot}号位第${slot}条词条`"
+                    @click="bumpRolls(discIndex, slot - 1, -1)"
+                  >
+                    −
+                  </button>
+                  <b class="num">{{ lineAt(discIndex, slot - 1)!.rolls }}</b>
+                  <button
+                    type="button"
+                    :aria-label="`增加${disc.slot}号位第${slot}条词条`"
+                    @click="bumpRolls(discIndex, slot - 1, 1)"
+                  >
+                    ＋
+                  </button>
+                  <button
+                    type="button"
+                    class="disc__remove"
+                    :aria-label="`清除${disc.slot}号位第${slot}条词条`"
+                    @click="clearLine(discIndex, slot - 1)"
+                  >
+                    ×
+                  </button>
+                </span>
+              </label>
+            </article>
           </div>
+
+          <p class="discs__note">
+            每盘 9 条（3 初始 + 5 强化 + 1 补足），单条 1–6 次、最多 4 种词条；下方结果按 6 件盘汇总。
+          </p>
         </section>
       </div>
 
@@ -1089,6 +1190,106 @@ const summaryStats = computed(() =>
   .panel-summary__link {
     margin-left: 0;
     min-height: 44px;
+  }
+}
+
+.discs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.disc {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.disc__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-2);
+  font-size: var(--fs-12);
+}
+
+.disc__head .num {
+  color: var(--muted);
+}
+
+.disc__head .num.is-over {
+  color: var(--danger);
+}
+
+.disc__line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.disc__line select {
+  min-height: 34px;
+  padding: 4px 8px;
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-12);
+}
+
+.disc__rolls {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.disc__rolls button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: var(--fs-12);
+}
+
+.disc__rolls button:hover {
+  color: var(--text);
+  border-color: var(--text-2);
+}
+
+.disc__rolls b {
+  min-width: 18px;
+  color: var(--text);
+  font-size: var(--fs-14);
+  text-align: center;
+}
+
+.disc__remove {
+  margin-left: 2px;
+  border-color: transparent !important;
+}
+
+.discs__note {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.7;
+}
+
+@media (max-width: 1100px) {
+  .discs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .discs {
+    grid-template-columns: 1fr;
   }
 }
 </style>
