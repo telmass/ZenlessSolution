@@ -48,6 +48,15 @@ function drawContain(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: 
   ctx.drawImage(image, x + (w - width) / 2, y + (h - height) / 2, width, height)
 }
 
+function drawAvatar(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, size: number) {
+  ctx.save()
+  ctx.beginPath()
+  ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2)
+  ctx.clip()
+  drawContain(ctx, image, x, y, size, size)
+  ctx.restore()
+}
+
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   const radius = Math.min(r, w / 2, h / 2)
   ctx.beginPath()
@@ -279,6 +288,7 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   let x = VALUE_X
   const set4Icon = images.get(build.set4.icon)
   const set4Label = `4 ${build.set4.name}`
+  ctx.font = font(11, 500)
   const w4 = textWidth(ctx, set4Label) + 52
   roundRect(ctx, x, y, w4, 32, 9)
   ctx.fillStyle = CHIP
@@ -295,6 +305,7 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   if (set2) {
     const icon = images.get(set2.icon)
     const label = `2 ${build.set2.map((item) => item.name).join(' / ')}`
+    ctx.font = font(11, 500)
     const width = textWidth(ctx, label) + 52
     roundRect(ctx, x, y, width, 32, 9)
     ctx.fillStyle = CHIP
@@ -310,13 +321,14 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   let statX = VALUE_X
   build.mainStats.forEach((stat) => {
     const label = `${stat.slot} ${stat.main}`
-    const width = textWidth(ctx, label) + 18
+    ctx.font = font(10, 500)
+    const width = textWidth(ctx, label) + 24
     roundRect(ctx, statX, y + 40, width, 28, 8)
     ctx.fillStyle = SOFT
     ctx.fill()
     ctx.font = font(10, 500)
     ctx.fillStyle = MUTED
-    ctx.fillText(label, statX + 9, y + 48)
+    ctx.fillText(label, statX + 10, y + 48)
     if (stat.alt && stat.alt !== '无') {
       ctx.font = font(9, 500)
       ctx.fillStyle = '#7b8494'
@@ -350,7 +362,7 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
       ctx.fill()
       ctx.strokeStyle = BORDER
       ctx.stroke()
-      if (icon) drawContain(ctx, icon, x + 2, top + 2, 24, 24)
+      if (icon) drawAvatar(ctx, icon, x + 2, top + 2, 24)
       ctx.font = font(10, 500)
       ctx.fillStyle = INK
       ctx.fillText(label, x + 30, top + 8)
