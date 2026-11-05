@@ -10,6 +10,7 @@ import {
   maxRollsFor,
   toCounts,
   totalRolls,
+  canUpgrade,
   validateDiscs,
   type Disc,
 } from '@/core/panel/discs'
@@ -60,11 +61,8 @@ describe('per-disc substat allocation', () => {
     }
   })
 
-  it('round-trips the 30-roll reference', () => {
-    const discs = fromCounts(PHOENIX_30, substats, MAINS)
-    expect(totalRolls(discs)).toBe(30)
-    expect(toCounts(discs)).toEqual(PHOENIX_30)
-    for (const disc of discs) expect(discRolls(disc)).toBeLessThanOrEqual(ROLLS_PER_DISC)
+  it('rejects a 30-roll budget that cannot fill four substats per disc', () => {
+    expect(() => fromCounts(PHOENIX_30, substats, MAINS)).toThrow(/选满 4 条/)
   })
 
   it('fails loudly when the aggregate cannot fit six discs', () => {
@@ -91,6 +89,17 @@ describe('per-disc substat allocation', () => {
     ]
     expect(maxRollsFor('atk_pct', substats, doubleAtkMain)).toBe(24)
     expect(() => fromCounts({ anomaly_proficiency: 31 }, substats, MAINS)).toThrow()
+  })
+
+  it('only allows upgrades after all four substats are selected', () => {
+    const partial: Disc[] = emptyDiscs()
+    partial[0].lines.push({ id: 'anomaly_proficiency', rolls: 6 }, { id: 'atk_pct', rolls: 3 })
+    expect(canUpgrade(partial[0])).toBe(false)
+    expect(validateDiscs(partial, substats, MAINS).some((error) => error.includes('未选满'))).toBe(
+      true,
+    )
+    partial[0].lines.push({ id: 'atk_flat', rolls: 1 }, { id: 'pen_value', rolls: 1 })
+    expect(canUpgrade(partial[0])).toBe(true)
   })
 
   it('rejects a substat that duplicates the disc main stat', () => {

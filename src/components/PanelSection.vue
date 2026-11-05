@@ -9,6 +9,7 @@ import { coreBonusFor, presetsFor, type BuildSpec } from '@/core/panel/presets'
 import {
   MAX_ROLLS_PER_LINE,
   ROLLS_PER_DISC,
+  canUpgrade,
   conflictsWithMain,
   discRolls,
   fromCounts,
@@ -25,8 +26,8 @@ const props = defineProps<{ agent: Agent }>()
 
 const coreLevels: BuildSpec['coreLevel'][] = ['A', 'B', 'C', 'D', 'E', 'F']
 
-const presetList = computed(() => presetsFor(props.agent))
-const startSpec = presetList.value[0]
+const rawPresets = presetsFor(props.agent)
+const startSpec = rawPresets[0]
 if (!startSpec) throw new Error(`${props.agent.slug}: no graduation preset`)
 
 const spec = reactive<BuildSpec>({
@@ -43,6 +44,19 @@ const mains = computed<MainStatInfo[]>(() => {
   }
   return out
 })
+
+const presetList = computed(() =>
+  rawPresets.filter((preset) => {
+    try {
+      fromCounts(preset.substats, substats, mains.value)
+      return true
+    } catch {
+      return false
+    }
+  }),
+)
+
+const presetError = ref('')
 
 function mainFor(slot: number) {
   return mains.value.find((item) => item.slot === slot)
@@ -79,6 +93,9 @@ watch(
         const rule = substats.find((item) => item.id === line.id)
         return !(rule && conflictsWithMain(rule, main))
       })
+      if (disc.lines.length < 4) {
+        for (const line of disc.lines) line.rolls = 1
+      }
     }
   },
 )
@@ -146,7 +163,12 @@ function applyPreset(preset: BuildSpec) {
   spec.set4 = preset.set4
   spec.set2 = preset.set2
   spec.mainStats = { ...preset.mainStats }
-  discs.value = fromCounts(preset.substats, substats, mains.value)
+  try {
+    discs.value = fromCounts(preset.substats, substats, mains.value)
+    presetError.value = ''
+  } catch (error) {
+    presetError.value = error instanceof Error ? error.message : String(error)
+  }
 }
 
 function lineAt(discIndex: number, lineIndex: number) {
@@ -159,7 +181,9 @@ function usedRolls(disc: Disc) {
 
 function lineRoom(disc: Disc, lineIndex: number) {
   const line = disc.lines[lineIndex]
-  const used = usedRolls(disc) - (line?.rolls ?? 0)
+  if (!line) return 0
+  if (!canUpgrade(disc)) return 1
+  const used = usedRolls(disc) - line.rolls
   return Math.min(MAX_ROLLS_PER_LINE, ROLLS_PER_DISC - used)
 }
 
@@ -207,12 +231,21 @@ function bumpRolls(discIndex: number, lineIndex: number, delta: number) {
   const disc = discs.value[discIndex]
   const line = disc?.lines[lineIndex]
   if (!disc || !line) return
-  if (delta > 0 && countStat(line.id) + delta > maxRollsFor(line.id, substats, mains.value)) return
+  if (delta > 0) {
+    if (!canUpgrade(disc)) return
+    if (countStat(line.id) + delta > maxRollsFor(line.id, substats, mains.value)) return
+  }
   line.rolls = Math.max(1, Math.min(lineRoom(disc, lineIndex), line.rolls + delta))
 }
 
 function clearLine(discIndex: number, lineIndex: number) {
-  discs.value[discIndex]?.lines.splice(lineIndex, 1)
+  const disc = discs.value[discIndex]
+  if (!disc) return
+  disc.lines.splice(lineIndex, 1)
+  // 少于 4 条时不允许保留强化：全部退回基础 1 条。
+  if (disc.lines.length < 4) {
+    for (const line of disc.lines) line.rolls = 1
+  }
 }
 
 const totalRolls = computed(() => sumDiscRolls(discs.value))
@@ -266,6 +299,7 @@ const summaryStats = computed(() =>
         </button>
       </div>
     </div>
+    <p v-if="presetError" class="preset-error">{{ presetError }}</p>
 
     <div class="panel-summary" aria-label="关键面板">
       <div v-for="stat in summaryStats" :key="stat.stat" class="panel-summary__item">
@@ -393,6 +427,9 @@ const summaryStats = computed(() =>
                 </span>
               </header>
               <p class="disc__main">主词条 · {{ mainLabel(disc.slot) }}</p>
+              <p v-if="!canUpgrade(disc)" class="disc__hint">
+                还差 {{ 4 - disc.lines.length }} 条副词条 · 选满后才能强化
+              </p>
 
               <label v-for="slot in 4" :key="slot" class="disc__line">
                 <select
@@ -408,6 +445,7 @@ const summaryStats = computed(() =>
                   <button
                     type="button"
                     :aria-label="`减少${disc.slot}号位第${slot}条词条`"
+                    :disabled="lineAt(discIndex, slot - 1)!.rolls <= 1"
                     @click="bumpRolls(discIndex, slot - 1, -1)"
                   >
                     −
@@ -416,6 +454,11 @@ const summaryStats = computed(() =>
                   <button
                     type="button"
                     :aria-label="`增加${disc.slot}号位第${slot}条词条`"
+                    :disabled="
+                      !canUpgrade(disc) ||
+                      lineAt(discIndex, slot - 1)!.rolls >= lineRoom(disc, slot - 1)
+                    "
+                    :title="canUpgrade(disc) ? '强化 1 次' : '先选满 4 条副词条才能强化'"
                     @click="bumpRolls(discIndex, slot - 1, 1)"
                   >
                     ＋
@@ -434,8 +477,8 @@ const summaryStats = computed(() =>
           </div>
 
           <p class="discs__note">
-            每盘 9 条（3 初始 + 5 强化 + 1 补足），单条 1–6 次、最多 4 种词条；同盘副词条不能与主词条相同。
-            同名词条的全局上限 =（6 − 主词条占用盘数）× 6：例如 4 号位主词条为异常精通时，异常精通副词条上限 30 条。
+            副词条必须**选满 4 条**才能开始强化：先选 4 种词条（各 1 条），再分配 5 次强化（每条最多 6 条）。
+            同盘副词条不能与主词条相同；同名词条的全局上限 =（6 − 主词条占用盘数）× 6，例如 4 号位主词条为异常精通时，异常精通副词条上限 30 条。
           </p>
         </section>
       </div>
@@ -1276,6 +1319,25 @@ const summaryStats = computed(() =>
 
 .disc__head .num {
   color: var(--muted);
+}
+
+.disc__hint {
+  color: var(--accent);
+  font-size: var(--fs-12);
+  line-height: 1.4;
+}
+
+.disc__rolls button:disabled {
+  color: var(--text-disabled);
+  border-color: var(--line);
+  cursor: not-allowed;
+}
+
+.preset-error {
+  margin-top: 6px;
+  color: var(--danger-ink);
+  font-size: var(--fs-12);
+  line-height: 1.6;
 }
 
 .disc__main {
