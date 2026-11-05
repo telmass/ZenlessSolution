@@ -2,12 +2,15 @@ import type { Agent, GuideGraduation, GuideTeam, GuideWeaponTier } from '@/types
 import { media } from '@/lib/media'
 import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
 
-const W = 1500
-const H = 880
+const W = 1620
+const H = 1000
 const CARD_X = 16
 const CARD_Y = 16
 const CARD_W = W - 32
 const CARD_H = H - 32
+const BODY_LINE = 650
+const LABEL_X = 676
+const VALUE_X = 810
 
 const INK = '#111318'
 const MUTED = '#343a45'
@@ -41,26 +44,6 @@ function drawContain(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: 
   const width = image.width * ratio
   const height = image.height * ratio
   ctx.drawImage(image, x + (w - width) / 2, y + (h - height) / 2, width, height)
-}
-
-function drawFullBody(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, w: number, h: number) {
-  // 全身立绘的翼展很宽；横向裁到角色主体，纵向保留完整身高。
-  const cropW = image.width * 0.66
-  const cropX = (image.width - cropW) / 2
-  const ratio = Math.min(w / cropW, h / image.height)
-  const width = cropW * ratio
-  const height = image.height * ratio
-  ctx.drawImage(
-    image,
-    cropX,
-    0,
-    cropW,
-    image.height,
-    x + (w - width) / 2,
-    y + (h - height) / 2,
-    width,
-    height,
-  )
 }
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
@@ -123,20 +106,20 @@ function rowLabel(ctx: CanvasRenderingContext2D, label: string, y: number) {
   ctx.strokeStyle = LINE
   ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(416, y + 18)
-  ctx.lineTo(454, y + 18)
+  ctx.moveTo(BODY_LINE - 18, y + 18)
+  ctx.lineTo(BODY_LINE, y + 18)
   ctx.stroke()
   ctx.font = font(18, 700)
   ctx.fillStyle = INK
-  ctx.fillText(label, 466, y)
+  ctx.fillText(label, LABEL_X, y)
 }
 
 function sectionBody(ctx: CanvasRenderingContext2D, y: number) {
   ctx.strokeStyle = LINE
   ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(438, 64)
-  ctx.lineTo(438, H - 60)
+  ctx.moveTo(BODY_LINE, 64)
+  ctx.lineTo(BODY_LINE, H - 60)
   ctx.stroke()
   void y
 }
@@ -156,14 +139,14 @@ function drawPortrait(ctx: CanvasRenderingContext2D, agent: Agent, images: Image
   const avatar = images.get(agent.assets.avatar)
   const x = 48
   const y = 48
-  const w = 360
-  const h = 620
+  const w = 544
+  const h = 700
 
   ctx.fillStyle = '#ffffff'
   roundRect(ctx, x, y, w, h, 22)
   ctx.fill()
 
-  if (full) drawFullBody(ctx, full, x + 8, y + 8, w - 16, h - 16)
+  if (full) drawContain(ctx, full, x + 8, y + 8, w - 16, h - 16)
   else if (tachie) drawContain(ctx, tachie, x + 8, y + 8, w - 16, h - 16)
   else if (avatar) drawContain(ctx, avatar, x + 70, y + 110, w - 140, w - 140)
 
@@ -196,7 +179,7 @@ function drawPortrait(ctx: CanvasRenderingContext2D, agent: Agent, images: Image
 function drawSkills(ctx: CanvasRenderingContext2D, agent: Agent, y: number, images: ImageMap) {
   rowLabel(ctx, '技能加点', y)
   const items = agent.guide.skillPriority
-  let x = 600
+  let x = VALUE_X
   items.forEach((item, index) => {
     const iconPath = `/assets/ui/skills/${item.key}.webp`
     const icon = images.get(iconPath)
@@ -228,7 +211,7 @@ function drawSkills(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
 function drawCinemas(ctx: CanvasRenderingContext2D, agent: Agent, y: number) {
   rowLabel(ctx, '命座推荐', y)
   const key = new Set(agent.guide.cinemaPriority.keyLevels)
-  let x = 600
+  let x = VALUE_X
   for (let level = 1; level <= 6; level += 1) {
     const active = key.has(level)
     roundRect(ctx, x, y, 40, 34, 9)
@@ -257,7 +240,7 @@ function drawWeapons(
   rowLabel(ctx, '音擎推荐', y)
   let top = y - 4
   for (const tier of tiers) {
-    const tierWidth = pill(ctx, tier.tier, 600, top + 2, {
+    const tierWidth = pill(ctx, tier.tier, VALUE_X, top + 2, {
       h: 26,
       pad: 9,
       size: 10,
@@ -266,7 +249,7 @@ function drawWeapons(
       border: tier === tiers[0] ? '#f0d9a0' : 'transparent',
       color: tier === tiers[0] ? ACCENT_INK : MUTED,
     })
-    let x = 600 + tierWidth + 8
+    let x = VALUE_X + tierWidth + 8
     for (const weapon of tier.items) {
       const icon = images.get(weapon.icon)
       const label = `${weapon.name} · 精${weapon.refinement}`
@@ -290,7 +273,7 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   rowLabel(ctx, '驱动盘推荐', y)
   const build = agent.guide.builds[0]
   if (!build) return
-  let x = 600
+  let x = VALUE_X
   const set4Icon = images.get(build.set4.icon)
   const set4Label = `4 ${build.set4.name}`
   const w4 = textWidth(ctx, set4Label) + 52
@@ -321,7 +304,7 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
     ctx.fillText(label, x + 34, y + 9)
   }
 
-  let statX = 600
+  let statX = VALUE_X
   build.mainStats.forEach((stat) => {
     const label = `${stat.slot} ${stat.main}`
     const width = textWidth(ctx, label) + 18
@@ -331,7 +314,12 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
     ctx.font = font(10, 500)
     ctx.fillStyle = MUTED
     ctx.fillText(label, statX + 9, y + 48)
-    statX += width + 6
+    if (stat.alt && stat.alt !== '无') {
+      ctx.font = font(9, 500)
+      ctx.fillStyle = '#7b8494'
+      ctx.fillText(`备选 ${stat.alt}`, statX + 9, y + 74)
+    }
+    statX += Math.max(width, stat.alt && stat.alt !== '无' ? textWidth(ctx, `备选 ${stat.alt}`) + 18 : 0) + 6
   })
 }
 
@@ -339,7 +327,7 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
   rowLabel(ctx, '队伍推荐', y)
   let top = y - 2
   for (const team of teams.slice(0, 2)) {
-    let x = 600
+    let x = VALUE_X
     const width = pill(ctx, team.name, x, top, {
       h: 26,
       pad: 9,
@@ -371,9 +359,9 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
 
 function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[], y: number) {
   rowLabel(ctx, '面板参考', y)
-  const width = 420
+  const width = 380
   cards.slice(0, 2).forEach((card, index) => {
-    const x = 600 + index * (width + 12)
+    const x = VALUE_X + index * (width + 12)
     roundRect(ctx, x, y - 2, width, 112, 10)
     ctx.fillStyle = '#f7f8fa'
     ctx.fill()
@@ -490,3 +478,4 @@ export async function copyGuideCard(agent: Agent): Promise<boolean> {
     return false
   }
 }
+
