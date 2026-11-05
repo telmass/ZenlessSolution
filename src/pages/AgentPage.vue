@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import phoenix from '@/data/agents/phoenix.json'
 import index from '@/data/agents/index.json'
 import type { Agent, AgentIndexItem } from '@/types/agent'
 import { AGENT_SECTIONS, SECTION_IDS, resolveSection } from '@/constants/sections'
@@ -18,7 +17,19 @@ import PanelSection from '@/components/PanelSection.vue'
 import DamageSection from '@/components/DamageSection.vue'
 
 const route = useRoute()
-const agent = phoenix as unknown as Agent
+const roster = index as unknown as AgentIndexItem[]
+
+// Dynamically imported per agent so the roster only ships the index.
+const modules = import.meta.glob<{ default: Agent }>('../data/agents/*.json')
+const loaders = Object.fromEntries(
+  Object.entries(modules)
+    .map(([path, loader]) => [path.split('/').pop()!.replace(/\.json$/, ''), loader])
+    .filter(([slug]) => slug !== 'index'),
+)
+
+const agent = ref<Agent | null>(null)
+const loading = ref(true)
+const loadError = ref('')
 
 const { active, setActive, hold } = useSectionSpy({ ids: SECTION_IDS, offset: 132 })
 const progress = ref(0)
@@ -92,20 +103,32 @@ function toTop() {
   window.scrollTo({ top: 0, behavior: reducedMotion() ? 'auto' : 'smooth' })
 }
 
-onMounted(async () => {
-  setPageMeta(agent.name, agent.intro)
-  window.addEventListener('hashchange', onHashChange)
-  window.addEventListener('scroll', onScroll, { passive: true })
-
-  const cancelAlign = () => {
-    initialAlignCancelled = true
+async function loadAgent(slug: string) {
+  loading.value = true
+  loadError.value = ''
+  const loader = loaders[slug]
+  if (!loader) {
+    agent.value = null
+    loading.value = false
+    return
   }
-  window.addEventListener('wheel', cancelAlign, { passive: true, once: true })
-  window.addEventListener('touchstart', cancelAlign, { passive: true, once: true })
-  window.addEventListener('keydown', cancelAlign, { once: true })
+  try {
+    const module = await loader()
+    agent.value = module.default
+  } catch (error) {
+    agent.value = null
+    loadError.value = String(error)
+  } finally {
+    loading.value = false
+  }
+}
 
-  await nextTick()
+function cancelInitialAlign() {
+  initialAlignCancelled = true
+}
 
+async function alignToHash() {
+  if (!agent.value) return
   const hash = decodeURIComponent(route.hash.replace(/^#/, ''))
   const tab = typeof route.query.tab === 'string' ? route.query.tab : ''
   let target: string | null = null
@@ -116,28 +139,48 @@ onMounted(async () => {
     target = resolveSection(tab)
     if (target) history.replaceState(null, '', `${window.location.pathname}#${target}`)
   }
+  if (!target) return
 
-  if (target) {
-    // Fonts and the first paint can change section heights; re-align a few
-    // times until the page settles, unless the user has already scrolled.
-    const align = () => {
-      if (!initialAlignCancelled && target) {
-        scrollToSection(target, { animate: false, initial: true })
-      }
+  await nextTick()
+  initialAlignCancelled = false
+  const align = () => {
+    if (!initialAlignCancelled && target) {
+      scrollToSection(target, { animate: false, initial: true })
     }
-    align()
-    if (document.fonts?.ready) {
-      await document.fonts.ready.catch(() => undefined)
-    }
-    align()
-    requestAnimationFrame(align)
-    for (const delay of [200, 600, 1200]) {
-      alignTimers.push(window.setTimeout(align, delay))
-    }
-    window.addEventListener('load', align, { once: true })
   }
+  align()
+  if (document.fonts?.ready) {
+    await document.fonts.ready.catch(() => undefined)
+  }
+  align()
+  requestAnimationFrame(align)
+  for (const delay of [200, 600, 1200]) {
+    alignTimers.push(window.setTimeout(align, delay))
+  }
+  window.addEventListener('load', align, { once: true })
+}
 
-  onScroll()
+watch(
+  () => String(route.params.slug ?? ''),
+  async (slug, previous) => {
+    await loadAgent(slug)
+    if (!agent.value) return
+    setPageMeta(agent.value.name, agent.value.intro)
+    if (previous !== undefined) {
+      window.scrollTo({ top: 0, behavior: 'auto' })
+    }
+    await alignToHash()
+    onScroll()
+  },
+  { immediate: true },
+)
+
+onMounted(() => {
+  window.addEventListener('hashchange', onHashChange)
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('wheel', cancelInitialAlign, { passive: true, once: true })
+  window.addEventListener('touchstart', cancelInitialAlign, { passive: true, once: true })
+  window.addEventListener('keydown', cancelInitialAlign, { once: true })
 })
 
 onBeforeUnmount(() => {
@@ -146,17 +189,26 @@ onBeforeUnmount(() => {
   for (const timer of alignTimers) window.clearTimeout(timer)
 })
 
-const notFound = computed(() => route.params.slug !== 'phoenix')
-const requested = computed(() =>
-  (index as unknown as AgentIndexItem[]).find((item) => item.slug === route.params.slug),
+const notFound = computed(() => {
+  if (loading.value) return false
+  if (!agent.value) return true
+  return agent.value.slug !== route.params.slug
+})
+
+const sections = computed(() =>
+  AGENT_SECTIONS.filter((section) => section.id !== 'damage' || Boolean(agent.value?.damageModel)),
 )
+
+const requested = computed(() => roster.find((item) => item.slug === route.params.slug))
+
+const openAgents = computed(() => roster.filter((item) => item.available))
 </script>
 
 <template>
-  <div v-if="!notFound" class="agent-page">
+  <div v-if="agent && !notFound" class="agent-page">
     <AgentHero :agent="agent" @jump="scrollToSection" />
     <SectionNav
-      :sections="AGENT_SECTIONS"
+      :sections="sections"
       :active="active"
       :progress="progress"
       @navigate="scrollToSection"
@@ -207,7 +259,12 @@ const requested = computed(() =>
         <PanelSection :agent="agent" />
       </section>
 
-      <section id="damage" class="chapter" aria-labelledby="damage-title">
+      <section
+        v-if="agent.damageModel"
+        id="damage"
+        class="chapter"
+        aria-labelledby="damage-title"
+      >
         <ChapterHead
           index="06"
           title="伤害"
@@ -230,18 +287,25 @@ const requested = computed(() =>
     </Transition>
   </div>
 
+  <div v-else-if="loading" class="container loading" aria-busy="true">
+    <p class="eyebrow">Agent · Loading</p>
+    <h1>正在读取代理人档案…</h1>
+  </div>
+
   <div v-else class="container empty">
     <p class="eyebrow">Agent · Locked</p>
     <h1>{{ requested ? `「${requested.name}」未开放` : '该代理人尚未接入' }}</h1>
     <p v-if="requested">
       {{ requested.fullName }} 已在图鉴中登记，但完整档案尚未开放。
-      当前先行开放的是菲欧妮。
     </p>
-    <p v-else>当前先行开放的是菲欧妮，其余代理人会在数据补齐后陆续开放。</p>
+    <p v-else>没有找到这位代理人，可能链接有误。</p>
+    <p v-if="requested && openAgents.length">
+      目前已开放：{{ openAgents.map((item) => item.name).join('、') }}。
+    </p>
     <div class="empty__actions">
       <RouterLink to="/agents" class="empty__link">返回代理人图鉴 →</RouterLink>
-      <RouterLink v-if="requested" to="/agents/phoenix" class="empty__link">
-        查看菲欧妮 →
+      <RouterLink v-if="openAgents[0]" :to="`/agents/${openAgents[0].slug}`" class="empty__link">
+        查看{{ openAgents[0].name }} →
       </RouterLink>
     </div>
   </div>
@@ -316,6 +380,11 @@ const requested = computed(() =>
 
 .empty {
   padding: 120px 0;
+}
+
+.loading {
+  padding: 120px 0;
+  color: var(--muted);
 }
 
 .empty h1 {

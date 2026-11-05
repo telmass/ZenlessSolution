@@ -1,0 +1,377 @@
+background = "https://i.gachabase.net/yqQKjlwfamiUP-EytwRiW2n2pyDl9j5-jrWXOybycEc/q:50/f:webp/plain/zzz/assets/2596d6f9f46c8c46a7b65274cbd3a02d.png"
+schemaVersion = 2
+
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/759/detail"
+[_meta]
+agentId = "ep-759"
+name = "简·杜"
+role = "物理异常 · 站场主C"
+oneLiner = "靠高频攻击快速触发物理异常，进入狂热状态持续输出。"
+tags = ["物理属性异常", "快速异常", "站场输出"]
+note = "本文件为简·杜的攻略编辑内容（加点/推荐/队伍/文字攻略），与抓取产物 jane.json 分开维护；graduationPanel 由 calc_graduation_panel.py 用仓库计算器实算后写入，请勿手改。"
+editorialSources = [
+    "技能机制：抓取自米游社 WIKI 代理人页的技能与影画文本（strategy/jane/data/jane.json）",
+    "配装口径：仓库计算器选项表（data/options.json）、音擎预设（data/weapon-presets.json）与驱动盘预设（data/drive-disc-presets.json）",
+    "音擎特效：米游社 WIKI 音擎详情页（entry_page_v2 的 multi_table 组件）——淬锋钳刺为简·杜专武",
+    "推荐档位与队伍：按 BWIKI/17173/Ludens 配装攻略整理（物理异常站场，淬锋钳刺专武，獠牙重金属 4 件 + 法厄同之歌 2 件），社区攻略作为参考",
+    "官方 WIKI：https://baike.mihoyo.com/zzz/wiki/content/759/detail",
+]
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/759/detail"
+
+[[skillPriority]]
+key = "core"
+label = "核心技"
+icon = "/images/skills/core.webp"
+level = 7
+maxLevel = 7
+next = ">"
+id = "core"
+
+[[skillPriority]]
+key = "basic"
+label = "普通攻击"
+icon = "/images/skills/basic.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "basic"
+
+[[skillPriority]]
+key = "special"
+label = "特殊技"
+icon = "/images/skills/special.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "special"
+
+[[skillPriority]]
+key = "chain"
+label = "连携技"
+icon = "/images/skills/chain.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "chain"
+
+[[skillPriority]]
+key = "assist"
+label = "支援技"
+icon = "/images/skills/assist.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "assist"
+
+[[skillPriority]]
+key = "dodge"
+label = "闪避"
+icon = "/images/skills/dodge.webp"
+level = 11
+maxLevel = 12
+next = ""
+id = "dodge"
+
+[[weapons]]
+tier = "首选"
+note = "简·杜专武（WIKI 音擎页 double_col_table 推荐代理人表列简·杜）：S 级物理异常音擎，基础攻击 713、副词条异常精通 90；特效冲刺攻击叠物理伤害（每层 12.5%~24%、3 层），满层后异常积蓄效率 +40%~80%，与简·杜的冲刺攻击循环完全契合。"
+
+[[weapons.items]]
+name = "淬锋钳刺"
+stats = "S 级 · 基础攻击 713 · 异常精通 90"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/27/160824341/15a02c67d9bcb3ba4b5727280adfb8fe_5211590432320608838.png"
+engineId = "ep-760"
+refinement = 1
+
+[[weapons]]
+tier = "下位"
+note = "物理异常音擎下位，需按 WIKI 音擎详情页补全特效文本。"
+
+[[weapons.items]]
+name = "嵌合编译器"
+stats = "S 级 · 基础攻击 684 · 穿透率 24%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png"
+engineId = "ep-214"
+refinement = 1
+
+[[weapons.items]]
+name = "双生泣星"
+stats = "A 级 · 基础攻击 594 · 攻击力 25%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b8c620882b72deab5a23c7cdd_3200938913040663318.png"
+engineId = "ep-212"
+refinement = 5
+
+[[weapons]]
+tier = "备选"
+note = "备选物理异常音擎，需按 WIKI 音擎详情页补全特效文本。"
+
+[[weapons.items]]
+name = "触电唇彩"
+stats = "A 级 · 基础攻击 594 · 异常精通 75"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/d40322e5c28b18493b8893d34f0fc9ef_67866270705971352.png"
+engineId = "ep-210"
+refinement = 5
+
+[[weapons.items]]
+name = "轰鸣座驾"
+stats = "S 级 · 基础攻击 624 · 攻击力 25%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/07/02/222203892/59d21937c3fed5bbd95981b7348905f2_5096431217142219251.png"
+engineId = "ep-494"
+refinement = 5
+
+[[driveBuilds]]
+name = "獠牙重金属 4 件套 + 法厄同之歌 2 件套"
+subPriority = [
+    { label = "异常精通", next = ">", id = "am" },
+    { label = "攻击力%", next = ">", id = "atk_pct" },
+    { label = "攻击力", next = "=", id = "atk_flat" },
+    { label = "穿透值", next = "", id = "pen_val" },
+]
+set4Id = "ep-104"
+set2Id = "ep-1194"
+set2AltIds = [
+    "ep-800",
+]
+
+[[driveBuilds.mainStats]]
+slot = "4 号位"
+main = "异常精通 +92"
+alt = "无"
+note = ""
+mainId = "am_92"
+
+[[driveBuilds.mainStats]]
+slot = "5 号位"
+main = "物理伤害 +30%"
+alt = "攻击力 +30%"
+note = ""
+mainId = "dmg_30"
+mainElement = "物理"
+altId = "atk_pct_30"
+
+[[driveBuilds.mainStats]]
+slot = "6 号位"
+main = "异常掌控 +30%"
+alt = "无"
+note = ""
+mainId = "ac_pct_30"
+
+[driveBuilds.set4]
+name = "獠牙重金属"
+label = "物理伤害 +10%"
+effect4 = "队伍中任意角色对敌人施加[强击]效果时，装备者对目标造成的伤害提升35%，持续12秒，重复触发时刷新持续时间。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png"
+
+[driveBuilds.set2.main]
+name = "法厄同之歌"
+label = "异常掌控 +8%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png"
+
+[driveBuilds.set2.alt]
+name = "混沌爵士"
+label = "异常精通 +30"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/09/12/141353238/8568657ee1c1230ddad9fb021ff45499_5857861870100619839.png"
+
+[[teams]]
+name = "简杜薇"
+
+[[teams.members]]
+agentId = "ep-759"
+name = "简·杜"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/16/15559334/671b9f8d9227c19355e2eceb9f23ef28_7055750575833971395.png"
+note = "物理异常站场主 C，[啮咬]+[畏缩]触发[强击]暴击率随异常精通提升（最高叠满），[狂热]状态下异常精通>120时每点转+2攻击力（上限+600）。"
+set4 = [
+    { name = "獠牙重金属", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png" },
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+set4Ids = [
+    "ep-104",
+    "ep-1194",
+]
+
+[[teams.members]]
+agentId = "ep-1386"
+name = "柚叶"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/10/76099754/f288f8b22deafa2493c389fc4465d77b_8800233381222281203.png"
+note = "彩糖花火染以太，加速以太积蓄，柚叶置于薇薇安/薇薇安之前染以太，与简·杜的物理异常形成双异常紊乱。"
+set4 = [
+    { name = "月光骑士颂", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG" },
+]
+set4Ids = [
+    "ep-1551",
+]
+
+[[teams.members]]
+agentId = "ep-1276"
+name = "薇薇安"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/04/17/15559334/ff1a8df24b61a379f46ff3e739e4b312_3615697079972716080.png"
+note = "以太异常副 C，自身强击异放提高队伍输出；额外能力提升全队紊乱伤害，柚叶的快支方便她回豆。"
+set4 = [
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+set4Ids = [
+    "ep-1194",
+]
+
+[[teams]]
+name = "简耀薇"
+
+[[teams.members]]
+agentId = "ep-759"
+name = "简·杜"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/16/15559334/671b9f8d9227c19355e2eceb9f23ef28_7055750575833971395.png"
+note = "物理异常站场主 C，耀嘉音补能与全队攻击增益，薇薇安补紊乱。"
+set4 = [
+    { name = "獠牙重金属", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png" },
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+set4Ids = [
+    "ep-104",
+    "ep-1194",
+]
+
+[[teams.members]]
+agentId = "ep-1276"
+name = "薇薇安"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/04/17/15559334/ff1a8df24b61a379f46ff3e739e4b312_3615697079972716080.png"
+note = "以太异常副 C，与简·杜互相结算紊乱，自身强击异放提高队伍输出。"
+set4 = [
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+set4Ids = [
+    "ep-1194",
+]
+
+[[teams.members]]
+agentId = "ep-1109"
+name = "耀嘉音"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/01/21/76099754/d1193bcbdf67de30128e8a1e288816bf_1810427348683629817.png"
+note = "支援回能与全队攻击增益，补齐简·杜的爆发轴真空期。"
+set4 = [
+    { name = "静听嘉音", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/12/13/158441880/f194a3c57fa7110f1591286be2d9e875_3682122467287058787.PNG" },
+]
+set4Ids = [
+    "ep-1001",
+]
+
+[[textGuide]]
+title = "出招表"
+lines = [
+    "资源循环：攻击命中、触发强击、招架支援累积[狂热心流]，累积至上限进入[狂热]状态；[狂热]下物理异常积蓄效率 +25%，异常精通 >120 时每点转 +2 攻击力（上限 +600）。",
+    "核心爆发：[啮咬]状态下队友触发[强击]并施加[畏缩]时，[畏缩]持续时间 +5秒，[强击]伤害有概率暴击（基础 20%，每点异常精通额外 +0.1%，最高叠满）；终结技[终幕演出]直接进入[狂热]并回满[狂热心流]。",
+    "爆发循环：进场 → 普攻/特殊技积[狂热心流] → 终结技进入[狂热] → 萨霍夫跳/强化特殊技爆发 → 切回队友补 Buff → 重复。",
+    "配队要点：简·杜额外能力需队内有强攻/异常/命破；主推 简杜薇（简·杜+柚叶+薇薇安，物理+以太双异常紊乱，柚叶染以太加速积蓄）。",
+]
+
+[[textGuide]]
+title = "注意事项"
+lines = [
+    "异常精通是简·杜的双重收益：[狂热]状态下精通 >120 时每点转 +2 攻击力（上限 +600），[啮咬]+[畏缩]触发[强击]暴击率随精通提升；毕业面板优先堆异常精通，专武淬锋钳刺副词条异常精通 90 直接提升收益。",
+    "獠牙重金属 4 件的队伍强击伤害 +35% 为局内，不计入面板；法厄同之歌 2 件的异常掌控 +8% 已计入局外面板。",
+    "[啮咬]持续 10 秒，控制好切换时机让简·杜的[强击]落在[啮咬]目标上，触发概率暴击。",
+    "闪避基本不用（Lv.11 即止），资源优先给核心技（异常掌控+基础攻击）与普攻（输出核心）。",
+    "属性为物理，仓库物理属性图标已存在，正常显示。",
+]
+
+[graduationPanel]
+totals = [
+    { label = "异常精通", value = 458, unit = "" },
+    { label = "异常掌控", value = 204.2, unit = "" },
+    { label = "攻击力", value = 2538.9, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-16T10:54:30+00:00"
+
+[graduationPanel.build]
+agent = "简·杜"
+weapon = "淬锋钳刺"
+core = "异常掌控 +36、基础攻击力 +75"
+set4 = "獠牙重金属"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
+subStats = "54 条满配：异常精通 ×18、攻击力% ×10、穿透值 ×7、小攻击 ×8、暴击伤害 ×5、暴击率 ×3、生命值% ×3"
+
+[graduationPanel.spec]
+agentId = "ep-759"
+weaponId = "ep-760"
+refinement = 1
+set4Id = "ep-104"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "物理"
+disc6MainId = "ac_pct_30"
+core = [
+    "ac",
+    "atk_base",
+]
+subStats = [
+    { id = "am", count = 18 },
+    { id = "atk_pct", count = 10 },
+    { id = "pen_val", count = 7 },
+    { id = "atk_flat", count = 8 },
+    { id = "cd", count = 5 },
+    { id = "cr", count = 3 },
+    { id = "hp_pct", count = 3 },
+]
+budget = 54
+filler = 0
+
+[graduationPanelAlt]
+totals = [
+    { label = "异常精通", value = 386, unit = "" },
+    { label = "异常掌控", value = 204.2, unit = "" },
+    { label = "攻击力", value = 2367.3, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-16T10:54:30+00:00"
+title = "非满配毕业面板（低词条参考）"
+
+[graduationPanelAlt.build]
+agent = "简·杜"
+weapon = "淬锋钳刺"
+core = "异常掌控 +36、基础攻击力 +75"
+set4 = "獠牙重金属"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
+subStats = "低词条参考：异常精通 ×10、攻击力% ×8、小攻击 ×4、穿透值 ×3"
+
+[graduationPanelAlt.spec]
+budget = 25
+core = ["ac", "atk_base"]
+filler = 0
+agentId = "ep-759"
+weaponId = "ep-760"
+set4Id = "ep-104"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "物理"
+disc6MainId = "ac_pct_30"
+subStats = [
+  { id = "am", count = 10 },
+  { id = "atk_pct", count = 8 },
+  { id = "atk_flat", count = 4 },
+  { id = "pen_val", count = 3 },
+]
+
+[cinemaPriority]
+keyLevels = []
+note = "旧攻略未标注关键影画；六层均为数值/机制提升，按顺序阅读"
+
+[[textGuide]]
+title = "影画要点"
+lines = [
+  "L1 犯罪顾问：[普通攻击：萨霍夫跳]的可使用次数上限增加一次，在[狂热]状态下，简的物理异常积蓄效率额外提升15%，同时每点异常精通将会使自身造成的伤害提升0.1%，最多提升30%。",
+  "L2 近朱者赤：简攻击命中处于[啮咬]状态下的敌人，或队伍中任意角色对处于[啮咬]状态下的敌人触发[强击]时，将会无视其15%防御力，当[强击]伤害触发暴击时，其暴击伤害额外提升50%。",
+  "L3 无名氏：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
+  "L4 因势利导：队伍中任意角色触发[强击]或[紊乱]效果时，全队角色造成的属性异常伤害提升18%，持续15秒。",
+  "L5 囤积癖好：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
+  "L6 「肮脏」技巧：[狂热]状态下，简的暴击率提升20%，暴击伤害提升40%；队伍中任意角色对敌人施加[强击]效果时，简将直接进入[狂热]状态，并使[狂热心流]回复至上限，本次[强击]伤害触发暴击时，将会对目标发动一次额外攻击，造成等同于简1600%异常精通的物理伤害。",
+]

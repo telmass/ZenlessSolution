@@ -1,4 +1,4 @@
-import type { Agent } from '@/types/agent'
+import type { Agent, BuildPanelSpec, GuideGraduation } from '@/types/agent'
 import type { PanelInput } from './types'
 
 export interface BuildSpec {
@@ -15,10 +15,13 @@ export interface BuildSpec {
 
 const CORE_LEVELS: PanelInput['coreLevel'][] = ['none', 'A', 'B', 'C', 'D', 'E', 'F']
 
-export function coreBonusFor(agent: Agent, level: PanelInput['coreLevel']): { ac: number; atkBase: number } {
+export function coreBonusFor(
+  agent: Agent,
+  level: PanelInput['coreLevel'],
+): Record<string, number> {
   const index = CORE_LEVELS.indexOf(level)
-  if (index <= 0) return { ac: 0, atkBase: 0 }
-  return agent.corePassive.coreBonus[index - 1] ?? { ac: 0, atkBase: 0 }
+  if (index <= 0) return {}
+  return agent.corePassive.coreBonus[index - 1] ?? {}
 }
 
 export function inputFromSpec(agent: Agent, spec: BuildSpec): PanelInput {
@@ -34,50 +37,52 @@ export function inputFromSpec(agent: Agent, spec: BuildSpec): PanelInput {
   }
 }
 
-export const graduation54: BuildSpec = {
-  id: 'graduation-54',
-  label: '满配毕业 · 54 词条',
-  budget: 54,
-  coreLevel: 'F',
-  engineId: 'ep-2259',
-  set4: 'ep-191',
-  set2: 'ep-1194',
-  mainStats: { 4: 'anomaly_proficiency_92', 5: 'dmg_bonus_30', 6: 'anomaly_mastery_30' },
-  substats: {
-    anomaly_proficiency: 30,
-    atk_pct: 11,
-    atk_flat: 6,
-    pen_value: 6,
-    hp_pct: 1,
-  },
+function fromPanel(
+  panel: BuildPanelSpec,
+  id: string,
+  label: string,
+): BuildSpec {
+  return {
+    id,
+    label,
+    budget: panel.budget,
+    coreLevel: panel.coreLevel,
+    engineId: panel.engineId,
+    set4: panel.set4,
+    set2: panel.set2,
+    mainStats: {
+      4: panel.mainStats['4'],
+      5: panel.mainStats['5'],
+      6: panel.mainStats['6'],
+    },
+    substats: { ...panel.substats },
+  }
 }
 
-export const graduation30: BuildSpec = {
-  id: 'graduation-30',
-  label: '小毕业 · 30 词条',
-  budget: 30,
-  coreLevel: 'F',
-  engineId: 'ep-2259',
-  set4: 'ep-191',
-  set2: 'ep-1194',
-  mainStats: { 4: 'anomaly_proficiency_92', 5: 'dmg_bonus_30', 6: 'anomaly_mastery_30' },
-  substats: {
-    anomaly_proficiency: 15,
-    atk_pct: 14,
-    atk_flat: 1,
-  },
+/** Turn a guide's graduation card into a runnable panel preset. */
+export function specFromGraduation(agent: Agent, graduation: GuideGraduation): BuildSpec {
+  if (!graduation.panel) {
+    throw new Error(`${agent.slug}: graduation ${graduation.title} has no panel spec`)
+  }
+  const label = graduation.panel.budget === 54 ? '满配 · 54 词条' : `${graduation.panel.budget} 词条参考`
+  return fromPanel(graduation.panel, `graduation-${graduation.panel.budget}`, label)
 }
 
-export const defaultSpec: BuildSpec = {
-  id: 'default',
-  label: '默认配装',
-  budget: 0,
-  coreLevel: 'F',
-  engineId: 'ep-2259',
-  set4: 'ep-191',
-  set2: 'ep-1194',
-  mainStats: { 4: 'anomaly_proficiency_92', 5: 'dmg_bonus_30', 6: 'anomaly_mastery_30' },
-  substats: {},
+/** Presets offered by the build calculator: full graduation, alt, then bare build. */
+export function presetsFor(agent: Agent): BuildSpec[] {
+  const list: BuildSpec[] = []
+  const graduation = agent.guide.graduation
+  const alt = agent.guide.graduationAlt
+  if (graduation) list.push(specFromGraduation(agent, graduation))
+  if (alt?.panel) list.push(specFromGraduation(agent, alt))
+  const base = list[0]
+  if (base) {
+    list.push({
+      ...base,
+      id: 'bare',
+      label: '无副词条',
+      substats: {},
+    })
+  }
+  return list
 }
-
-export const presets = [graduation54, graduation30]

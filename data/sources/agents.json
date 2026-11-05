@@ -1,5 +1,543 @@
 [
  {
+  "id": "ep-1276",
+  "name": "薇薇安·班希",
+  "element": "以太",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/1276/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7673,
+   "atk": 805,
+   "def": 606,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 108,
+   "am": 118,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-1385",
+  "name": "爱丽丝·泰姆菲尔德",
+  "element": "物理",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/1385/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7673,
+   "atk": 805,
+   "def": 606,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 106,
+   "am": 118,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-150",
+  "name": "格莉丝·霍华德",
+  "element": "电",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_flat",
+   "atk_pct",
+   "crit_rate",
+   "crit_dmg",
+   "pen_value",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/150/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7482,
+   "atk": 750,
+   "def": 600,
+   "impact": 83,
+   "cr": 5,
+   "cd": 50,
+   "ac": 115,
+   "am": 116,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-1793",
+  "name": "爱芮",
+  "element": "以太",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/1793/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7749,
+   "atk": 788,
+   "def": 619,
+   "impact": 87,
+   "cr": 5,
+   "cd": 50,
+   "ac": 115,
+   "am": 116,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-1926",
+  "name": "普罗米娅",
+  "element": "冰",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_flat",
+   "atk_pct",
+   "pen_value",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/1926/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7788,
+   "atk": 797,
+   "def": 612,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 112,
+   "am": 114,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-1960",
+  "name": "维琳娜·艾嘉德",
+  "element": "风",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/1960/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7788,
+   "atk": 797,
+   "def": 612,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 112,
+   "am": 111,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "am",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常精通",
+    "perRank": 18,
+    "totalValue": 54,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "am": 18
+   },
+   {
+    "am": 18,
+    "atkBase": 25
+   },
+   {
+    "am": 36,
+    "atkBase": 25
+   },
+   {
+    "am": 36,
+    "atkBase": 50
+   },
+   {
+    "am": 54,
+    "atkBase": 50
+   },
+   {
+    "am": 54,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-2076",
+  "name": "蕾米埃尔·丹",
+  "element": "流明",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/2076/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7482,
+   "atk": 748,
+   "def": 600,
+   "impact": 83,
+   "cr": 5,
+   "cd": 50,
+   "ac": 115,
+   "am": 116,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "am",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常精通",
+    "perRank": 18,
+    "totalValue": 54,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "am": 18
+   },
+   {
+    "am": 18,
+    "atkBase": 25
+   },
+   {
+    "am": 36,
+    "atkBase": 25
+   },
+   {
+    "am": 36,
+    "atkBase": 50
+   },
+   {
+    "am": 54,
+    "atkBase": 50
+   },
+   {
+    "am": 54,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
   "id": "ep-2216",
   "name": "菲欧妮·蕾法爱菈",
   "element": "火",
@@ -47,6 +585,396 @@
     "perRank": 25,
     "totalValue": 75,
     "unit": ""
+   }
+  ]
+ },
+ {
+  "id": "ep-485",
+  "name": "派派·韦尔",
+  "element": "物理",
+  "rank": "A",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_flat",
+   "atk_pct",
+   "crit_rate",
+   "crit_dmg",
+   "pen_value",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/485/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 6976,
+   "atk": 683,
+   "def": 612,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 116,
+   "am": 118,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "er_base",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "基础能量自动回复",
+    "perRank": 0.12,
+    "totalValue": 0.36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "erBase": 0.12
+   },
+   {
+    "erBase": 0.12,
+    "atkBase": 25
+   },
+   {
+    "erBase": 0.24,
+    "atkBase": 25
+   },
+   {
+    "erBase": 0.24,
+    "atkBase": 50
+   },
+   {
+    "erBase": 0.36,
+    "atkBase": 50
+   },
+   {
+    "erBase": 0.36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-759",
+  "name": "简·杜",
+  "element": "物理",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/759/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7788,
+   "atk": 805,
+   "def": 606,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 112,
+   "am": 114,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-840",
+  "name": "柏妮思·怀特",
+  "element": "火",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_flat",
+   "atk_pct",
+   "pen_value",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/840/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7368,
+   "atk": 788,
+   "def": 600,
+   "impact": 83,
+   "cr": 5,
+   "cd": 50,
+   "ac": 118,
+   "am": 120,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "er_base",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "基础能量自动回复",
+    "perRank": 0.12,
+    "totalValue": 0.36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "erBase": 0.12
+   },
+   {
+    "erBase": 0.12,
+    "atkBase": 25
+   },
+   {
+    "erBase": 0.24,
+    "atkBase": 25
+   },
+   {
+    "erBase": 0.24,
+    "atkBase": 50
+   },
+   {
+    "erBase": 0.36,
+    "atkBase": 50
+   },
+   {
+    "erBase": 0.36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-916",
+  "name": "月城柳",
+  "element": "电",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_flat",
+   "atk_pct",
+   "pen_value",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/916/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7788,
+   "atk": 797,
+   "def": 612,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 112,
+   "am": 114,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "ac",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常掌控",
+    "perRank": 12,
+    "totalValue": 36,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "ac": 12
+   },
+   {
+    "ac": 12,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 25
+   },
+   {
+    "ac": 24,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 50
+   },
+   {
+    "ac": 36,
+    "atkBase": 75
+   }
+  ]
+ },
+ {
+  "id": "ep-996",
+  "name": "星见 雅",
+  "element": "烈霜",
+  "rank": "S",
+  "trait": "异常",
+  "panelMode": "standard",
+  "importantSubStats": [
+   "atk_pct",
+   "crit_rate",
+   "crit_dmg",
+   "anomaly_proficiency"
+  ],
+  "source": "https://baike.mihoyo.com/zzz/wiki/content/996/detail?mhy_presentation_style=fullscreen",
+  "base": {
+   "hp": 7673,
+   "atk": 805,
+   "def": 606,
+   "impact": 86,
+   "cr": 5,
+   "cd": 50,
+   "ac": 116,
+   "am": 148,
+   "pr": 0,
+   "er": 1.2
+  },
+  "core": [
+   {
+    "optionId": "am_90",
+    "ranks": [
+     "A",
+     "C",
+     "E"
+    ],
+    "label": "异常精通",
+    "perRank": 30,
+    "totalValue": 90,
+    "unit": ""
+   },
+   {
+    "optionId": "atk_base",
+    "ranks": [
+     "B",
+     "D",
+     "F"
+    ],
+    "label": "基础攻击力",
+    "perRank": 25,
+    "totalValue": 75,
+    "unit": ""
+   }
+  ],
+  "coreBonus": [
+   {
+    "am": 30
+   },
+   {
+    "am": 30,
+    "atkBase": 25
+   },
+   {
+    "am": 60,
+    "atkBase": 25
+   },
+   {
+    "am": 60,
+    "atkBase": 50
+   },
+   {
+    "am": 90,
+    "atkBase": 50
+   },
+   {
+    "am": 90,
+    "atkBase": 75
    }
   ]
  }

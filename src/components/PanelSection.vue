@@ -5,25 +5,61 @@ import type { StatId } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
 import { engines, mainStatsFor, sets, STAT_LABELS, STAT_UNITS, substats } from '@/core/panel/data'
 import { formatStat } from '@/core/panel/format'
-import { coreBonusFor, graduation54, presets, type BuildSpec } from '@/core/panel/presets'
-import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
+import { coreBonusFor, presetsFor, type BuildSpec } from '@/core/panel/presets'
+import { analyzeSubstats } from '@/core/substats'
 import { media } from '@/lib/media'
 
 const props = defineProps<{ agent: Agent }>()
 
 const coreLevels: BuildSpec['coreLevel'][] = ['A', 'B', 'C', 'D', 'E', 'F']
 
+const presetList = computed(() => presetsFor(props.agent))
+const startSpec = presetList.value[0]
+if (!startSpec) throw new Error(`${props.agent.slug}: no graduation preset`)
+
 const spec = reactive<BuildSpec>({
-  ...graduation54,
-  mainStats: { ...graduation54.mainStats },
-  substats: { ...graduation54.substats },
+  ...startSpec,
+  mainStats: { ...startSpec.mainStats },
+  substats: { ...startSpec.substats },
 })
+
+const profile = computed(() => props.agent.substatProfile)
+
+/** Engines this agent's guide actually recommends, in guide order. */
+const engineOptions = computed(() => {
+  const order = new Map<string, number>()
+  const add = (id: string) => {
+    if (id && !order.has(id)) order.set(id, order.size)
+  }
+  for (const tier of props.agent.guide.weapons) for (const item of tier.items) add(item.engineId)
+  for (const graduation of [props.agent.guide.graduation, props.agent.guide.graduationAlt]) {
+    if (graduation?.panel) add(graduation.panel.engineId)
+  }
+  add(spec.engineId ?? '')
+  return engines
+    .filter((engine) => order.has(engine.id))
+    .sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))
+})
+
+const profileRows = computed(() =>
+  substats
+    .filter((rule) => profile.value.effective.includes(rule.id))
+    .map((rule) => rule.label),
+)
+
+const smallRows = computed(() =>
+  substats.filter((rule) => profile.value.small.includes(rule.id)).map((rule) => rule.label),
+)
+
+const coreHint = computed(() =>
+  props.agent.corePassive.effects.map((effect) => effect.label).join(' · ') || 'A–F 逐级提升',
+)
 
 const expanded = ref<StatId | null>(null)
 const includePenValue = ref(false)
 
 const effective = computed(() =>
-  analyzeSubstats(spec.substats, PHOENIX_PROFILE, {
+  analyzeSubstats(spec.substats, profile.value, {
     includePenValue: includePenValue.value,
     budget: spec.budget || 54,
   }),
@@ -32,8 +68,8 @@ const effective = computed(() =>
 function tierFor(id: string) {
   const row = effective.value.rows.find((item) => item.id === id)
   if (row) return row.tier
-  if (PHOENIX_PROFILE.effective.includes(id)) return 'effective'
-  if (PHOENIX_PROFILE.small.includes(id)) return 'small'
+  if (profile.value.effective.includes(id)) return 'effective'
+  if (profile.value.small.includes(id)) return 'small'
   return 'invalid'
 }
 
@@ -101,7 +137,7 @@ const summaryStats = computed(() =>
       </p>
       <div class="presets">
         <button
-          v-for="preset in presets"
+          v-for="preset in presetList"
           :key="preset.id"
           class="presets__item"
           :class="{ 'is-active': spec.id === preset.id }"
@@ -125,7 +161,7 @@ const summaryStats = computed(() =>
         <section class="form__group">
           <header class="form__head">
             <h3>核心技</h3>
-            <span class="form__hint">A/C/E 异常掌控 · B/D/F 基础攻击</span>
+            <span class="form__hint">{{ coreHint }}</span>
           </header>
           <div class="pills">
             <button
@@ -147,7 +183,7 @@ const summaryStats = computed(() =>
           </header>
           <div class="engines">
             <button
-              v-for="engine in engines"
+              v-for="engine in engineOptions"
               :key="engine.id"
               class="engine"
               :class="{ 'is-active': spec.engineId === engine.id }"
@@ -312,8 +348,8 @@ const summaryStats = computed(() =>
               </li>
             </ul>
             <p>
-              有效：异常精通、攻击力%；小词条：攻击力、穿透值；其余无效。穿透值可切换计入有效。该判定只用于展示，
-              不进入面板或伤害计算。
+              有效：{{ profileRows.join('、') }}；小词条：{{ smallRows.join('、') || '无' }}；其余无效。
+              穿透值可切换计入有效。该判定只用于展示，不进入面板或伤害计算。
             </p>
           </details>
         </section>

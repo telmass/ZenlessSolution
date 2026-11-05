@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import type { Agent } from '@/types/agent'
 import type { PanelResult } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
-import { graduation30, graduation54, inputFromSpec, type BuildSpec } from '@/core/panel/presets'
+import { inputFromSpec, specFromGraduation, type BuildSpec } from '@/core/panel/presets'
 import {
   computePhoenixDamage,
   computeSingleRelease,
@@ -31,6 +31,11 @@ interface ComputedConfig extends DamageConfig {
   build: DamageBuild
   damage: PhoenixDamage
 }
+
+const graduation54 = specFromGraduation(props.agent, props.agent.guide.graduation!)
+const graduation30 = props.agent.guide.graduationAlt?.panel
+  ? specFromGraduation(props.agent, props.agent.guide.graduationAlt)
+  : graduation54
 
 const CONFIGS: DamageConfig[] = [
   {

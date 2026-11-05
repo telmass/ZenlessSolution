@@ -9,14 +9,14 @@ const year = new Date().getFullYear()
         <span class="footer__mark" aria-hidden="true"></span>
         <div>
           <b>ZENLESS SOLUTION</b>
-          <p>绝区零图鉴复刻与代理人攻略 · 菲欧妮先行版</p>
+          <p>绝区零图鉴复刻与代理人攻略</p>
         </div>
       </div>
 
       <div class="footer__meta">
         <p>
           数据来源：
-          <a href="https://baike.mihoyo.com/zzz/wiki/content/2216/detail" target="_blank" rel="noreferrer">
+          <a href="https://baike.mihoyo.com/zzz/wiki/" target="_blank" rel="noreferrer">
             官方 WIKI
           </a>
           ·
@@ -25,7 +25,7 @@ const year = new Date().getFullYear()
           </a>
         </p>
         <p class="muted">
-          非商业资料整理；游戏素材版权归 miHoYo 所有。更新于 2026-11-04 · © {{ year }} ZenlessSolution
+          非商业资料整理；游戏素材版权归 miHoYo 所有。更新于 2026-11-05 · © {{ year }} ZenlessSolution
         </p>
       </div>
     </div>

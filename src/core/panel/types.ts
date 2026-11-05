@@ -78,7 +78,7 @@ export interface PanelInput {
     energyRegen: number
   }
   coreLevel: 'none' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
-  coreBonus: { ac: number; atkBase: number }
+  coreBonus: Record<string, number>
   engineId: string | null
   mainStats: { 4: string; 5: string; 6: string }
   set4: string | null

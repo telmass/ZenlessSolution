@@ -122,11 +122,23 @@ export interface GuideGraduation {
   note: string
   computedAt: string
   build: Record<string, string | number>
+  /** Ready-to-run panel spec: panel ids, no legacy aliases. */
+  panel: BuildPanelSpec | null
   spec: {
     subStats?: { id: string; count: number }[]
     budget?: number
     [key: string]: unknown
   }
+}
+
+export interface BuildPanelSpec {
+  engineId: string
+  set4: string
+  set2: string
+  mainStats: Record<'4' | '5' | '6', string>
+  substats: Record<string, number>
+  budget: number
+  coreLevel: 'none' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 }
 
 export interface AgentGuide {
@@ -173,11 +185,19 @@ export interface Agent {
   corePassive: {
     name: string
     levels: string[]
-    amFlat: number[]
-    critDmg: number[]
-    tickAtkPct: number[]
-    coreBonus: { ac: number; atkBase: number }[]
+    /** Cumulative per-rank stat bonus, A–F. */
+    coreBonus: Record<string, number>[]
+    /** Per-rank display rows for the overview (label + one value per rank). */
+    effects: { label: string; values: string[] }[]
+    /** Phoenix-only mechanics; other agents leave these undefined. */
+    amFlat?: number[]
+    critDmg?: number[]
+    tickAtkPct?: number[]
   }
+  /** Display-only substat whitelist; never enters panel/damage math. */
+  substatProfile: { effective: string[]; small: string[] }
+  /** Which damage model this agent owns (v1 only phoenix). */
+  damageModel: 'phoenix' | null
   skills: AgentSkill[]
   cinemas: AgentCinema[]
   assets: { avatar: string; tachie: string; full: string; film?: string }

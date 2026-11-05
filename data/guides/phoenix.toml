@@ -4,6 +4,9 @@ schemaVersion = 2
 [_meta]
 agentId = "ep-2216"
 name = "菲欧妮"
+role = "火属性异常 · 灼蚀异放主C"
+oneLiner = "以「灼蚀」放大全队异常伤害，靠「异放」结算爆发。"
+tags = ["火属性异常", "异常暴击", "驻场输出", "异放"]
 note = "本文件为菲欧妮·蕾法爱菈的攻略编辑内容（加点/推荐/队伍/文字攻略），与抓取产物 phoenix.json 分开维护；graduationPanel 由 calc_graduation_panel.py 用仓库计算器实算后写入，请勿手改。"
 editorialSources = [
     "技能机制：抓取自米游社 WIKI 代理人页的技能与影画文本（strategy/phoenix/data/phoenix.json）",
@@ -332,6 +335,7 @@ mainStats = "4 号位异常精通 +92，5 号位火属性伤害 +30%，6 号位�
 subStats = "30 条：异常精通 ×15、攻击力% ×14、攻击力 ×1"
 
 [graduationPanelAlt.spec]
+core = ["ac", "atk_base"]
 agentId = "ep-2216"
 weaponId = "ep-2259"
 refinement = 1

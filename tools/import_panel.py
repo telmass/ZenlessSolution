@@ -4,6 +4,13 @@ Inputs:
   - data/rules/panel.toml
   - data/sources/engines.json
   - data/sources/drive-sets.json
+  - data/guides/*.toml (which engines/sets the shipped dossiers may select)
+
+Outputs:
+  - src/data/panel.json
+
+The engine list is the union of every engine referenced by a shipped guide, so
+the calculator can offer exactly the recommended options per agent.
 
 Run: python tools/import_panel.py
 """
@@ -17,22 +24,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RULES = ROOT / "data" / "rules" / "panel.toml"
 SOURCES = ROOT / "data" / "sources"
+GUIDES = ROOT / "data" / "guides"
 OUT = ROOT / "src" / "data" / "panel.json"
-
-ENGINE_ICON_KEYS = {
-    "ep-2259": "engine:ep-2259:icon",
-    "ep-1883": "engine:ep-1883:icon",
-    "ep-1964": "engine:ep-1964:icon",
-    "ep-212": "engine:ep-212:icon",
-}
-
-SET_ICON_KEYS = {
-    "自由蓝调": "set:自由蓝调:icon",
-    "法厄同之歌": "set:法厄同之歌:icon",
-    "呼啸沙龙": "set:呼啸沙龙:icon",
-    "谶羽之誓": "set:谶羽之誓:icon",
-    "月光骑士颂": "set:月光骑士颂:icon",
-}
 
 # Catalog substat targets -> canonical stat ids.
 TARGET_TO_STAT = {
@@ -52,14 +45,35 @@ TARGET_TO_STAT = {
 }
 
 
+def referenced_engine_ids() -> set[str]:
+    ids: set[str] = set()
+    for path in sorted(GUIDES.glob("*.toml")):
+        guide = tomllib.loads(path.read_text(encoding="utf-8"))
+        for tier in guide.get("weapons", []):
+            for item in tier.get("items", []):
+                if item.get("engineId"):
+                    ids.add(item["engineId"])
+        for key in ("graduationPanel", "graduationPanelAlt"):
+            spec = (guide.get(key) or {}).get("spec") or {}
+            if spec.get("weaponId"):
+                ids.add(spec["weaponId"])
+    return ids
+
+
 def main() -> None:
     rules = tomllib.loads(RULES.read_text(encoding="utf-8"))
-    panel_engine_ids = {"ep-2259", "ep-1883", "ep-1964", "ep-212"}
+    wanted = referenced_engine_ids()
+    if not wanted:
+        raise SystemExit("no engine referenced by data/guides/*.toml")
     engines_src = [
         item
         for item in json.loads((SOURCES / "engines.json").read_text(encoding="utf-8"))
-        if item["id"] in panel_engine_ids
+        if item["id"] in wanted
     ]
+    found = {item["id"] for item in engines_src}
+    missing = wanted - found
+    if missing:
+        raise SystemExit(f"guide references engines missing from data/sources/engines.json: {sorted(missing)}")
     sets_src = json.loads((SOURCES / "drive-sets.json").read_text(encoding="utf-8"))
 
     effects = {item["id"]: item for item in rules.get("setEffects", [])}
@@ -85,9 +99,10 @@ def main() -> None:
                     if stat
                     else None
                 ),
-                "icon": ENGINE_ICON_KEYS.get(engine["id"]),
+                "icon": f"engine:{engine['id']}:icon",
             }
         )
+    engines.sort(key=lambda item: (item["rank"] != "S", item["name"]))
 
     sets = []
     unknown_effects = set()
@@ -112,7 +127,7 @@ def main() -> None:
                     else None
                 ),
                 "effect2Text": item.get("setEffect2", ""),
-                "icon": SET_ICON_KEYS.get(item["name"]),
+                "icon": f"set:{item['name']}:icon",
             }
         )
 

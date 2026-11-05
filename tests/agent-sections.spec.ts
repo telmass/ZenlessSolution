@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
+import { flushPromises, shallowMount } from '@vue/test-utils'
 import { AGENT_SECTIONS, resolveSection } from '@/constants/sections'
 
 const mockRoute = {
@@ -39,15 +39,30 @@ describe('agent page structure', () => {
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo
   })
 
-  it('renders every chapter at once and no page-level tablist', () => {
+  it('renders every chapter at once and no page-level tablist', async () => {
+    mockRoute.params.slug = 'phoenix'
     const wrapper = shallowMount(AgentPage, {
       global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
     })
+    await flushPromises()
 
+    await vi.waitFor(() => expect(wrapper.find('section#overview').exists()).toBe(true))
     const ids = wrapper.findAll('section[id]').map((section) => section.attributes('id'))
     expect(ids).toEqual(AGENT_SECTIONS.map((section) => section.id))
     expect(wrapper.findAll('[role="tablist"]')).toHaveLength(0)
     expect(wrapper.find('.tabs').exists()).toBe(false)
+  })
+
+  it('drops the damage chapter for agents without a damage model', async () => {
+    mockRoute.params.slug = 'vivian'
+    const wrapper = shallowMount(AgentPage, {
+      global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
+    })
+    await flushPromises()
+
+    await vi.waitFor(() => expect(wrapper.find('section#overview').exists()).toBe(true))
+    const ids = wrapper.findAll('section[id]').map((section) => section.attributes('id'))
+    expect(ids).toEqual(['overview', 'skills', 'cinemas', 'guide', 'build'])
   })
 })
 

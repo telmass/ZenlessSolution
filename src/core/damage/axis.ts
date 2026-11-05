@@ -177,7 +177,7 @@ export function computePhoenixDamage(
   )
 
   const coreIndex = ['none', 'A', 'B', 'C', 'D', 'E', 'F'].indexOf(build.coreLevel)
-  const tickPct = coreValue(agent.corePassive.tickAtkPct, coreIndex)
+  const tickPct = coreValue(agent.corePassive.tickAtkPct ?? [], coreIndex)
   if (tickPct > 0) {
     push(event('sear-tick', '灼蚀 tick', 'direct', 2, tickPct / 100, stats, enemy, baseOptions))
   }

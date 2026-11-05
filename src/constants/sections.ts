@@ -16,7 +16,7 @@ export const AGENT_SECTIONS: AgentSection[] = [
     id: 'skills',
     index: '02',
     label: '技能',
-    lede: '六类招式、十八个动作，1–16 级倍率全部展开。',
+    lede: '六类招式，1–16 级倍率与核心技 A–F 数值全部展开。',
   },
   {
     id: 'cinemas',

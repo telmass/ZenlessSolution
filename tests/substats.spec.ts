@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { analyzeSubstats, countRolls, PHOENIX_PROFILE } from '@/core/substats'
-import { graduation30, graduation54 } from '@/core/panel/presets'
+import phoenixData from '@/data/agents/phoenix.json'
+import { analyzeSubstats, countRolls } from '@/core/substats'
+import { specFromGraduation } from '@/core/panel/presets'
+import type { Agent } from '@/types/agent'
+
+const agent = phoenixData as unknown as Agent
+const PHOENIX_PROFILE = agent.substatProfile
+const graduation54 = specFromGraduation(agent, agent.guide.graduation!)
+const graduation30 = specFromGraduation(agent, agent.guide.graduationAlt!)
 
 describe('substat rolls', () => {
   it('accepts only integral 1–6 rolls', () => {

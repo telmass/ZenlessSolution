@@ -89,10 +89,15 @@
   "element": "以太",
   "specialty": "异常",
   "faction": "反舌鸟",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:vivian:avatar",
+  "full": "agent:vivian:full",
+  "tags": [
+   "以太属性异常",
+   "后台积蓄",
+   "异放",
+   "紊乱"
+  ]
  },
  {
   "id": "ep-1290",
@@ -149,10 +154,15 @@
   "element": "物理",
   "specialty": "异常",
   "faction": "怪啖屋",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:alice:avatar",
+  "full": "agent:alice:full",
+  "tags": [
+   "物理属性异常",
+   "三段蓄力",
+   "极性强击",
+   "紊乱"
+  ]
  },
  {
   "id": "ep-1386",
@@ -194,10 +204,14 @@
   "element": "电",
   "specialty": "异常",
   "faction": "白祇重工",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:grace:avatar",
+  "full": "agent:grace:full",
+  "tags": [
+   "电属性异常",
+   "范围输出",
+   "快速异常"
+  ]
  },
  {
   "id": "ep-1501",
@@ -329,10 +343,14 @@
   "element": "以太",
   "specialty": "异常",
   "faction": "妄想天使",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:aria:avatar",
+  "full": "agent:aria:full",
+  "tags": [
+   "以太属性异常",
+   "蓄力输出",
+   "异放"
+  ]
  },
  {
   "id": "ep-1852",
@@ -374,10 +392,14 @@
   "element": "冰",
   "specialty": "异常",
   "faction": "坎卜斯黑枝",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:promeia:avatar",
+  "full": "agent:promeia:full",
+  "tags": [
+   "冰属性异常",
+   "异放",
+   "全队异放增益"
+  ]
  },
  {
   "id": "ep-1927",
@@ -418,11 +440,16 @@
   "rarity": "S",
   "element": "风",
   "specialty": "异常",
-  "faction": "罗斯凯利法·外务筹策局",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "faction": "外务筹策局",
+  "available": true,
+  "avatar": "agent:velina:avatar",
+  "full": "agent:velina:full",
+  "tags": [
+   "风属性异常",
+   "后台输出",
+   "聚怪",
+   "减抗"
+  ]
  },
  {
   "id": "ep-1962",
@@ -448,11 +475,15 @@
   "rarity": "S",
   "element": "流明",
   "specialty": "异常",
-  "faction": "达识结社",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "faction": "虚狩·时隙流明",
+  "available": true,
+  "avatar": "agent:remielle:avatar",
+  "full": "agent:remielle:full",
+  "tags": [
+   "流明异常",
+   "后场输出",
+   "全队增伤"
+  ]
  },
  {
   "id": "ep-2079",
@@ -629,10 +660,14 @@
   "element": "物理",
   "specialty": "异常",
   "faction": "刑侦特勤组",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:jane:avatar",
+  "full": "agent:jane:full",
+  "tags": [
+   "物理属性异常",
+   "快速异常",
+   "站场输出"
+  ]
  },
  {
   "id": "ep-801",
@@ -659,25 +694,34 @@
   "element": "火",
   "specialty": "异常",
   "faction": "卡吕冬之子",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:burnice:avatar",
+  "full": "agent:burnice:full",
+  "tags": [
+   "火属性异常",
+   "后台输出",
+   "紊乱"
+  ]
  },
  {
   "id": "ep-916",
   "slug": "yanagi",
   "en": "Yanagi",
-  "name": "柳",
+  "name": "月城柳",
   "fullName": "月城柳",
   "rarity": "S",
   "element": "电",
   "specialty": "异常",
   "faction": "对空六课",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:yanagi:avatar",
+  "full": "agent:yanagi:full",
+  "tags": [
+   "电属性异常",
+   "快速异常",
+   "紊乱",
+   "穿透增益"
+  ]
  },
  {
   "id": "ep-950",
@@ -698,16 +742,20 @@
   "id": "ep-996",
   "slug": "miyabi",
   "en": "Miyabi",
-  "name": "雅",
+  "name": "星见雅",
   "fullName": "星见 雅",
   "rarity": "S",
   "element": "烈霜",
   "specialty": "异常",
-  "faction": "对空六课",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "faction": "虚狩·心念无我",
+  "available": true,
+  "avatar": "agent:miyabi:avatar",
+  "full": "agent:miyabi:full",
+  "tags": [
+   "烈霜属性",
+   "紊乱",
+   "直伤双修"
+  ]
  },
  {
   "id": "ep-997",
@@ -869,10 +917,14 @@
   "element": "物理",
   "specialty": "异常",
   "faction": "卡吕冬之子",
-  "available": false,
-  "avatar": "",
-  "full": "",
-  "tags": []
+  "available": true,
+  "avatar": "agent:piper:avatar",
+  "full": "agent:piper:full",
+  "tags": [
+   "物理属性异常",
+   "全队加伤",
+   "清杂"
+  ]
  },
  {
   "id": "ep-493",

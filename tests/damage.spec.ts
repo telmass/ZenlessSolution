@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import phoenixData from '@/data/agents/phoenix.json'
 import type { Agent } from '@/types/agent'
 import { computePanel } from '@/core/panel/compute'
-import { graduation54, inputFromSpec } from '@/core/panel/presets'
+import { inputFromSpec, specFromGraduation } from '@/core/panel/presets'
 import {
   buildCombatStats,
   computePhoenixDamage,
@@ -15,6 +15,7 @@ import {
 } from '@/core/damage'
 
 const agent = phoenixData as unknown as Agent
+const graduation54 = specFromGraduation(agent, agent.guide.graduation!)
 const standard = enemyById('standard')
 
 const oracleStats: CombatStats = {

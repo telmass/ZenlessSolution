@@ -60,12 +60,39 @@ export function computePanel(input: PanelInput): PanelResult {
     energyRegen: { label: '角色基础', text: `基础 ${trimNumber(base.energyRegen * 100, 0)}%` },
   }
 
-  // Core skill: flat mastery + base ATK (the core passive itself is in-combat).
-  if (core.ac) {
-    addSource(acc, 'anomalyMastery', '核心技', `核心 ${input.coreLevel} 异常掌控 +${core.ac}`)
+  // Core skill: the A-F bonus is an out-of-combat stat grant (the passive
+  // itself stays in-combat). Every shipped agent uses one of these fields.
+  const coreAc = core.ac ?? 0
+  const coreAtkBase = core.atkBase ?? 0
+  const coreAm = core.am ?? 0
+  const coreErBase = core.erBase ?? 0
+  const unknownCore = Object.keys(core).filter(
+    (key) => !['ac', 'atkBase', 'am', 'erBase'].includes(key),
+  )
+  if (unknownCore.length) {
+    warnings.push(`核心技存在未知加成字段：${unknownCore.join(', ')}`)
   }
-  if (core.atkBase) {
-    addSource(acc, 'atk', '核心技', `核心 ${input.coreLevel} 基础攻击 +${core.atkBase}`)
+  if (coreAc) {
+    addSource(acc, 'anomalyMastery', '核心技', `核心 ${input.coreLevel} 异常掌控 +${coreAc}`)
+  }
+  if (coreAtkBase) {
+    addSource(acc, 'atk', '核心技', `核心 ${input.coreLevel} 基础攻击 +${coreAtkBase}`)
+  }
+  if (coreAm) {
+    addSource(
+      acc,
+      'anomalyProficiency',
+      '核心技',
+      `核心 ${input.coreLevel} 异常精通 +${coreAm}`,
+    )
+  }
+  if (coreErBase) {
+    addSource(
+      acc,
+      'energyRegen',
+      '核心技',
+      `核心 ${input.coreLevel} 基础能量自动回复 +${coreErBase}`,
+    )
   }
 
   // W-Engine: base ATK/DEF enter the base pool; the advanced stat is a modifier.
@@ -164,7 +191,7 @@ export function computePanel(input: PanelInput): PanelResult {
 
   const stats: PanelStats = {
     hp: (base.hp * (1 + pct('hp') / 100)) + flat('hp'),
-    atk: (base.atk + core.atkBase + engineBaseAtk) * (1 + pct('atk') / 100) + flat('atk'),
+    atk: (base.atk + coreAtkBase + engineBaseAtk) * (1 + pct('atk') / 100) + flat('atk'),
     def: (base.def + engineBaseDef) * (1 + pct('def') / 100) + flat('def'),
     impact: base.impact * (1 + pct('impact') / 100) + flat('impact'),
     critRate: base.critRate + pct('critRate') + flat('critRate'),
@@ -172,9 +199,12 @@ export function computePanel(input: PanelInput): PanelResult {
     dmgBonus: pct('dmgBonus') + flat('dmgBonus'),
     penRatio: base.penRatio + pct('penRatio') + flat('penRatio'),
     penValue: pct('penValue') + flat('penValue'),
-    anomalyProficiency: base.anomalyProficiency + pct('anomalyProficiency') + flat('anomalyProficiency'),
-    anomalyMastery: (base.anomalyMastery + core.ac) * (1 + pct('anomalyMastery') / 100) + flat('anomalyMastery'),
-    energyRegen: (base.energyRegen + flat('energyRegen')) * (1 + pct('energyRegen') / 100) * 100,
+    anomalyProficiency:
+      base.anomalyProficiency + coreAm + pct('anomalyProficiency') + flat('anomalyProficiency'),
+    anomalyMastery:
+      (base.anomalyMastery + coreAc) * (1 + pct('anomalyMastery') / 100) + flat('anomalyMastery'),
+    energyRegen:
+      (base.energyRegen + coreErBase + flat('energyRegen')) * (1 + pct('energyRegen') / 100) * 100,
   }
 
   const breakdown: BreakdownRow[] = STAT_ORDER.map((stat) => {

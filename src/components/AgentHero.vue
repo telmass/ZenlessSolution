@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import type { Agent } from '@/types/agent'
 import { media, mediaColor } from '@/lib/media'
+import { publicUrl } from '@/lib/url'
 import GuideCardActions from '@/components/GuideCardActions.vue'
 
 const props = defineProps<{ agent: Agent }>()
@@ -16,8 +17,12 @@ const elementIcon = computed(() => {
     物理: 'physical',
     以太: 'ether',
     风: 'wind',
+    烈霜: 'frost',
+    流明: 'lumiflux',
+    玄墨: 'auric-ink',
+    凛刃: 'honed-edge',
   }
-  return `/assets/ui/elements/${map[props.agent.element] ?? 'physical'}.webp`
+  return publicUrl(`/assets/ui/elements/${map[props.agent.element] ?? 'physical'}.webp`)
 })
 
 const specialtyIcon = computed(() => {
@@ -30,10 +35,10 @@ const specialtyIcon = computed(() => {
     命破: 'rupture',
     锋御: 'armorer',
   }
-  return `/assets/ui/traits/${map[props.agent.specialty] ?? 'anomaly'}.webp`
+  return publicUrl(`/assets/ui/traits/${map[props.agent.specialty] ?? 'anomaly'}.webp`)
 })
 
-const rankIcon = `/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`
+const rankIcon = publicUrl(`/assets/ui/ranks/${props.agent.rarity.toLowerCase()}.webp`)
 </script>
 
 <template>

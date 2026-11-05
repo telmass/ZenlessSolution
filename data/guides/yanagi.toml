@@ -1,0 +1,377 @@
+background = "https://i.gachabase.net/c7HY6-DsH0CGW6M4BOGBkiucva0N_LnoMEH4fGiXPzE/q:50/f:webp/plain/zzz/assets/46d2ad62c424ec9a86ec7263feffcae8.png"
+schemaVersion = 2
+
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/916/detail"
+[_meta]
+agentId = "ep-916"
+name = "月城柳"
+role = "电异常 · 紊乱爆发"
+oneLiner = "切换特殊技获得电伤与穿透增益，靠强化特殊技与终结技爆发。"
+tags = ["电属性异常", "快速异常", "紊乱", "穿透增益"]
+note = "本文件为月城柳的攻略编辑内容（加点/推荐/队伍/文字攻略），与抓取产物 yanagi.json 分开维护；graduationPanel 由 calc_graduation_panel.py 用仓库计算器实算后写入，请勿手改。"
+editorialSources = [
+    "技能机制：抓取自米游社 WIKI 代理人页的技能与影画文本（strategy/yanagi/data/yanagi.json）",
+    "配装口径：仓库计算器选项表（data/options.json）、音擎预设（data/weapon-presets.json）与驱动盘预设（data/drive-disc-presets.json）",
+    "推荐档位与队伍：按 BWIKI/17173/233乐园/Ludens 配装攻略整理（异常精通/掌控流，谶羽之誓 4 件 + 法厄同之歌 2 件），社区攻略作为参考",
+    "官方 WIKI：https://baike.mihoyo.com/zzz/wiki/content/916/detail",
+]
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/916/detail"
+
+[[skillPriority]]
+key = "core"
+label = "核心技"
+icon = "/images/skills/core.webp"
+level = 7
+maxLevel = 7
+next = ">"
+id = "core"
+
+[[skillPriority]]
+key = "special"
+label = "特殊技"
+icon = "/images/skills/special.webp"
+level = 12
+maxLevel = 12
+next = ">"
+id = "special"
+
+[[skillPriority]]
+key = "basic"
+label = "普通攻击"
+icon = "/images/skills/basic.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "basic"
+
+[[skillPriority]]
+key = "chain"
+label = "连携技"
+icon = "/images/skills/chain.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "chain"
+
+[[skillPriority]]
+key = "assist"
+label = "支援技"
+icon = "/images/skills/assist.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "assist"
+
+[[skillPriority]]
+key = "dodge"
+label = "闪避"
+icon = "/images/skills/dodge.webp"
+level = 11
+maxLevel = 12
+next = ""
+id = "dodge"
+
+[[weapons]]
+tier = "首选"
+items = []
+note = "月城柳无专武预设（weapon-presets.json 无 agentId=ep-916），首选异常音擎，下位嵌合编译器/淬锋钳刺/灼心摇壶，备选时流贤者/飞鸟星梦/十方锻星。需按 WIKI 音擎页 double_col_table「推荐代理人」表补充专武名字。"
+
+[[weapons]]
+tier = "下位"
+note = "异常音擎下位，需按 WIKI 音擎详情页补全特效文本。"
+
+[[weapons.items]]
+name = "嵌合编译器"
+stats = "S 级 · 基础攻击 684 · 穿透率 24%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png"
+engineId = "ep-214"
+refinement = 1
+
+[[weapons.items]]
+name = "淬锋钳刺"
+stats = "S 级 · 基础攻击 713 · 异常精通 90"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/27/160824341/15a02c67d9bcb3ba4b5727280adfb8fe_5211590432320608838.png"
+engineId = "ep-760"
+refinement = 1
+
+[[weapons.items]]
+name = "灼心摇壶"
+stats = "S 级 · 基础攻击 713 · 攻击力 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/10/08/158441880/a6467e15e97985d628b20eed5c1cdc55_148533700024515905.png"
+engineId = "ep-841"
+refinement = 1
+
+[[weapons]]
+tier = "备选"
+note = "备选异常音擎，需按 WIKI 音擎详情页补全特效文本。"
+
+[[weapons.items]]
+name = "时流贤者"
+stats = "S 级 · 基础攻击 713 · 攻击力 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/10/29/141353238/7ba42d92bd7e5b61fce77a99254aaa1d_6071459695802830396.png"
+engineId = "ep-915"
+refinement = 1
+
+[[weapons.items]]
+name = "飞鸟星梦"
+stats = "S 级 · 基础攻击 713 · 异常精通 90"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/04/18/15559334/da3ee1e35d1fb8661b92bfa2dc020ce4_6126634634305718379.png"
+engineId = "ep-1277"
+refinement = 1
+
+[[weapons.items]]
+name = "十方锻星"
+stats = "S 级 · 基础攻击 713 · 攻击力 30%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/30/233874762/a5aae825ebc18a3c99198fa400c09287_9200668947823037651.png"
+engineId = "ep-1503"
+refinement = 1
+
+[[driveBuilds]]
+name = "谶羽之誓 4 件套 + 法厄同之歌 2 件套"
+subPriority = [
+    { label = "异常精通", next = ">", id = "am" },
+    { label = "攻击力%", next = ">", id = "atk_pct" },
+    { label = "攻击力", next = ">", id = "atk_flat" },
+    { label = "穿透值", next = "", id = "pen_val" },
+]
+set4Id = "ep-2116"
+set2Id = "ep-1194"
+set2AltIds = [
+    "ep-800",
+]
+
+[[driveBuilds.mainStats]]
+slot = "4 号位"
+main = "异常精通 +92"
+alt = "无"
+note = ""
+mainId = "am_92"
+
+[[driveBuilds.mainStats]]
+slot = "5 号位"
+main = "攻击力 +30%"
+alt = "攻击力 +30%"
+note = ""
+mainId = "atk_pct_30"
+altId = "atk_pct_30"
+
+[[driveBuilds.mainStats]]
+slot = "6 号位"
+main = "异常掌控 +30%"
+alt = "无"
+note = ""
+mainId = "ac_pct_30"
+
+[driveBuilds.set4]
+name = "谶羽之誓"
+label = "异常精通 +92"
+effect4 = "队伍中任意角色对敌人施加[强化特殊技]时，装备者的异常精通提升92点，持续8秒，重复触发时刷新持续时间。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png"
+
+[driveBuilds.set2.main]
+name = "法厄同之歌"
+label = "异常掌控 +8%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png"
+
+[driveBuilds.set2.alt]
+name = "混沌爵士"
+label = "异常精通 +30"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/09/12/141353238/8568657ee1c1230ddad9fb021ff45499_5857861870100619839.png"
+
+[[teams]]
+name = "星南柚"
+
+[[teams.members]]
+agentId = "ep-996"
+name = "星见 雅"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/12/09/82500917/8facd72e9178da44d0708bfc4e1d5ade_1655620996938124425.jpg"
+note = "烈霜异常主 C，满层[落霜]后满蓄力重击是主要爆发，月城柳的电异常与冰异常组成双异常紊乱。"
+set4 = [
+    { name = "折枝剑歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/12/13/158441880/36b1daf1b269c3c44caa36511c0d1262_819312653053323943.PNG" },
+]
+set4Ids = [
+    "ep-1000",
+]
+
+[[teams.members]]
+agentId = "ep-1852"
+name = "南宫羽"
+role = "击破"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/03/19/15559334/47fa944608544745d4b648e2224b9381_5402359186626856976.png"
+note = "以太击破副 C，优质以太异常给紊乱基底，三段蓄力精准起手。"
+set4 = [
+    { name = "云岿如我", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/05/31/82500917/dc6808d5dd3bc7b61298c1e235e8fbd6_6438710815284590757.png" },
+]
+set4Ids = [
+    "ep-1347",
+]
+
+[[teams.members]]
+agentId = "ep-916"
+name = "月城柳"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/10/29/76099754/dc3af8ec666a63e03d49b88aac5bb044_8292939597769078774.png"
+note = "电异常后台耀变引擎，[漂流]持续异常积蓄与[归零]异放；谶羽之誓 4 件 + 法厄同之歌 2 件。"
+set4 = [
+    { name = "谶羽之誓", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png" },
+]
+set4Ids = [
+    "ep-2116",
+]
+
+[[teams]]
+name = "艾柚薇"
+
+[[teams.members]]
+agentId = "ep-1385"
+name = "爱丽丝"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/31/15559334/9de81fb0768d528204ba87a600ba6c5e_4639668304344154125.png"
+note = "物理异常主 C，极性强击自紊乱；月城柳的电异常与物理异常互相结算紊乱。"
+set4 = [
+    { name = "獠牙重金属", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png" },
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
+]
+set4Ids = [
+    "ep-104",
+    "ep-1194",
+]
+
+[[teams.members]]
+agentId = "ep-1386"
+name = "柚叶"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/10/76099754/f288f8b22deafa2493c389fc4465d77b_8800233381222281203.png"
+note = "彩糖花火染以太，加速以太积蓄，满足月城柳额外能力的队内异常条件。"
+set4 = [
+    { name = "月光骑士颂", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG" },
+]
+set4Ids = [
+    "ep-1551",
+]
+
+[[teams.members]]
+agentId = "ep-916"
+name = "月城柳"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/10/29/76099754/dc3af8ec666a63e03d49b88aac5bb044_8292939597769078774.png"
+note = "电异常后台耀变引擎，与爱丽丝的物理异常互相结算紊乱。"
+set4 = [
+    { name = "谶羽之誓", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png" },
+]
+set4Ids = [
+    "ep-2116",
+]
+
+[[textGuide]]
+title = "出招表"
+lines = [
+    "资源循环：[上弦]架势提高电伤 10%、[下弦]架势提高穿透率 10%，切换架势后增益保留 8 秒；[特殊技：流转]切换架势并可衔接第三段普攻；[强化特殊技：月华流转]进入[森罗万象] 15 秒，下落攻击命中异常敌人触发[极性紊乱]。",
+    "核心爆发：[强化特殊技]后队伍触发[紊乱]时紊乱倍率×250%（15 秒），月城柳电伤+20%（15 秒）；[终结技：雷影天华]落雷命中异常敌人也触发[极性紊乱]。",
+    "爆发循环：进场 → 特殊技/普攻切换架势 → 强化特殊技积[森罗万象] → 终结技极性紊乱 → 衔接队友紊乱收割 → 重复。",
+    "配队要点：月城柳额外能力需队内有强攻/异常/命破；主推 星南柚（星见雅+南宫羽+月城柳，双异常紊乱）或 艾柚薇（爱丽丝+柚叶+月城柳，物理+电双异常）。",
+]
+
+[[textGuide]]
+title = "注意事项"
+lines = [
+    "异常精通是月城柳的核心倍率：[漂流]持续异常积蓄与[归零]异放均吃精通，毕业面板优先堆异常精通；谶羽之誓 4 件的精通+92（强化特殊技触发）为局内、不进面板。",
+    "法厄同之歌 2 件的异常掌控 +8% 已计入局外面板。",
+    "[上弦]/[下弦]架势切换可在脱手后保留 8 秒增益，配合队友快支衔接最大化利用。",
+    "闪避基本不用（Lv.11 即止），资源优先给核心技（异常掌控+基础攻击）与特殊技（输出核心）。",
+    "属性为电，仓库电属性图标已存在，正常显示。",
+]
+
+[graduationPanel]
+totals = [
+    { label = "攻击力", value = 2947.3, unit = "" },
+    { label = "异常精通", value = 512, unit = "" },
+    { label = "异常掌控", value = 154.6, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-16T10:01:00+00:00"
+
+[graduationPanel.build]
+agent = "月城柳"
+weapon = "嵌合编译器"
+core = "异常精通 +90、基础攻击力 +75"
+set4 = "谶羽之誓"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位攻击力 +30%，6 号位异常掌控 +30%"
+subStats = "54 条满配：异常精通 ×28、攻击力% ×11、小攻击 ×5、穿透值 ×6、小生命 ×4（填充）"
+
+[graduationPanel.spec]
+agentId = "ep-916"
+weaponId = "ep-214"
+refinement = 1
+set4Id = "ep-2116"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "atk_pct_30"
+disc6MainId = "ac_pct_30"
+core = [
+    "am_90",
+    "atk_base",
+]
+subStats = [
+    { id = "am", count = 28 },
+    { id = "atk_pct", count = 11 },
+    { id = "atk_flat", count = 5 },
+    { id = "pen_val", count = 6 },
+    { id = "hp_flat", count = 4 },
+]
+budget = 54
+filler = 0
+
+[graduationPanelAlt]
+totals = [
+    { label = "攻击力", value = 2788.2, unit = "" },
+    { label = "异常精通", value = 350, unit = "" },
+    { label = "异常掌控", value = 154.6, unit = "" },
+]
+note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
+computedAt = "2026-10-16T10:01:00+00:00"
+title = "非满配毕业面板（低词条参考）"
+
+[graduationPanelAlt.build]
+agent = "月城柳"
+weapon = "嵌合编译器"
+core = "异常精通 +90、基础攻击力 +75"
+set4 = "谶羽之誓"
+set2 = "法厄同之歌"
+mainStats = "4 号位异常精通 +92，5 号位攻击力 +30%，6 号位异常掌控 +30%"
+subStats = "低词条参考：异常精通 ×10、攻击力% ×8、小攻击 ×4、穿透值 ×3"
+
+[graduationPanelAlt.spec]
+budget = 25
+core = ["am_90", "atk_base"]
+filler = 0
+agentId = "ep-916"
+weaponId = "ep-214"
+set4Id = "ep-2116"
+set2Id = "ep-1194"
+disc4MainId = "am_92"
+disc5MainId = "atk_pct_30"
+disc6MainId = "ac_pct_30"
+subStats = [
+  { id = "am", count = 10 },
+  { id = "atk_pct", count = 8 },
+  { id = "atk_flat", count = 4 },
+  { id = "pen_val", count = 3 },
+]
+
+[cinemaPriority]
+keyLevels = []
+note = "旧攻略未标注关键影画；六层均为数值/机制提升，按顺序阅读"
+
+[[textGuide]]
+title = "影画要点"
+lines = [
+  "L1 知己知彼：队伍中任意角色对敌人施加属性异常效果时，月城柳会获得1层[洞悉]，持续15秒，最多叠加3层，重复触发时刷新持续时间；受到敌方攻击时，月城柳将消耗1层[洞悉]并获得无敌效果，持续1秒；拥有1层或以上[洞悉]时，月城柳的异常精通提升80点。",
+  "L2 卓越适应性：[强化特殊技]中，快速突刺累积的电属性异常积蓄值提升20%；快速突刺命中敌人时，保持长按「特殊攻击」按键，可以额外消耗10点能量，再次发动突刺攻击，能量不足或停止长按后将自动衔接下落攻击；下落攻击命中处于属性异常状态下的敌人并触发[极性紊乱]效果时，对目标造成的伤害倍率提升至原本[紊乱]效果的20%，每额外发动一次突刺攻击，该伤害倍率额外提升15%，伤害倍率额外提升效果最多触发2次。",
+  "L3 月城氏管理学：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技] 技能等级+2",
+  "L4 掌棋者：月城柳对敌人造成属性异常伤害时，会为其施加[识破]效果，持续15秒；处于[识破]效果下的敌人受到攻击时，本次攻击的穿透率提升16%。",
+  "L5 鬼「妈妈」：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技] 技能等级+2",
+  "L6 非人之血：在[强化特殊技]中发动突刺攻击后，[森罗万象]状态的持续时间提升至30秒，状态持续期间，[强化特殊技]造成的伤害提升20%；[卓越适应性]中，[极性紊乱]伤害倍率额外提升效果的触发次数上限提升至4次，前4次额外发动突刺攻击时所需的能量消耗减半。",
+]

@@ -14,7 +14,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MEDIA = ROOT / "src" / "data" / "media.json"
 MANIFEST = ROOT / "src" / "data" / "media-manifest.json"
-AGENT = ROOT / "src" / "data" / "agents" / "phoenix.json"
+AGENTS = ROOT / "src" / "data" / "agents"
+AGENT_INDEX = AGENTS / "index.json"
 CODEX = ROOT / "src" / "data" / "codex"
 PUBLIC = ROOT / "public"
 ASSET_DIR = PUBLIC / "assets" / "media"
@@ -43,7 +44,10 @@ def main() -> None:
         raise SystemExit(1)
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     entries = json.loads(MEDIA.read_text(encoding="utf-8"))
-    agent = json.loads(AGENT.read_text(encoding="utf-8"))
+    index = json.loads(AGENT_INDEX.read_text(encoding="utf-8"))
+    open_slugs = [entry["slug"] for entry in index if entry.get("available")]
+    if not open_slugs:
+        errors.append("no agent is open")
 
     declared = {entry["key"] for entry in entries}
     missing = declared - set(manifest)
@@ -51,10 +55,18 @@ def main() -> None:
         errors.append(f"manifest missing keys: {', '.join(sorted(missing))}")
 
     referenced: set[str] = set()
-    collect_keys(agent, referenced)
-    unknown = referenced - set(manifest)
-    if unknown:
-        errors.append(f"data references unknown media keys: {', '.join(sorted(unknown))}")
+    for slug in open_slugs:
+        agent = json.loads((AGENTS / f"{slug}.json").read_text(encoding="utf-8"))
+        before = len(referenced)
+        collect_keys(agent, referenced)
+        unknown = referenced - set(manifest)
+        if unknown:
+            errors.append(f"[{slug}] unknown media keys: {', '.join(sorted(unknown))}")
+        elif len(referenced) == before:
+            errors.append(f"[{slug}] references no media")
+    for entry in index:
+        if entry.get("available") and not entry.get("avatar"):
+            errors.append(f"[{entry['slug']}] open agent has no avatar key")
 
     engines = json.loads((CODEX / "engines.json").read_text(encoding="utf-8"))
     sets = json.loads((CODEX / "sets.json").read_text(encoding="utf-8"))

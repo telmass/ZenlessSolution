@@ -1,0 +1,338 @@
+background = "https://i.gachabase.net/efHuhYbjFvZDpY1aCN-WtMvlfIwcgJP5syT4PMBE2g4/q:50/f:webp/plain/zzz/assets/2f1b50f649274008957e4ab565326ef4.png"
+schemaVersion = 2
+
+officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/485/detail"
+
+[_meta]
+agentId = "ep-485"
+name = "派派·韦尔"
+role = "物理异常 · 全队加伤"
+oneLiner = "旋转斩击叠满动力，强化特殊技与终结技提供物理异常与全队增伤。"
+tags = ["物理属性异常", "全队加伤", "清杂"]
+authored = true
+note = "本文件为派派·韦尔的攻略编辑内容；旧仓库里的同角色攻略是叶瞬光模板的复制件，已整体重写。graduationPanel 由 spec 实算，totals 仅审计。"
+editorialSources = [
+    "技能机制：官方 WIKI 抓取快照 data/sources/piper.json",
+    "音擎与驱动盘：官方 WIKI 图鉴快照 data/sources/engines.json / drive-sets.json",
+    "配装与队伍：按角色机制整理，社区口径交叉核对",
+]
+
+[cinemaPriority]
+keyLevels = []
+note = "旧攻略未标注关键影画；六层均为数值/机制提升，按顺序阅读"
+
+[[skillPriority]]
+key = "core"
+label = "核心技"
+icon = "/images/skills/core.webp"
+level = 7
+maxLevel = 7
+next = ">"
+id = "core"
+
+[[skillPriority]]
+key = "chain"
+label = "连携技"
+icon = "/images/skills/chain.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "chain"
+
+[[skillPriority]]
+key = "basic"
+label = "普通攻击"
+icon = "/images/skills/basic.webp"
+level = 12
+maxLevel = 12
+next = "="
+id = "basic"
+
+[[skillPriority]]
+key = "special"
+label = "特殊技"
+icon = "/images/skills/special.webp"
+level = 12
+maxLevel = 12
+next = ">"
+id = "special"
+
+[[skillPriority]]
+key = "assist"
+label = "支援技"
+icon = "/images/skills/assist.webp"
+level = 12
+maxLevel = 12
+next = ">"
+id = "assist"
+
+[[skillPriority]]
+key = "dodge"
+label = "闪避"
+icon = "/images/skills/dodge.webp"
+level = 11
+maxLevel = 12
+next = ""
+id = "dodge"
+
+[[weapons]]
+tier = "首选"
+note = "异常精通 90 直接抬物理异常与强击伤害；特效的物理增伤与积蓄效率也全部吃满，是派派最稳的一把。"
+
+[[weapons.items]]
+name = "淬锋钳刺"
+stats = "S 级 · 基础攻击 713 · 异常精通 90"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/27/160824341/15a02c67d9bcb3ba4b5727280adfb8fe_5211590432320608838.png"
+engineId = "ep-760"
+refinement = 1
+
+[[weapons]]
+tier = "下位"
+note = "触电唇彩提供异常精通 75，A 级里最贴合派派的异常定位。"
+
+[[weapons.items]]
+name = "触电唇彩"
+stats = "A 级 · 基础攻击 594 · 异常精通 75"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/d40322e5c28b18493b8893d34f0fc9ef_67866270705971352.png"
+engineId = "ep-210"
+refinement = 5
+
+[[weapons]]
+tier = "备选"
+note = "双生泣星靠异常触发叠攻击；嵌合编译器给穿透率 24%，对高防目标更稳。"
+
+[[weapons.items]]
+name = "双生泣星"
+stats = "A 级 · 基础攻击 594 · 攻击力 25%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/198cf01b8c620882b72deab5a23c7cdd_3200938913040663318.png"
+engineId = "ep-212"
+refinement = 5
+
+[[weapons.items]]
+name = "嵌合编译器"
+stats = "S 级 · 基础攻击 684 · 穿透率 24%"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/f870509a9a2979efe912c9d7785092b0_4453729163182777022.png"
+engineId = "ep-214"
+refinement = 1
+
+[[driveBuilds]]
+name = "自由蓝调 4 件套 + 獠牙重金属 2 件套"
+subPriority = [
+    { label = "异常精通", next = ">", id = "am" },
+    { label = "攻击力%", next = ">", id = "atk_pct" },
+    { label = "攻击力", next = ">", id = "atk_flat" },
+    { label = "穿透值", next = "", id = "pen_val" },
+]
+set4Id = "自由蓝调"
+set2Id = "獠牙重金属"
+
+[[driveBuilds.mainStats]]
+slot = "4 号位"
+main = "异常精通 +92"
+alt = "无"
+note = ""
+mainId = "am_92"
+
+[[driveBuilds.mainStats]]
+slot = "5 号位"
+main = "物理伤害 +30%"
+alt = "攻击力 +30%"
+note = ""
+mainId = "dmg_30"
+
+[[driveBuilds.mainStats]]
+slot = "6 号位"
+main = "异常掌控 +30%"
+alt = "无"
+note = ""
+mainId = "ac_pct_30"
+
+[driveBuilds.set4]
+name = "自由蓝调"
+label = "异常精通+30点。"
+effect4 = "[强化特殊技]命中敌人时，根据装备者的属性类型，使目标对应属性异常积蓄抗性降低20%，持续8秒，相同属性的效果不可叠加。"
+scene = "主力 4 件套"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png"
+
+[driveBuilds.set2.main]
+name = "獠牙重金属"
+label = "物理伤害+10%。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png"
+
+[driveBuilds.set2.alt]
+name = "法厄同之歌"
+label = "异常掌控+8%。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png"
+
+[[teams]]
+name = "柏派露"
+
+[[teams.members]]
+agentId = "ep-840"
+name = "柏妮思"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/06/25/76099754/d98501189911794e65a7bbcb205e65ed_6543737891696181009.png"
+note = "后台火异常叠灼烧，与派派的物理异常互相结算紊乱。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+
+[[teams.members]]
+agentId = "ep-485"
+name = "派派"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/07/01/82500917/102594259ff0844c16286931f27e3738_7546128660858702351.png"
+note = "前台叠动力并打物理异常，动力满 20 层时给全队 18% 增伤。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+
+[[teams.members]]
+agentId = "ep-493"
+name = "露西"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/07/01/34600917/3fa01447d481351416ef664e21894c29_801262856017991825.png"
+note = "火属性支援，提供攻击加成并补灼烧，维持紊乱节奏。"
+set4 = [
+    { name = "静听嘉音", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/12/13/158441880/f194a3c57fa7110f1591286be2d9e875_3682122467287058787.PNG" },
+]
+
+[[teams]]
+name = "简派露"
+
+[[teams.members]]
+agentId = "ep-759"
+name = "简"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/16/15559334/671b9f8d9227c19355e2eceb9f23ef28_7055750575833971395.png"
+note = "物理异常主 C，快速叠强击与紊乱。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+
+[[teams.members]]
+agentId = "ep-485"
+name = "派派"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/07/01/82500917/102594259ff0844c16286931f27e3738_7546128660858702351.png"
+note = "副异常，负责动力增伤与旋转斩击补积蓄。"
+set4 = [
+    { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
+]
+
+[[teams.members]]
+agentId = "ep-493"
+name = "露西"
+role = "支援"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/07/01/34600917/3fa01447d481351416ef664e21894c29_801262856017991825.png"
+note = "攻击增益与快速支援，双物理异常的稳定第三人。"
+set4 = [
+    { name = "静听嘉音", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/12/13/158441880/f194a3c57fa7110f1591286be2d9e875_3682122467287058787.PNG" },
+]
+
+[[textGuide]]
+title = "出招表（循环）"
+lines = [
+  "资源：[动力]由[强化特殊技：引擎转]或[终结技]的旋转斩击命中获得，每层 +4% 物理异常积蓄效率，上限 20 层、持续 12 秒。",
+  "基础循环：普攻前三段（或冲刺攻击、闪避反击）后接[特殊技：轮胎转]，长按升蓄力，松手打[特殊技：有亿点重]。",
+  "满蓄力后继续长按进入[强化特殊技：引擎转]，最多持续 3 秒；松手或能量降到 20 点自动接[强化特殊技：非常重]。",
+  "爆发：终结技[坐～稳～啦～]一次叠多层动力；进失衡前把动力叠到 20 层，让额外能力的全队 +18% 增伤覆盖失衡窗口。",
+]
+
+[[textGuide]]
+title = "注意事项"
+lines = [
+  "[动力]只由强化特殊技/终结技的旋转斩击叠层，[特殊技：轮胎转]本身不叠；想快速满层要靠引擎转或终结技。",
+  "引擎转持续消耗能量、最多 3 秒，能量低于 20 会自动下砸；留足能量给下一轮，别把能量打空。",
+  "额外能力需要队内有同属性/同阵营或异常角色，且动力 ≥ 20 层才给全队 18% 增伤，配队时优先满足条件。",
+  "[轮胎转]期间受伤降低 40%，可以主动用来抗打断；但派派仍以异常积蓄为主，不必强求暴击词条。",
+]
+
+[[textGuide]]
+title = "影画要点"
+lines = [
+  "L1 悠闲一刻：派派在[特殊技：轮胎转]、[强化特殊技：引擎转]或[终结技]中发动旋转斩击命中敌人时，有50%概率额外获得1层[动力]，[动力]的叠加层数上限提升至30层。",
+  "L2 上进心：在[特殊技：轮胎转]和[强化特殊技：引擎转]发动期间，派派的移动速度有所提升；在[特殊技：有亿点重]、[强化特殊技：非常重]和[终结技]中发动下砸攻击命中敌人时，招式造成的物理伤害提升10%，每拥有1层[动力]，该增益效果额外提升1%。",
+  "L3 卡车专家：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
+  "L4 技巧娴熟：队伍中任意角色对敌人施加属性异常效果时，派派回复20点能量，30秒内最多触发一次。",
+  "L5 私人爱好：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
+  "L6 轻度兴奋：[强化特殊技：引擎转]的持续时间上限提升2秒，[动力]的持续时间提升4秒。",
+]
+
+[graduationPanel]
+totals = [
+    { label = "攻击力", value = 0, unit = "" },
+    { label = "异常精通", value = 0, unit = "" },
+    { label = "异常掌控", value = 0, unit = "" },
+]
+note = "页面按 spec 实算，totals 仅保留旧计算器审计值。"
+computedAt = "2026-11-05T00:00:00+00:00"
+
+[graduationPanel.build]
+agent = "派派·韦尔"
+weapon = "淬锋钳刺"
+core = "基础能量自动回复 +0.36、基础攻击力 +75"
+set4 = "自由蓝调"
+set2 = "獠牙重金属"
+mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
+subStats = "54 条满配：异常精通 ×28、攻击力% ×12、小攻击 ×6、穿透值 ×6、小生命 ×2"
+
+[graduationPanel.spec]
+agentId = "ep-485"
+weaponId = "ep-760"
+refinement = 1
+set4Id = "ep-191"
+set2Id = "ep-104"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "物理"
+disc6MainId = "ac_pct_30"
+core = ["er_base", "atk_base"]
+subStats = [
+    { id = "am", count = 28 },
+    { id = "atk_pct", count = 12 },
+    { id = "atk_flat", count = 6 },
+    { id = "pen_val", count = 6 },
+    { id = "hp_pct", count = 2 },
+]
+budget = 54
+filler = 0
+
+[graduationPanelAlt]
+totals = [
+    { label = "攻击力", value = 0, unit = "" },
+    { label = "异常精通", value = 0, unit = "" },
+    { label = "异常掌控", value = 0, unit = "" },
+]
+note = "页面按 spec 实算，totals 仅保留旧计算器审计值。"
+computedAt = "2026-11-05T00:00:00+00:00"
+title = "小毕业面板（低词条参考）"
+
+[graduationPanelAlt.build]
+agent = "派派·韦尔"
+weapon = "淬锋钳刺"
+core = "基础能量自动回复 +0.36、基础攻击力 +75"
+set4 = "自由蓝调"
+set2 = "獠牙重金属"
+mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
+subStats = "30 条参考：异常精通 ×15、攻击力% ×9、小攻击 ×3、穿透值 ×3"
+
+[graduationPanelAlt.spec]
+agentId = "ep-485"
+weaponId = "ep-760"
+refinement = 1
+set4Id = "ep-191"
+set2Id = "ep-104"
+disc4MainId = "am_92"
+disc5MainId = "dmg_30"
+disc5Element = "物理"
+disc6MainId = "ac_pct_30"
+core = ["er_base", "atk_base"]
+subStats = [
+    { id = "am", count = 15 },
+    { id = "atk_pct", count = 9 },
+    { id = "atk_flat", count = 3 },
+    { id = "pen_val", count = 3 },
+]
+budget = 30
+filler = 0

@@ -12,9 +12,12 @@ const levelIndex = computed(() => coreLevels.indexOf(level.value))
 const coreSkill = computed(() => props.agent.skills.find((skill) => skill.key === 'core'))
 const coreText = computed(() => coreSkill.value?.moves[0]?.text ?? '')
 const passive = props.agent.corePassive
-const bonus = computed(() => passive.coreBonus[levelIndex.value])
 // Core ranks A-F map to passive levels 2-7; level 1 (43) is the no-core state.
 const passiveIndex = computed(() => levelIndex.value + 1)
+const coreRows = computed(() =>
+  passive.effects.map((effect) => ({ label: effect.label, value: effect.values[levelIndex.value] })),
+)
+const hasPhoenixMechanics = computed(() => Boolean(passive.amFlat))
 
 const stats = computed(() => [
   { label: '生命值', value: props.agent.base.hp, unit: '' },
@@ -102,21 +105,23 @@ const stats = computed(() => [
         <aside class="core__scaling">
           <p class="core__scaling-title num">{{ level }} 级数值</p>
           <dl>
-            <div>
-              <dt>异常精通</dt>
-              <dd class="num">+{{ passive.amFlat[passiveIndex] }}</dd>
-            </div>
-            <div>
-              <dt>灼蚀暴击伤害</dt>
-              <dd class="num">{{ passive.critDmg[passiveIndex] }}%</dd>
-            </div>
-            <div>
-              <dt>灼蚀周期伤害</dt>
-              <dd class="num">{{ passive.tickAtkPct[passiveIndex] }}% 攻击</dd>
-            </div>
-            <div>
-              <dt>核心属性</dt>
-              <dd class="num">掌控 +{{ bonus.ac }} / 基础攻击 +{{ bonus.atkBase }}</dd>
+            <template v-if="hasPhoenixMechanics">
+              <div>
+                <dt>异常精通</dt>
+                <dd class="num">+{{ passive.amFlat![passiveIndex] }}</dd>
+              </div>
+              <div>
+                <dt>灼蚀暴击伤害</dt>
+                <dd class="num">{{ passive.critDmg![passiveIndex] }}%</dd>
+              </div>
+              <div>
+                <dt>灼蚀周期伤害</dt>
+                <dd class="num">{{ passive.tickAtkPct![passiveIndex] }}% 攻击</dd>
+              </div>
+            </template>
+            <div v-for="row in coreRows" :key="row.label">
+              <dt>{{ row.label }}</dt>
+              <dd class="num">+{{ row.value }}</dd>
             </div>
           </dl>
         </aside>

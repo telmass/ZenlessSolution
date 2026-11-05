@@ -1,6 +1,8 @@
 import type { Agent, GuideGraduation, GuideTeam, GuideWeaponTier } from '@/types/agent'
 import { media } from '@/lib/media'
-import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
+import { publicUrl } from '@/lib/url'
+import { analyzeSubstats } from '@/core/substats'
+import { graduationTotals } from '@/lib/graduation'
 
 const W = 1620
 const H = 1000
@@ -124,12 +126,12 @@ function sectionBody(ctx: CanvasRenderingContext2D, y: number) {
   void y
 }
 
-function effectiveLine(panel: GuideGraduation): string {
+function effectiveLine(agent: Agent, panel: GuideGraduation): string {
   const spec = panel.spec
   if (!spec.subStats?.length) return ''
   const map: Record<string, string> = { am: 'anomaly_proficiency', pen_val: 'pen_value' }
   const counts = Object.fromEntries(spec.subStats.map((item) => [map[item.id] ?? item.id, item.count]))
-  const result = analyzeSubstats(counts, PHOENIX_PROFILE, { budget: spec.budget })
+  const result = analyzeSubstats(counts, agent.substatProfile, { budget: spec.budget })
   return `${result.effective} 有效 · ${result.small} 小 · ${result.invalid} 无效`
 }
 
@@ -173,7 +175,7 @@ function drawPortrait(ctx: CanvasRenderingContext2D, agent: Agent, images: Image
 
   ctx.font = font(11, 500, DISPLAY)
   ctx.fillStyle = '#7b8494'
-  ctx.fillText('ZENLESS SOLUTION  ·  PHOENIX FILE 001', x + 4, H - 46)
+  ctx.fillText(`ZENLESS SOLUTION  ·  ${agent.element} 异常档案`, x + 4, H - 46)
 }
 
 function drawSkills(ctx: CanvasRenderingContext2D, agent: Agent, y: number, images: ImageMap) {
@@ -228,7 +230,8 @@ function drawCinemas(ctx: CanvasRenderingContext2D, agent: Agent, y: number) {
   }
   ctx.font = font(11, 500)
   ctx.fillStyle = MUTED
-  ctx.fillText(`关键 ${Array.from(key).join(' / ')} · 技能 +2 不计入伤害对比`, x + 4, y + 10)
+  const keyLabel = key.size ? `关键 ${Array.from(key).join(' / ')}` : '未标注关键影画'
+  ctx.fillText(`${keyLabel} · 技能 +2 不计入伤害对比`, x + 4, y + 10)
 }
 
 function drawWeapons(
@@ -357,7 +360,12 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
   }
 }
 
-function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[], y: number) {
+function drawGraduation(
+  ctx: CanvasRenderingContext2D,
+  agent: Agent,
+  cards: GuideGraduation[],
+  y: number,
+) {
   rowLabel(ctx, '面板参考', y)
   const width = 600
   cards.slice(0, 2).forEach((card, index) => {
@@ -371,7 +379,7 @@ function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[],
     ctx.font = font(12, 700)
     ctx.fillStyle = INK
     ctx.fillText(card.title.replace(/（.*?）/, ''), x + 12, top + 8)
-    card.totals.forEach((total, totalIndex) => {
+    graduationTotals(agent, card).forEach((total, totalIndex) => {
       const tx = x + 12 + totalIndex * (width / 3)
       ctx.font = font(9, 500)
       ctx.fillStyle = MUTED
@@ -380,7 +388,7 @@ function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[],
       ctx.fillStyle = INK
       ctx.fillText(`${total.value}${total.unit}`, tx, top + 50)
     })
-    const line = effectiveLine(card)
+    const line = effectiveLine(agent, card)
     if (line) {
       ctx.font = font(9, 500)
       ctx.fillStyle = MUTED
@@ -408,6 +416,7 @@ function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap)
   drawTeams(ctx, agent.guide.teams, 492, images)
   drawGraduation(
     ctx,
+    agent,
     [agent.guide.graduationAlt, agent.guide.graduation]
       .filter((item): item is GuideGraduation => Boolean(item))
       .sort((a, b) => (a.spec.budget ?? 0) - (b.spec.budget ?? 0)),
@@ -423,6 +432,7 @@ export async function renderGuideCard(agent: Agent, scale = 2): Promise<Blob> {
   keys.add(agent.assets.avatar)
   for (const tier of agent.guide.weapons) for (const item of tier.items) keys.add(item.icon)
   for (const item of agent.guide.skillPriority) keys.add(`/assets/ui/skills/${item.key}.webp`)
+  // 上面收集的是根路径 key；载入时再统一拼 base，绘制处仍按 key 取图。
   const build = agent.guide.builds[0]
   if (build) {
     keys.add(build.set4.icon)
@@ -433,7 +443,7 @@ export async function renderGuideCard(agent: Agent, scale = 2): Promise<Blob> {
   const images: ImageMap = new Map()
   await Promise.all(
     Array.from(keys).map(async (key) => {
-      images.set(key, await loadImage(key.startsWith('/') ? key : media(key)))
+      images.set(key, await loadImage(key.startsWith('/') ? publicUrl(key) : media(key)))
     }),
   )
 

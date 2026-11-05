@@ -2,28 +2,49 @@
 import { computed } from 'vue'
 import type { Agent, GuideGraduation } from '@/types/agent'
 import { media } from '@/lib/media'
+import { publicUrl } from '@/lib/url'
 import RichText from '@/components/RichText.vue'
 import GuideCardActions from '@/components/GuideCardActions.vue'
-import { analyzeSubstats, PHOENIX_PROFILE } from '@/core/substats'
+import { analyzeSubstats } from '@/core/substats'
 import { computePanel } from '@/core/panel/compute'
-import { graduation54, inputFromSpec } from '@/core/panel/presets'
+import { inputFromSpec, specFromGraduation } from '@/core/panel/presets'
 import { computePhoenixDamage, enemyById } from '@/core/damage'
+import { graduationTotals } from '@/lib/graduation'
 
 const props = defineProps<{ agent: Agent }>()
 
 const guide = computed(() => props.agent.guide)
 
+const ELEMENT_TONE: Record<string, string> = {
+  物理: 'physical',
+  火: 'fire',
+  冰: 'ice',
+  电: 'electric',
+  以太: 'ether',
+  风: 'wind',
+  烈霜: 'frost',
+  流明: 'lumiflux',
+  玄墨: 'auric-ink',
+  凛刃: 'honed-edge',
+}
+
+const elementTone = computed(() => ELEMENT_TONE[props.agent.element] ?? 'accent')
+
 const substatLabels: Record<string, string> = {
   am: '异常精通',
   anomaly_proficiency: '异常精通',
   atk_pct: '攻击力%',
-  atk_flat: '攻击力',
   pen_val: '穿透值',
   pen_value: '穿透值',
   hp_pct: '生命值%',
   crit_rate: '暴击率',
   crit_dmg: '暴击伤害',
   anomaly_mastery: '异常掌控',
+  hp_flat: '小生命',
+  atk_flat: '小攻击',
+  def_flat: '小防御',
+  def_pct: '防御力%',
+  other: '填充',
 }
 
 function substatLabel(id: string): string {
@@ -47,10 +68,16 @@ const buildRows = (graduation: GuideGraduation) =>
     { label: '副词条', value: graduation.build.subStats },
   ].filter((row) => row.value)
 
+const effectiveSummary = computed(() =>
+  props.agent.substatProfile.effective
+    .map((id) => substatLabel(id))
+    .join(' + '),
+)
+
 const effectiveCount = computed(() => {
   const spec = guide.value.graduation?.spec
   if (!spec?.subStats) return null
-  return analyzeSubstats(graduationCounts(spec.subStats), PHOENIX_PROFILE, {
+  return analyzeSubstats(graduationCounts(spec.subStats), props.agent.substatProfile, {
     budget: spec.budget,
   }).effective
 })
@@ -67,15 +94,18 @@ function graduationCounts(subStats: { id: string; count: number }[]) {
 }
 
 function graduationAnalysis(item: GuideGraduation, includePenValue = false) {
-  return analyzeSubstats(graduationCounts(item.spec.subStats ?? []), PHOENIX_PROFILE, {
+  return analyzeSubstats(graduationCounts(item.spec.subStats ?? []), props.agent.substatProfile, {
     includePenValue,
     budget: item.spec.budget,
   })
 }
 
 const cinemaGains = computed(() => {
+  if (props.agent.damageModel !== 'phoenix' || !guide.value.graduation) return {}
   const enemy = enemyById('standard')
-  const panel = computePanel(inputFromSpec(props.agent, graduation54))
+  const panel = computePanel(
+    inputFromSpec(props.agent, specFromGraduation(props.agent, guide.value.graduation)),
+  )
   const totals = [0, 1, 2, 4, 6].map((cinema) =>
     computePhoenixDamage(
       props.agent,
@@ -94,8 +124,10 @@ function cinemaGain(line: string): { label: string; value: number; from: string 
   const match = /^L([1246])\b/.exec(line)
   if (!match) return null
   const level = Number(match[1])
+  const value = cinemaGains.value[level]
+  if (value === undefined) return null
   const from = { 1: '0+1', 2: '1+1', 4: '2+1', 6: '4+1' }[level]
-  return { label: `L${level}`, value: cinemaGains.value[level], from: from ?? '' }
+  return { label: `L${level}`, value, from: from ?? '' }
 }
 
 function graduationLabel(item: GuideGraduation): string {
@@ -113,13 +145,15 @@ function graduationLabel(item: GuideGraduation): string {
         <h2>{{ guide.role }}</h2>
         <p class="guide__oneliner">{{ guide.oneLiner }}</p>
         <ul class="guide__tags">
-          <li v-for="tag in guide.tags" :key="tag" class="tag tag--fire">{{ tag }}</li>
+          <li v-for="tag in guide.tags" :key="tag" :class="['tag', `tag--${elementTone}`]">
+            {{ tag }}
+          </li>
         </ul>
         <GuideCardActions :agent="agent" class="guide__actions" />
       </div>
       <div v-if="effectiveCount" class="guide__effective">
         <b class="num">{{ effectiveCount }}</b>
-        <span>满配有效词条<br />异常精通 + 攻击力%</span>
+        <span>满配有效词条<br />{{ effectiveSummary }}</span>
       </div>
     </section>
 
@@ -127,7 +161,7 @@ function graduationLabel(item: GuideGraduation): string {
       <h3>技能加点</h3>
       <div class="priority">
         <div v-for="(item, index) in guide.skillPriority" :key="item.key" class="priority__item">
-          <img :src="`/assets/ui/skills/${item.key}.webp`" alt="" aria-hidden="true" />
+          <img :src="publicUrl(`/assets/ui/skills/${item.key}.webp`)" alt="" aria-hidden="true" />
           <div class="priority__text">
             <b>{{ item.label }}</b>
             <span class="num">{{ item.level }}<i>/{{ item.maxLevel }}</i></span>
@@ -244,7 +278,7 @@ function graduationLabel(item: GuideGraduation): string {
             <span v-if="item.spec.budget" class="tag tag--accent">{{ item.spec.budget }} 词条</span>
           </header>
           <div class="graduation__totals">
-            <div v-for="total in item.totals" :key="total.label">
+            <div v-for="total in graduationTotals(agent, item)" :key="total.label">
               <span>{{ total.label }}</span>
               <b class="num">{{ total.value }}{{ total.unit }}</b>
             </div>
@@ -321,7 +355,7 @@ function graduationLabel(item: GuideGraduation): string {
               {{ line }}
             </li>
           </ol>
-          <p v-if="text.title === '影画要点'" class="cinema-gain-note">
+          <p v-if="text.title === '影画要点' && agent.damageModel" class="cinema-gain-note">
             百分比为 20s 参考轴相对上一影画的增量：0+1 → 1+1 → 2+1 → 4+1 → 6+1；技能 +2 未计入。
           </p>
         </article>

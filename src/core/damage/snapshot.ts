@@ -76,8 +76,8 @@ export function buildCombatStats(
   build: DamageBuild,
 ): CombatStats {
   const index = coreIndex(build.coreLevel)
-  const amFlat = coreValue(agent.corePassive.amFlat, index)
-  const coreCritDmg = coreValue(agent.corePassive.critDmg, index)
+  const amFlat = coreValue(agent.corePassive.amFlat ?? [], index)
+  const coreCritDmg = coreValue(agent.corePassive.critDmg ?? [], index)
   const cinema = Math.min(6, Math.max(0, build.cinema))
   const effect = engineEffect(build.engineId, build.refinement)
 

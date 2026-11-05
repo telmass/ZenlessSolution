@@ -90,8 +90,8 @@ function reset() {
         <p class="eyebrow">Agent Codex</p>
         <h1>代理人</h1>
         <p class="agents-title__lede">
-          官方图鉴复刻进行中。已收录 <b>{{ agents.length }}</b> 位代理人，当前仅
-          <b>菲欧妮</b> 开放完整档案；灰色条目尚未开放。
+          官方图鉴复刻进行中。已收录 <b>{{ agents.length }}</b> 位代理人，其中
+          <b>{{ openCount }}</b> 位已开放完整档案（异常特性全部开放）；灰色条目尚未开放。
         </p>
       </div>
 

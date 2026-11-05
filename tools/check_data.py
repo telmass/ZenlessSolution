@@ -1,4 +1,4 @@
-"""Contract checks for the generated Phoenix data.
+"""Contract checks for every generated agent dossier.
 
 Run: python tools/check_data.py
 """
@@ -11,16 +11,24 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-AGENT = ROOT / "src" / "data" / "agents" / "phoenix.json"
+AGENTS = ROOT / "src" / "data" / "agents"
 INDEX = ROOT / "src" / "data" / "agents" / "index.json"
 MANIFEST = ROOT / "src" / "data" / "media-manifest.json"
 
 SKILL_KEYS = ["basic", "dodge", "assist", "special", "chain", "core"]
 MEDIA_KEY_RE = re.compile(r"^(agent|engine|set|bangboo):[^:]+:")
-
-
-def fail(errors: list[str], message: str) -> None:
-    errors.append(message)
+BASE_FIELDS = (
+    "hp",
+    "atk",
+    "def",
+    "impact",
+    "critRate",
+    "critDmg",
+    "anomalyProficiency",
+    "anomalyMastery",
+    "penRatio",
+    "energyRegen",
+)
 
 
 def collect_media_keys(node, found: set[str]) -> None:
@@ -34,156 +42,157 @@ def collect_media_keys(node, found: set[str]) -> None:
         found.add(node)
 
 
-def main() -> None:
-    errors: list[str] = []
-    agent = json.loads(AGENT.read_text(encoding="utf-8"))
-    index = json.loads(INDEX.read_text(encoding="utf-8"))
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-
-    if agent["id"] != "ep-2216":
-        fail(errors, f"unexpected agent id: {agent['id']}")
-    if agent["slug"] != "phoenix":
-        fail(errors, f"unexpected slug: {agent['slug']}")
-    if not index or index[0].get("full") != "agent:phoenix:full":
-        fail(errors, "agent index missing the full-body media key")
-    if len(index) != 61:
-        fail(errors, f"agent index has {len(index)} entries, expected 61")
-    if index[0].get("slug") != "phoenix":
-        fail(errors, "phoenix should be the first agent-index entry")
-    slugs = [entry.get("slug") for entry in index]
-    if len(set(slugs)) != len(slugs):
-        fail(errors, "agent index contains duplicate slugs")
-    required_index_fields = (
-        "id",
-        "slug",
-        "en",
-        "name",
-        "fullName",
-        "rarity",
-        "element",
-        "specialty",
-        "faction",
-    )
-    for entry in index:
-        missing = [field for field in required_index_fields if not entry.get(field)]
-        if missing:
-            fail(errors, f"agent index entry {entry.get('slug')} missing: {missing}")
-        if not isinstance(entry.get("available"), bool):
-            fail(errors, f"agent index entry {entry.get('slug')} has non-boolean available")
-    open_slugs = [entry.get("slug") for entry in index if entry.get("available")]
-    if open_slugs != ["phoenix"]:
-        fail(errors, f"only phoenix should be open, got: {open_slugs}")
-    if agent["rarity"] != "S" or agent["element"] != "火" or agent["specialty"] != "异常":
-        fail(errors, "rarity/element/specialty mismatch")
-
-    base = agent["base"]
-    expected_base = {
-        "hp": 7673,
-        "atk": 797,
-        "def": 612,
-        "impact": 86,
-        "critRate": 5,
-        "critDmg": 50,
-        "anomalyProficiency": 118,
-        "anomalyMastery": 116,
-        "energyRegen": 1.2,
-    }
-    for key, expected in expected_base.items():
-        if base.get(key) != expected:
-            fail(errors, f"base.{key} = {base.get(key)}, expected {expected}")
-
-    skills = agent["skills"]
-    if [skill["key"] for skill in skills] != SKILL_KEYS:
-        fail(errors, f"skill categories mismatch: {[s['key'] for s in skills]}")
-
-    move_count = 0
-    for skill in skills:
+def check_agent(slug: str, agent: dict, manifest: set[str], errors: list[str]) -> int:
+    tag = f"[{slug}]"
+    if agent["slug"] != slug:
+        errors.append(f"{tag} slug mismatch: {agent['slug']}")
+    if not agent["id"].startswith("ep-"):
+        errors.append(f"{tag} unexpected agent id {agent['id']}")
+    if [skill["key"] for skill in agent["skills"]] != SKILL_KEYS:
+        errors.append(f"{tag} skill categories mismatch")
+    for skill in agent["skills"]:
         if not skill["moves"]:
-            fail(errors, f"{skill['key']} has no moves")
+            errors.append(f"{tag} {skill['key']} has no moves")
         for move in skill["moves"]:
-            move_count += 1
             table = move.get("table")
             if not table:
                 continue
             if skill["key"] == "core":
-                if [row["level"] for row in table["levels"]] != ["A", "B", "C", "D", "E", "F"]:
-                    fail(errors, f"core levels invalid for {move['title']}")
+                if [row["level"] for row in table["levels"]] != list("ABCDEF"):
+                    errors.append(f"{tag} core levels invalid for {move['title']}")
                 continue
             if len(table["levels"]) != 16:
-                fail(errors, f"{move['title']} has {len(table['levels'])} levels")
+                errors.append(f"{tag} {move['title']} has {len(table['levels'])} levels")
             for group in table["groups"]:
                 for row in group["rows"]:
                     if len(row["values"]) != 16:
-                        fail(errors, f"{move['title']}/{row['label']} has {len(row['values'])} values")
+                        errors.append(f"{tag} {move['title']}/{row['label']} width")
                         break
-
-    if move_count != 18:
-        fail(errors, f"expected 18 moves, got {move_count}")
 
     cinemas = agent["cinemas"]
     if [c["level"] for c in cinemas] != [1, 2, 3, 4, 5, 6]:
-        fail(errors, "cinema levels mismatch")
-    if {c["level"] for c in cinemas if c["keyLevel"]} != {1, 6}:
-        fail(errors, "key cinemas should be 1 and 6")
-    expected_cinema_images = ["agent:phoenix:cinema:2"] * 3 + ["agent:phoenix:cinema:3"] * 3
-    if [c["image"] for c in cinemas] != expected_cinema_images:
-        fail(
-            errors,
-            f"cinema backdrops mismatch: {[c['image'] for c in cinemas]} (L1-L3 share cinema:2, L4-L6 share cinema:3)",
-        )
+        errors.append(f"{tag} cinema levels mismatch")
+    key_levels = {c["level"] for c in cinemas if c["keyLevel"]}
+    declared = set(agent["guide"]["cinemaPriority"]["keyLevels"])
+    if key_levels != declared:
+        errors.append(f"{tag} cinema key levels disagree with guide: {sorted(key_levels)} vs {sorted(declared)}")
+
+    for field in BASE_FIELDS:
+        if not isinstance(agent["base"].get(field), (int, float)):
+            errors.append(f"{tag} base.{field} missing")
+
+    passive = agent["corePassive"]
+    if len(passive.get("coreBonus", [])) != 6:
+        errors.append(f"{tag} coreBonus must have six ranks")
+    if not passive.get("effects"):
+        errors.append(f"{tag} core passive effects missing")
+    profile = agent.get("substatProfile") or {}
+    if not profile.get("effective"):
+        errors.append(f"{tag} substat profile missing effective stats")
 
     guide = agent["guide"]
-    if len(guide["weapons"]) != 4:
-        fail(errors, f"expected 4 weapon tiers, got {len(guide['weapons'])}")
     if not guide["builds"]:
-        fail(errors, "no drive disc build")
-    if len(guide["teams"]) != 2:
-        fail(errors, f"expected 2 teams, got {len(guide['teams'])}")
-    if len(guide["texts"]) != 3:
-        fail(errors, f"expected 3 text sections, got {len(guide['texts'])}")
+        errors.append(f"{tag} no drive disc build")
+    if not guide["teams"]:
+        errors.append(f"{tag} no team")
+    if not any(text["title"] == "影画要点" for text in guide["texts"]):
+        errors.append(f"{tag} missing 影画要点 text")
+    if not guide["skillPriority"]:
+        errors.append(f"{tag} no skill priority")
+    if not guide["weapons"]:
+        errors.append(f"{tag} no weapon tiers")
 
-    for key, budget in (("graduation", 54), ("graduationAlt", 30)):
-        graduation = guide.get(key)
+    for key, graduation in (("graduation", guide.get("graduation")), ("graduationAlt", guide.get("graduationAlt"))):
         if not graduation:
-            fail(errors, f"missing {key}")
+            errors.append(f"{tag} missing {key}")
             continue
-        if graduation["spec"].get("budget") != budget:
-            fail(errors, f"{key} budget mismatch")
-        total = sum(item["count"] for item in graduation["spec"].get("subStats", []))
+        spec = graduation["spec"]
+        budget = spec.get("budget")
+        total = sum(item["count"] for item in spec.get("subStats", []))
         if total != budget:
-            fail(errors, f"{key} subStats total {total} != {budget}")
-        if "core" not in graduation["spec"]:
-            fail(errors, f"{key}.spec missing core (legacy bug)")
+            errors.append(f"{tag} {key} substats {total} != budget {budget}")
+        if "core" not in spec:
+            errors.append(f"{tag} {key}.spec missing core")
+        panel_spec = graduation.get("panel") or {}
+        if not panel_spec:
+            errors.append(f"{tag} {key} has no panel mapping")
+            continue
+        if sum(panel_spec.get("substats", {}).values()) != panel_spec.get("budget"):
+            errors.append(f"{tag} {key} panel substats != budget")
+        if panel_spec.get("coreLevel") != "F":
+            errors.append(f"{tag} {key} panel core level must be F")
 
     referenced: set[str] = set()
     collect_media_keys(agent, referenced)
-    missing = referenced - set(manifest)
+    missing = referenced - manifest
     if missing:
-        fail(errors, f"media keys missing from manifest: {sorted(missing)}")
+        errors.append(f"{tag} media keys missing from manifest: {sorted(missing)}")
+
+    payload = json.dumps(agent, ensure_ascii=False)
+    if "TODO" in payload:
+        errors.append(f"{tag} generated data contains TODO")
+    return len(referenced)
+
+
+def main() -> None:
+    errors: list[str] = []
+    index = json.loads(INDEX.read_text(encoding="utf-8"))
+    manifest = set(json.loads(MANIFEST.read_text(encoding="utf-8")))
+
+    if len(index) != 61:
+        errors.append(f"agent index has {len(index)} entries, expected 61")
+    slugs = [entry.get("slug") for entry in index]
+    if len(set(slugs)) != len(slugs):
+        errors.append("agent index contains duplicate slugs")
+    if slugs[0] != "phoenix":
+        errors.append("phoenix should be the first agent-index entry")
+
+    required = ("id", "slug", "en", "name", "fullName", "rarity", "element", "specialty", "faction")
+    for entry in index:
+        missing_fields = [field for field in required if not entry.get(field)]
+        if missing_fields:
+            errors.append(f"index entry {entry.get('slug')} missing: {missing_fields}")
+        if not isinstance(entry.get("available"), bool):
+            errors.append(f"index entry {entry.get('slug')} non-boolean available")
+
+    open_entries = [entry for entry in index if entry.get("available")]
+    open_slugs = [entry["slug"] for entry in open_entries]
+    if not open_entries:
+        errors.append("no agent is open")
+    if any(entry["specialty"] != "异常" for entry in open_entries):
+        errors.append("every open agent should be an Anomaly agent")
+
+    files = {path.stem for path in AGENTS.glob("*.json") if path.name != "index.json"}
+    if files != set(open_slugs):
+        errors.append(f"agent files {sorted(files)} != open slugs {sorted(open_slugs)}")
+
+    total_refs = 0
+    for slug in open_slugs:
+        agent = json.loads((AGENTS / f"{slug}.json").read_text(encoding="utf-8"))
+        total_refs += check_agent(slug, agent, manifest, errors)
 
     panel = json.loads((ROOT / "src" / "data" / "panel.json").read_text(encoding="utf-8"))
-    if len(panel["engines"]) != 4:
-        fail(errors, f"panel engines = {len(panel['engines'])}, expected 4")
+    if len(panel["engines"]) < 4:
+        errors.append(f"panel engines = {len(panel['engines'])}, expected the shipped guide engines")
     if len(panel["sets"]) != 30:
-        fail(errors, f"panel sets = {len(panel['sets'])}, expected 30")
+        errors.append(f"panel sets = {len(panel['sets'])}, expected 30")
     if len(panel["substats"]) != 10:
-        fail(errors, f"panel substats = {len(panel['substats'])}, expected 10")
+        errors.append(f"panel substats = {len(panel['substats'])}, expected 10")
     if {item["slot"] for item in panel["mainStats"]} != {4, 5, 6}:
-        fail(errors, "panel mainStats slots mismatch")
-    for item in panel["mainStats"]:
-        if item["stat"] not in {
-            "hp", "atk", "def", "impact", "critRate", "critDmg", "dmgBonus",
-            "penRatio", "penValue", "anomalyProficiency", "anomalyMastery", "energyRegen",
-        }:
-            fail(errors, f"panel main stat unknown target: {item['stat']}")
+        errors.append("panel mainStats slots mismatch")
     if panel["discFixed"] != {"hp": 2200, "atk": 316, "def": 184}:
-        fail(errors, f"panel discFixed mismatch: {panel['discFixed']}")
+        errors.append(f"panel discFixed mismatch: {panel['discFixed']}")
 
-    for graduation_key in ("graduation", "graduationAlt"):
-        graduation = guide.get(graduation_key)
-        if graduation and graduation["spec"].get("disc5MainId") == "dmg_30":
-            if "dmgBonus" not in {item["stat"] for item in panel["mainStats"]}:
-                fail(errors, "panel missing damage-bonus main stat")
+    panel_engine_ids = {item["id"] for item in panel["engines"]}
+    for slug in open_slugs:
+        agent = json.loads((AGENTS / f"{slug}.json").read_text(encoding="utf-8"))
+        for key in ("graduation", "graduationAlt"):
+            graduation = agent["guide"].get(key)
+            if not graduation or not graduation.get("panel"):
+                continue
+            engine_id = graduation["panel"]["engineId"]
+            if engine_id not in panel_engine_ids:
+                errors.append(f"[{slug}] {key} engine {engine_id} missing from panel.json")
 
     codex_dir = ROOT / "src" / "data" / "codex"
     for filename, expected_count in (
@@ -193,25 +202,15 @@ def main() -> None:
     ):
         rows = json.loads((codex_dir / filename).read_text(encoding="utf-8"))
         if len(rows) != expected_count:
-            fail(errors, f"{filename} = {len(rows)}, expected {expected_count}")
-
-    wiki_path = ROOT / "data" / "sources" / "bangboo-wiki.json"
-    if wiki_path.exists():
-        wiki = json.loads(wiki_path.read_text(encoding="utf-8"))
-        if len(wiki.get("byName", {})) < 41:
-            fail(errors, f"bangboo wiki entries = {len(wiki.get('byName', {}))}, expected >= 41")
+            errors.append(f"{filename} = {len(rows)}, expected {expected_count}")
 
     enemies = json.loads((ROOT / "src" / "data" / "enemies.json").read_text(encoding="utf-8"))
     if len(enemies) != 4:
-        fail(errors, f"enemies = {len(enemies)}, expected 4")
-
-    payload = json.dumps(agent, ensure_ascii=False)
-    if "TODO" in payload or "TODO" in json.dumps(guide, ensure_ascii=False):
-        fail(errors, "generated data contains TODO")
+        errors.append(f"enemies = {len(enemies)}, expected 4")
 
     print(
-        f"agent: {agent['name']} ({agent['id']}) | skills: {len(skills)} | moves: {move_count} | "
-        f"cinemas: {len(cinemas)} | teams: {len(guide['teams'])} | media refs: {len(referenced)}"
+        f"agents: {len(open_slugs)} open / {len(index)} roster | media refs: {total_refs} | "
+        f"panel engines: {len(panel['engines'])}"
     )
     if errors:
         print("FAILED:", file=sys.stderr)

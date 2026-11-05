@@ -151,6 +151,31 @@ input[type="radio"] {
   color: var(--fire-ink);
 }
 
+.tag--physical,
+.tag--fire,
+.tag--ice,
+.tag--electric,
+.tag--ether,
+.tag--wind,
+.tag--frost,
+.tag--lumiflux,
+.tag--auric-ink,
+.tag--honed-edge {
+  border-color: currentColor;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tag--physical { color: #c8b98a; }
+.tag--fire { color: #ff8a63; border-color: rgba(255, 106, 61, 0.45); background: var(--fire-soft); }
+.tag--ice { color: #8fdcff; }
+.tag--electric { color: #9db9ff; }
+.tag--ether { color: #c99bff; }
+.tag--wind { color: #7fe0b4; }
+.tag--frost { color: #b3e2ff; }
+.tag--lumiflux { color: #ffe9a3; }
+.tag--auric-ink { color: #a99cff; }
+.tag--honed-edge { color: #ffa8a8; }
+
 .tag--accent {
   border-color: rgba(240, 223, 78, 0.45);
   background: var(--accent-soft);

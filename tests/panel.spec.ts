@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import agentJson from '@/data/agents/phoenix.json'
 import { computePanel } from '@/core/panel/compute'
-import { graduation30, graduation54, inputFromSpec } from '@/core/panel/presets'
+import { inputFromSpec, specFromGraduation } from '@/core/panel/presets'
 import type { Agent } from '@/types/agent'
 
 const agent = agentJson as unknown as Agent
+const graduation54 = specFromGraduation(agent, agent.guide.graduation!)
+const graduation30 = specFromGraduation(agent, agent.guide.graduationAlt!)
 
 describe('out-of-combat panel engine', () => {
   it('reproduces the legacy 54-roll graduation panel', () => {
