@@ -10,7 +10,9 @@
 - `vite.config.ts` 支持 `VITE_BASE`（默认 `/`）；`createWebHistory(import.meta.env.BASE_URL)` 与 `src/lib/url.ts` 让图片 / 字体 / 技能图标跟随 base，修复子路径部署 404。
 - 构建时把 `index.html` 复制为 `404.html`，GitHub Pages 深链回退到 SPA。
 - 新增 `tests/url.spec.ts` 覆盖 base 拼接与重复前缀。
-- `public/sitemap.xml` 的 6 条 `<loc>` 改为 `https://telmass.github.io/ZenlessSolution/`。
+- 深链静态入口：构建时为 4 个列表页与全部详情页（13 代理人 / 101 音擎 / 30 驱动盘 / 42 邦布）生成 `index.html`，深链返回 200，`404.html` 只兜未知路径。
+- 移除 Cloudflare 专用的 `public/_headers`、`public/_redirects`，发布链路只保留 GitHub Pages。
+- `public/sitemap.xml` 的 6 条 `<loc>` 改为 `https://telmass.github.io/ZenlessSolution/`（带尾斜杠）。
 
 ### 异常代理人全量接入（13 / 13）
 

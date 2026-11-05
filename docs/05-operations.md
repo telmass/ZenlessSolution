@@ -26,20 +26,17 @@ pnpm assets:check   # 离线校验
 
 ## 3. 部署
 
-静态部署，无运行时后端；只有构建期可选变量 `VITE_BASE`（默认 `/`）。构建产物在 `dist/`。
+静态部署，无运行时后端；只有构建期可选变量 `VITE_BASE`（默认 `/`）。构建产物在 `dist/`。当前公网地址：<https://telmass.github.io/ZenlessSolution/>。
 
-- **Cloudflare Pages**：构建命令 `pnpm build`，输出目录 `dist`。
-  - `public/_headers`：资产长缓存、`index.html` 不缓存、`nosniff`。
-  - `public/_redirects`：`/* → /index.html 200` SPA 回退。
-- **GitHub Pages（项目页）**：`.github/workflows/deploy.yml` 已配好。
-  - 仓库 Settings → Pages → Source 选 **GitHub Actions**；push `master` 或手动 `workflow_dispatch` 触发。
-  - 访问地址 `https://<user>.github.io/<repo>/`；CI 注入 `VITE_BASE=/${{ github.event.repository.name }}/`，`createWebHistory`、图片、字体都挂在该子路径下。
-  - 深链（`/agents/phoenix`、`/engines/ep-211`）：构建时把 `index.html` 复制成 `404.html`，Pages 对未知路径返回它，前端路由按 `location.pathname` 渲染。代价是该响应 HTTP 状态是 404（Pages 不支持 rewrite）；要 200 深链请用 Cloudflare Pages 或自定义域名 + 反向代理。
+- **GitHub Pages（唯一发布方式）**：`.github/workflows/deploy.yml`，push `master` 自动发布，也可手动 `workflow_dispatch`。
+  - 仓库 Settings → Pages → Source 选 **GitHub Actions**；`configure-pages` 带 `enablement: true`，首次运行也会自动创建 Pages。
+  - CI 注入 `VITE_BASE=/${{ github.event.repository.name }}/`，`createWebHistory`、图片、字体都挂在该子路径下。
+  - 深链：构建时给 4 个列表页与全部详情页（13 代理人 / 101 音擎 / 30 驱动盘 / 42 邦布）各生成一份 `index.html`，直接访问返回 **200**；只有未知路径才落到 `404.html`（内容仍是应用壳，前端渲染 404 页，状态码 404 属正常）。
   - 本地验证子路径：`VITE_BASE=/<repo>/ pnpm build`，再 `VITE_BASE=/<repo>/ pnpm preview` 打开 `http://localhost:4173/<repo>/`。
   - 仓库必须是 public（或账号支持私有 Pages）；默认分支若不是 `master`，改 workflow 的 `on.push.branches`。
-- 也可部署到任意静态托管（Netlify / Vercel / Nginx），直接上传 `dist/`；根路径部署无需设置 `VITE_BASE`。
-- 缓存约定：`index.html` no-cache；hash 资源与 `/assets/`、`/fonts/` immutable。
-- `public/sitemap.xml` 已指向 `https://telmass.github.io/ZenlessSolution/`；换账号 / 仓库名 / 自定义域名时同步修改这 6 条 `<loc>`。
+- 也可把 `dist/` 直接上传到任意静态托管；根路径部署无需设置 `VITE_BASE`（`404.html` 与预生成入口同样可用）。
+- 缓存由 GitHub Pages 的 CDN 管理：Vite 产物文件名带内容 hash，`index.html` 走 `no-cache` 语义，无需额外配置。
+- `public/sitemap.xml` 已指向 `https://telmass.github.io/ZenlessSolution/`（带尾斜杠，对应预生成的目录入口）；换账号 / 仓库名 / 自定义域名时同步修改这 6 条 `<loc>`。
 
 ## 4. 发布检查单
 

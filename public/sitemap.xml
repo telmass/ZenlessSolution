@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://telmass.github.io/ZenlessSolution/</loc></url>
-  <url><loc>https://telmass.github.io/ZenlessSolution/agents</loc></url>
-  <url><loc>https://telmass.github.io/ZenlessSolution/agents/phoenix</loc></url>
-  <url><loc>https://telmass.github.io/ZenlessSolution/engines</loc></url>
-  <url><loc>https://telmass.github.io/ZenlessSolution/drives</loc></url>
-  <url><loc>https://telmass.github.io/ZenlessSolution/bangboo</loc></url>
+  <url><loc>https://telmass.github.io/ZenlessSolution/agents/</loc></url>
+  <url><loc>https://telmass.github.io/ZenlessSolution/agents/phoenix/</loc></url>
+  <url><loc>https://telmass.github.io/ZenlessSolution/engines/</loc></url>
+  <url><loc>https://telmass.github.io/ZenlessSolution/drives/</loc></url>
+  <url><loc>https://telmass.github.io/ZenlessSolution/bangboo/</loc></url>
 </urlset>

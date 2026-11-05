@@ -23,7 +23,7 @@
 | 20s 伤害参考轴、单次异放、0+1 / 2+1 / 4+1 / 6+1 对比 | ✅ |
 | 攻略卡导出（PNG 保存 / 复制剪贴板） | ✅ |
 | UI 与排版系统（九档字号 / 34em 行宽 / 对比度 / 移动端 44px 触控） | ✅ |
-| 发布打磨（404 / 加载与错误 / a11y / SEO / Cloudflare 与 GitHub Pages 部署 / 运维文档） | ✅ |
+| 发布打磨（404 / 加载与错误 / a11y / SEO / GitHub Pages 部署与深链入口 / 运维文档） | ✅ |
 | 其余 60 位代理人档案 | ⏳ 施工中（图鉴条目已收录） |
 
 ## 快速开始
@@ -48,13 +48,13 @@ pnpm preview
 
 ## 部署
 
-纯静态：`pnpm build` 产出 `dist/`，无后端、无运行时环境变量。
+纯静态：`pnpm build` 产出 `dist/`，无后端、无运行时环境变量。当前公网地址：<https://telmass.github.io/ZenlessSolution/>。
 
-- **GitHub Pages（项目页）**：`.github/workflows/deploy.yml` 已配置；仓库 Settings → Pages → Source 选 `GitHub Actions`，push `master` 即发布到 `https://<user>.github.io/<repo>/`。
-  - CI 用 `VITE_BASE=/<repo>/` 构建，路由 / 图片 / 字体自动跟随子路径；深链由 `404.html` 回退。
+- **GitHub Pages（唯一发布方式）**：`.github/workflows/deploy.yml`；仓库 Settings → Pages → Source 选 `GitHub Actions`，push `master` 自动发布。
+  - CI 用 `VITE_BASE=/<repo>/` 构建，路由 / 图片 / 字体自动跟随子路径。
+  - 构建时给列表页与全部详情页预生成静态入口，深链直接 **200**；未知路径回退到 `404.html`。
   - 本地验证子路径：`VITE_BASE=/<repo>/ pnpm build` + `VITE_BASE=/<repo>/ pnpm preview`。
-- **Cloudflare Pages / 其它静态托管**：构建 `pnpm build`，输出 `dist`；`_headers`、`_redirects` 已随 `public/` 打包。
-- 细节与限制见 [docs/05-operations.md](docs/05-operations.md) 第 3 节。
+- 其它静态托管也可直接上传 `dist/`；细节见 [docs/05-operations.md](docs/05-operations.md) 第 3 节。
 
 ## 数据与资产
 
