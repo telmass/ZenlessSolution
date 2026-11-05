@@ -408,7 +408,9 @@ function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap)
   drawTeams(ctx, agent.guide.teams, 492, images)
   drawGraduation(
     ctx,
-    [agent.guide.graduation, agent.guide.graduationAlt].filter((item): item is GuideGraduation => Boolean(item)),
+    [agent.guide.graduationAlt, agent.guide.graduation]
+      .filter((item): item is GuideGraduation => Boolean(item))
+      .sort((a, b) => (a.spec.budget ?? 0) - (b.spec.budget ?? 0)),
     606,
   )
 }
