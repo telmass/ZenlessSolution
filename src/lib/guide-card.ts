@@ -359,31 +359,32 @@ function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number,
 
 function drawGraduation(ctx: CanvasRenderingContext2D, cards: GuideGraduation[], y: number) {
   rowLabel(ctx, '面板参考', y)
-  const width = 380
+  const width = W - VALUE_X - 56
   cards.slice(0, 2).forEach((card, index) => {
-    const x = VALUE_X + index * (width + 12)
-    roundRect(ctx, x, y - 2, width, 112, 10)
+    const top = y - 2 + index * 124
+    const x = VALUE_X
+    roundRect(ctx, x, top, width, 112, 10)
     ctx.fillStyle = '#f7f8fa'
     ctx.fill()
     ctx.strokeStyle = BORDER
     ctx.stroke()
     ctx.font = font(12, 700)
     ctx.fillStyle = INK
-    ctx.fillText(card.title.replace(/（.*?）/, ''), x + 12, y + 8)
+    ctx.fillText(card.title.replace(/（.*?）/, ''), x + 12, top + 8)
     card.totals.forEach((total, totalIndex) => {
-      const tx = x + 12 + totalIndex * 132
+      const tx = x + 12 + totalIndex * (width / 3)
       ctx.font = font(9, 500)
       ctx.fillStyle = MUTED
-      ctx.fillText(total.label, tx, y + 34)
+      ctx.fillText(total.label, tx, top + 34)
       ctx.font = font(20, 700, DISPLAY)
       ctx.fillStyle = INK
-      ctx.fillText(`${total.value}${total.unit}`, tx, y + 50)
+      ctx.fillText(`${total.value}${total.unit}`, tx, top + 50)
     })
     const line = effectiveLine(card)
     if (line) {
       ctx.font = font(9, 500)
       ctx.fillStyle = MUTED
-      ctx.fillText(line, x + 12, y + 84)
+      ctx.fillText(line, x + 12, top + 84)
     }
   })
 }
