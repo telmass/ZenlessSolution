@@ -1,4 +1,4 @@
-import type { SubStatRule } from './types'
+import type { ModKind, StatId, SubStatRule } from './types'
 
 /** 每件驱动盘满级 9 条：3 初始 + 5 强化 + 1 补足。 */
 export const ROLLS_PER_DISC = 9
@@ -16,6 +16,36 @@ export interface DiscLine {
 export interface Disc {
   slot: number
   lines: DiscLine[]
+}
+
+/** 4/5/6 号位的当前主词条，用来判定副词条冲突与上限。 */
+export interface MainStatInfo {
+  slot: number
+  stat: StatId
+  kind: ModKind
+}
+
+export function conflictsWithMain(rule: SubStatRule, main?: MainStatInfo): boolean {
+  return Boolean(main && main.stat === rule.stat && main.kind === rule.kind)
+}
+
+/**
+ * 同名词条的全局上限 = (6 - 该词条作为主词条的盘数) × 6。
+ *
+ * 例：4 号位主词条是异常精通，则异常精通只能出现在另外 5 件盘上，
+ * 每盘最多 6 条 → 上限 30 条。
+ */
+export function maxRollsFor(
+  statId: string,
+  rules: SubStatRule[],
+  mains: MainStatInfo[],
+): number {
+  const rule = rules.find((item) => item.id === statId)
+  if (!rule) return 0
+  const blocked = mains.filter(
+    (main) => main.stat === rule.stat && main.kind === rule.kind,
+  ).length
+  return Math.max(0, DISC_SLOTS.length - blocked) * MAX_ROLLS_PER_LINE
 }
 
 export function emptyDiscs(): Disc[] {
@@ -55,21 +85,32 @@ export function discOfLine(discs: Disc[], statId: string): number[] {
  * 先按条数从多到少填，每次选剩余空间最大的盘；分配完必须能精确还原，
  * 否则直接报错（不静默兜底）。
  */
-export function fromCounts(counts: Record<string, number>): Disc[] {
+export function fromCounts(
+  counts: Record<string, number>,
+  rules: SubStatRule[] = [],
+  mains: MainStatInfo[] = [],
+): Disc[] {
   const discs = emptyDiscs()
   const entries = Object.entries(counts)
     .filter(([, value]) => value > 0)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
 
   for (const [id, count] of entries) {
+    if (rules.length && count > maxRollsFor(id, rules, mains)) {
+      throw new Error(
+        `${id} 需要 ${count} 条，超过上限 ${maxRollsFor(id, rules, mains)}（主词条占用的盘不能再出同名词条）`,
+      )
+    }
     let remaining = count
     while (remaining > 0) {
+      const rule = rules.find((item) => item.id === id)
       const candidates = discs
         .filter(
           (disc) =>
             discRolls(disc) < ROLLS_PER_DISC &&
             disc.lines.length < MAX_LINES_PER_DISC &&
-            !disc.lines.some((line) => line.id === id),
+            !disc.lines.some((line) => line.id === id) &&
+            !(rule && conflictsWithMain(rule, mains.find((item) => item.slot === disc.slot))),
         )
         .sort(
           (a, b) =>
@@ -91,7 +132,11 @@ export function fromCounts(counts: Record<string, number>): Disc[] {
 }
 
 /** 校验单件盘的合法分配；返回错误列表（空 = 合法）。 */
-export function validateDiscs(discs: Disc[], rules: SubStatRule[]): string[] {
+export function validateDiscs(
+  discs: Disc[],
+  rules: SubStatRule[],
+  mains: MainStatInfo[] = [],
+): string[] {
   const ids = new Set(rules.map((rule) => rule.id))
   const errors: string[] = []
   const slots = new Set<number>()
@@ -106,6 +151,10 @@ export function validateDiscs(discs: Disc[], rules: SubStatRule[]): string[] {
       if (line.rolls < 1 || line.rolls > MAX_ROLLS_PER_LINE) {
         errors.push(`${disc.slot} 号位 ${line.id} 条数 ${line.rolls} 不在 1–6`)
       }
+      const rule = rules.find((item) => item.id === line.id)
+      if (rule && conflictsWithMain(rule, mains.find((item) => item.slot === disc.slot))) {
+        errors.push(`${disc.slot} 号位 ${line.id} 与主词条重复`)
+      }
     }
     if (disc.lines.length > MAX_LINES_PER_DISC) {
       errors.push(`${disc.slot} 号位有 ${disc.lines.length} 条副词条，超过 4`)
@@ -113,6 +162,14 @@ export function validateDiscs(discs: Disc[], rules: SubStatRule[]): string[] {
     if (discRolls(disc) > ROLLS_PER_DISC) {
       errors.push(`${disc.slot} 号位共 ${discRolls(disc)} 条，超过 9`)
     }
+  }
+  for (const rule of rules) {
+    const total = discs.reduce(
+      (sum, disc) => sum + disc.lines.filter((line) => line.id === rule.id).reduce((n, line) => n + line.rolls, 0),
+      0,
+    )
+    const cap = maxRollsFor(rule.id, rules, mains)
+    if (total > cap) errors.push(`${rule.id} 共 ${total} 条，超过上限 ${cap}`)
   }
   return errors
 }

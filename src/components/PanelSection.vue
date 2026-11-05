@@ -3,17 +3,20 @@ import { computed, reactive, ref, watch } from 'vue'
 import type { Agent } from '@/types/agent'
 import type { StatId } from '@/core/panel/types'
 import { computePanel } from '@/core/panel/compute'
-import { engines, mainStatsFor, sets, STAT_LABELS, STAT_UNITS, substats } from '@/core/panel/data'
+import { engines, mainStatsFor, panelRules, sets, STAT_LABELS, STAT_UNITS, substats } from '@/core/panel/data'
 import { formatStat } from '@/core/panel/format'
 import { coreBonusFor, presetsFor, type BuildSpec } from '@/core/panel/presets'
 import {
   MAX_ROLLS_PER_LINE,
   ROLLS_PER_DISC,
+  conflictsWithMain,
   discRolls,
   fromCounts,
+  maxRollsFor,
   toCounts,
   totalRolls as sumDiscRolls,
   type Disc,
+  type MainStatInfo,
 } from '@/core/panel/discs'
 import { analyzeSubstats } from '@/core/substats'
 import { media } from '@/lib/media'
@@ -32,7 +35,29 @@ const spec = reactive<BuildSpec>({
   substats: { ...startSpec.substats },
 })
 
-const discs = ref<Disc[]>(fromCounts(startSpec.substats))
+const mains = computed<MainStatInfo[]>(() => {
+  const out: MainStatInfo[] = []
+  for (const slot of [4, 5, 6] as const) {
+    const rule = mainStatsFor(slot).find((item) => item.id === spec.mainStats[slot])
+    if (rule) out.push({ slot, stat: rule.stat, kind: rule.kind })
+  }
+  return out
+})
+
+function mainFor(slot: number) {
+  return mains.value.find((item) => item.slot === slot)
+}
+
+function mainLabel(slot: number) {
+  if (slot === 1) return `生命值 +${panelRules.discFixed.hp}`
+  if (slot === 2) return `攻击力 +${panelRules.discFixed.atk}`
+  if (slot === 3) return `防御力 +${panelRules.discFixed.def}`
+  const key = slot as 4 | 5 | 6
+  const rule = mainStatsFor(key).find((item) => item.id === spec.mainStats[key])
+  return rule?.label ?? '未选择'
+}
+
+const discs = ref<Disc[]>(fromCounts(startSpec.substats, substats, mains.value))
 
 // 单盘分配是编辑口径，面板计算仍吃聚合条数。
 watch(
@@ -41,6 +66,21 @@ watch(
     spec.substats = toCounts(value)
   },
   { deep: true, immediate: true },
+)
+
+// 换主词条后，清掉与该盘主词条冲突的副词条（游戏里两者不能同名）。
+watch(
+  () => [spec.mainStats[4], spec.mainStats[5], spec.mainStats[6]],
+  () => {
+    for (const disc of discs.value) {
+      const main = mainFor(disc.slot)
+      if (!main) continue
+      disc.lines = disc.lines.filter((line) => {
+        const rule = substats.find((item) => item.id === line.id)
+        return !(rule && conflictsWithMain(rule, main))
+      })
+    }
+  },
 )
 
 const profile = computed(() => props.agent.substatProfile)
@@ -106,7 +146,7 @@ function applyPreset(preset: BuildSpec) {
   spec.set4 = preset.set4
   spec.set2 = preset.set2
   spec.mainStats = { ...preset.mainStats }
-  discs.value = fromCounts(preset.substats)
+  discs.value = fromCounts(preset.substats, substats, mains.value)
 }
 
 function lineAt(discIndex: number, lineIndex: number) {
@@ -123,12 +163,25 @@ function lineRoom(disc: Disc, lineIndex: number) {
   return Math.min(MAX_ROLLS_PER_LINE, ROLLS_PER_DISC - used)
 }
 
+function countStat(id: string) {
+  return discs.value.reduce(
+    (sum, disc) =>
+      sum + Math.max(0, disc.lines.find((line) => line.id === id)?.rolls ?? 0),
+    0,
+  )
+}
+
 function optionsFor(disc: Disc, lineIndex: number) {
   const current = disc.lines[lineIndex]?.id
-  return substats.filter(
-    (rule) =>
-      rule.id === current || !disc.lines.some((line) => line.id === rule.id),
-  )
+  const main = mainFor(disc.slot)
+  return substats.filter((rule) => {
+    if (rule.id !== current && disc.lines.some((line) => line.id === rule.id)) return false
+    if (conflictsWithMain(rule, main)) return false
+    if (rule.id !== current && countStat(rule.id) + 1 > maxRollsFor(rule.id, substats, mains.value)) {
+      return false
+    }
+    return true
+  })
 }
 
 function setStat(discIndex: number, lineIndex: number, event: Event) {
@@ -146,6 +199,7 @@ function setStat(discIndex: number, lineIndex: number, event: Event) {
     return
   }
   if (disc.lines.length >= 4 || usedRolls(disc) >= ROLLS_PER_DISC) return
+  if (countStat(id) + 1 > maxRollsFor(id, substats, mains.value)) return
   disc.lines.push({ id, rolls: 1 })
 }
 
@@ -153,6 +207,7 @@ function bumpRolls(discIndex: number, lineIndex: number, delta: number) {
   const disc = discs.value[discIndex]
   const line = disc?.lines[lineIndex]
   if (!disc || !line) return
+  if (delta > 0 && countStat(line.id) + delta > maxRollsFor(line.id, substats, mains.value)) return
   line.rolls = Math.max(1, Math.min(lineRoom(disc, lineIndex), line.rolls + delta))
 }
 
@@ -337,6 +392,7 @@ const summaryStats = computed(() =>
                   {{ usedRolls(disc) }} / 9 条
                 </span>
               </header>
+              <p class="disc__main">主词条 · {{ mainLabel(disc.slot) }}</p>
 
               <label v-for="slot in 4" :key="slot" class="disc__line">
                 <select
@@ -378,7 +434,8 @@ const summaryStats = computed(() =>
           </div>
 
           <p class="discs__note">
-            每盘 9 条（3 初始 + 5 强化 + 1 补足），单条 1–6 次、最多 4 种词条；下方结果按 6 件盘汇总。
+            每盘 9 条（3 初始 + 5 强化 + 1 补足），单条 1–6 次、最多 4 种词条；同盘副词条不能与主词条相同。
+            同名词条的全局上限 =（6 − 主词条占用盘数）× 6：例如 4 号位主词条为异常精通时，异常精通副词条上限 30 条。
           </p>
         </section>
       </div>
@@ -445,6 +502,7 @@ const summaryStats = computed(() =>
             <ul>
               <li v-for="row in effective.rows" :key="row.id">
                 <span>{{ row.label }} × {{ row.rolls }}</span>
+                <small class="cap">上限 {{ maxRollsFor(row.id, substats, mains) }}</small>
                 <em :class="`sub__tier--${row.tier}`">{{ tierLabel(row.id) }}</em>
               </li>
             </ul>
@@ -1220,6 +1278,12 @@ const summaryStats = computed(() =>
   color: var(--muted);
 }
 
+.disc__main {
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.4;
+}
+
 .disc__head .num.is-over {
   color: var(--danger);
 }
@@ -1239,6 +1303,12 @@ const summaryStats = computed(() =>
   background: var(--surface);
   color: var(--text);
   font: inherit;
+  font-size: var(--fs-12);
+}
+
+.cap {
+  margin-left: auto;
+  color: var(--text-disabled);
   font-size: var(--fs-12);
 }
 

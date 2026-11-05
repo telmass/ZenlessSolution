@@ -7,12 +7,14 @@ import {
   discRolls,
   emptyDiscs,
   fromCounts,
+  maxRollsFor,
   toCounts,
   totalRolls,
   validateDiscs,
   type Disc,
 } from '@/core/panel/discs'
 import { substats } from '@/core/panel/data'
+import type { MainStatInfo } from '@/core/panel/discs'
 
 const PHOENIX_54 = {
   anomaly_proficiency: 30,
@@ -28,6 +30,13 @@ const PHOENIX_30 = {
   atk_flat: 1,
 }
 
+// 4 号位异常精通 / 5 号位属性伤害 / 6 号位异常掌控
+const MAINS: MainStatInfo[] = [
+  { slot: 4, stat: 'anomalyProficiency', kind: 'flat' },
+  { slot: 5, stat: 'dmgBonus', kind: 'flat' },
+  { slot: 6, stat: 'anomalyMastery', kind: 'pct' },
+]
+
 describe('per-disc substat allocation', () => {
   it('starts with six empty discs', () => {
     const discs = emptyDiscs()
@@ -37,7 +46,7 @@ describe('per-disc substat allocation', () => {
   })
 
   it('round-trips the 54-roll graduation spec', () => {
-    const discs = fromCounts(PHOENIX_54)
+    const discs = fromCounts(PHOENIX_54, substats, MAINS)
     expect(totalRolls(discs)).toBe(54)
     expect(toCounts(discs)).toEqual(PHOENIX_54)
     for (const disc of discs) {
@@ -52,7 +61,7 @@ describe('per-disc substat allocation', () => {
   })
 
   it('round-trips the 30-roll reference', () => {
-    const discs = fromCounts(PHOENIX_30)
+    const discs = fromCounts(PHOENIX_30, substats, MAINS)
     expect(totalRolls(discs)).toBe(30)
     expect(toCounts(discs)).toEqual(PHOENIX_30)
     for (const disc of discs) expect(discRolls(disc)).toBeLessThanOrEqual(ROLLS_PER_DISC)
@@ -60,6 +69,36 @@ describe('per-disc substat allocation', () => {
 
   it('fails loudly when the aggregate cannot fit six discs', () => {
     expect(() => fromCounts({ anomaly_proficiency: 40 })).toThrow()
+  })
+
+  it('blocks a substat on the disc where it is the main stat', () => {
+    const discs = fromCounts(PHOENIX_54, substats, MAINS)
+    const slot4 = discs.find((disc) => disc.slot === 4)!
+    expect(slot4.lines.some((line) => line.id === 'anomaly_proficiency')).toBe(false)
+    for (const disc of discs) {
+      if (disc.slot === 4) continue
+      expect(disc.lines.some((line) => line.id === 'anomaly_proficiency')).toBe(true)
+    }
+  })
+
+  it('caps the same substat at (6 - main occurrences) * 6', () => {
+    expect(maxRollsFor('anomaly_proficiency', substats, MAINS)).toBe(30)
+    expect(maxRollsFor('atk_pct', substats, MAINS)).toBe(36)
+    const doubleAtkMain: MainStatInfo[] = [
+      ...MAINS,
+      { slot: 5, stat: 'atk', kind: 'pct' },
+      { slot: 6, stat: 'atk', kind: 'pct' },
+    ]
+    expect(maxRollsFor('atk_pct', substats, doubleAtkMain)).toBe(24)
+    expect(() => fromCounts({ anomaly_proficiency: 31 }, substats, MAINS)).toThrow()
+  })
+
+  it('rejects a substat that duplicates the disc main stat', () => {
+    const discs = emptyDiscs()
+    discs[3].lines.push({ id: 'anomaly_proficiency', rolls: 6 })
+    expect(validateDiscs(discs, substats, MAINS).some((error) => error.includes('与主词条重复'))).toBe(
+      true,
+    )
   })
 
   it('validates per-disc limits', () => {
