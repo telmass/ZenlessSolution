@@ -162,7 +162,7 @@ const requested = computed(() =>
       @navigate="scrollToSection"
     />
 
-    <main id="content" class="container agent-body" tabindex="-1">
+    <div id="content" class="container agent-body" tabindex="-1">
       <section id="overview" class="chapter chapter--overview" aria-labelledby="overview-title">
         <h2 id="overview-title" class="sr-only">概览</h2>
         <OverviewSection :agent="agent" />
@@ -183,7 +183,6 @@ const requested = computed(() =>
           index="03"
           title="影画"
           title-id="cinemas-title"
-          :lede="AGENT_SECTIONS[2].lede"
         />
         <CinemasSection :agent="agent" />
       </section>
@@ -217,10 +216,17 @@ const requested = computed(() =>
         />
         <DamageSection :agent="agent" />
       </section>
-    </main>
+    </div>
 
     <Transition name="fade">
-      <button v-if="showTop" class="to-top" aria-label="回到顶部" @click="toTop">↑</button>
+      <button
+        v-if="showTop && active !== 'build'"
+        class="to-top"
+        aria-label="回到顶部"
+        @click="toTop"
+      >
+        ↑
+      </button>
     </Transition>
   </div>
 
@@ -228,10 +234,10 @@ const requested = computed(() =>
     <p class="eyebrow">Agent · Locked</p>
     <h1>{{ requested ? `「${requested.name}」未开放` : '该代理人尚未接入' }}</h1>
     <p v-if="requested">
-      {{ requested.fullName }} 已在图鉴中登记，但完整档案仍在施工中。
+      {{ requested.fullName }} 已在图鉴中登记，但完整档案尚未开放。
       当前先行开放的是菲欧妮。
     </p>
-    <p v-else>当前先行开放的是菲欧妮，其余代理人会在数据管线跑通后陆续开放。</p>
+    <p v-else>当前先行开放的是菲欧妮，其余代理人会在数据补齐后陆续开放。</p>
     <div class="empty__actions">
       <RouterLink to="/agents" class="empty__link">返回代理人图鉴 →</RouterLink>
       <RouterLink v-if="requested" to="/agents/phoenix" class="empty__link">
@@ -254,7 +260,7 @@ const requested = computed(() =>
   padding: 10px 16px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 600;
   transition: top var(--dur-fast) var(--ease-out);
 }
@@ -282,13 +288,15 @@ const requested = computed(() =>
   z-index: 45;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   background: rgba(16, 16, 21, 0.9);
   color: var(--text-2);
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: var(--fs-22);
   backdrop-filter: blur(8px);
-  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .to-top:hover {
@@ -313,18 +321,24 @@ const requested = computed(() =>
 .empty h1 {
   margin: 14px 0 10px;
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: var(--fs-36);
+  line-height: var(--lh-title);
 }
 
 .empty p {
-  max-width: 46ch;
+  max-width: var(--measure);
   color: var(--muted);
+  font-size: var(--fs-16);
+  line-height: 1.7;
 }
 
 .empty__link {
-  display: inline-block;
-  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: var(--s4);
   color: var(--accent);
+  font-size: var(--fs-14);
 }
 
 .empty__link + .empty__link {

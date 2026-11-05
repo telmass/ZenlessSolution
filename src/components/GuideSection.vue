@@ -327,21 +327,6 @@ function graduationLabel(item: GuideGraduation): string {
         </article>
       </div>
     </section>
-
-    <section class="block block--sources">
-      <h3>数据来源</h3>
-      <div class="sources">
-        <a
-          v-for="source in agent.sources"
-          :key="source.url"
-          :href="source.url"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {{ source.label }} <span aria-hidden="true">↗</span>
-        </a>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -969,22 +954,6 @@ function graduationLabel(item: GuideGraduation): string {
 }
 
 /* sources */
-.sources {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 18px;
-}
-
-.sources a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  color: var(--accent);
-  font-size: var(--fs-14);
-  border-bottom: 1px solid rgba(240, 223, 78, 0.35);
-}
-
 @media (max-width: 1080px) {
   .priority {
     grid-template-columns: repeat(3, minmax(0, 1fr));

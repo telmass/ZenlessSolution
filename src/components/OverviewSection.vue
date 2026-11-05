@@ -28,12 +28,7 @@ const stats = computed(() => [
   { label: '穿透率', value: props.agent.base.penRatio, unit: '%' },
   { label: '能量自动回复', value: props.agent.base.energyRegen * 100, unit: '%' },
 ])
-
-const keyLevels = computed(() =>
-  props.agent.cinemas.filter((cinema) => cinema.keyLevel).map((cinema) => `L${cinema.level}`),
-)
 </script>
-
 <template>
   <div class="overview">
     <div class="overview__grid">
@@ -61,10 +56,6 @@ const keyLevels = computed(() =>
             <dd>{{ agent.rarity }}</dd>
           </div>
         </dl>
-        <p class="dossier__intro">{{ agent.intro }}</p>
-        <ul class="dossier__tags">
-          <li v-for="tag in agent.tags" :key="tag" class="tag">{{ tag }}</li>
-        </ul>
       </section>
 
       <section class="stats">
@@ -128,17 +119,9 @@ const keyLevels = computed(() =>
               <dd class="num">掌控 +{{ bonus.ac }} / 基础攻击 +{{ bonus.atkBase }}</dd>
             </div>
           </dl>
-          <p class="core__hint">
-            文本为 F 级描述，切换等级后以右侧数值为准。A/C/E 提供异常掌控，B/D/F 提供基础攻击力。
-          </p>
         </aside>
       </div>
     </section>
-
-    <div class="key-link">
-      <span>关键影画 {{ keyLevels.join(' / ') }}</span>
-      <a href="#cinemas">查看影画 →</a>
-    </div>
   </div>
 </template>
 
@@ -159,7 +142,7 @@ const keyLevels = computed(() =>
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .dossier__list {
@@ -183,21 +166,7 @@ const keyLevels = computed(() =>
 .dossier__list dd {
   margin: 0;
   color: var(--text-2);
-  font-size: var(--fs-13);
-}
-
-.dossier__intro {
-  margin-top: var(--s5);
-  color: var(--text-2);
-  font-size: var(--fs-15);
-  line-height: 1.82;
-}
-
-.dossier__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: var(--s4);
+  font-size: var(--fs-14);
 }
 
 .stats__head {
@@ -210,7 +179,7 @@ const keyLevels = computed(() =>
 .stats__head span {
   color: var(--muted);
   font-size: var(--fs-12);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
 .stats__grid {
@@ -242,9 +211,10 @@ const keyLevels = computed(() =>
 }
 
 .stats__note {
+  max-width: var(--measure-wide);
   margin-top: var(--s4);
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   line-height: 1.7;
 }
 
@@ -264,7 +234,7 @@ const keyLevels = computed(() =>
 .core__kicker {
   color: var(--muted);
   font-size: var(--fs-12);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
 .core__head h3 {
@@ -272,7 +242,7 @@ const keyLevels = computed(() =>
   font-family: var(--font-display);
   font-size: var(--fs-28);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .core__levels {
@@ -281,18 +251,21 @@ const keyLevels = computed(() =>
 }
 
 .core__level {
-  width: 34px;
-  height: 30px;
-  border: 1px solid var(--line-strong);
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--muted);
   font-family: var(--font-display);
-  font-size: var(--fs-12);
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  font-size: var(--fs-14);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 .core__level:hover {
   color: var(--text);
+  border-color: var(--text-2);
 }
 
 .core__level.is-active {
@@ -315,7 +288,7 @@ const keyLevels = computed(() =>
 .core__scaling-title {
   color: var(--accent);
   font-size: var(--fs-12);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
 .core__scaling dl {
@@ -328,7 +301,7 @@ const keyLevels = computed(() =>
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s3);
-  padding: 9px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -340,35 +313,8 @@ const keyLevels = computed(() =>
 .core__scaling dd {
   margin: 0;
   color: var(--text);
-  font-size: var(--fs-15);
+  font-size: var(--fs-18);
   font-weight: 600;
-}
-
-.core__hint {
-  margin-top: var(--s4);
-  color: var(--muted);
-  font-size: var(--fs-11);
-  line-height: 1.75;
-}
-
-.key-link {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s4);
-  padding-top: var(--s4);
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: var(--fs-13);
-}
-
-.key-link a {
-  color: var(--accent);
-  border-bottom: 1px solid rgba(240, 223, 78, 0.3);
-}
-
-.key-link a:hover {
-  border-color: var(--accent);
 }
 
 @media (max-width: 980px) {
@@ -383,13 +329,37 @@ const keyLevels = computed(() =>
 }
 
 @media (max-width: 560px) {
-  .stats__grid {
-    grid-template-columns: 1fr;
+  .overview__grid {
+    gap: var(--s6);
   }
 
   .core__head {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .core__level {
+    width: 44px;
+    height: 44px;
+  }
+
+  .stats__grid {
+    column-gap: var(--s4);
+  }
+
+  .stats__row {
+    gap: var(--s2);
+  }
+
+  .core__scaling {
+    max-width: 420px;
+  }
+
+  .key-link a {
+    display: inline-flex;
+    align-items: flex-start;
+    min-height: 44px;
+    padding-top: 8px;
   }
 }
 </style>

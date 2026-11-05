@@ -48,11 +48,6 @@ const groups = computed<CinemaGroup[]>(() => {
         aria-hidden="true"
       />
 
-      <div class="cinema-group__head">
-        <span class="cinema-group__label">意象影画 {{ group.showcase }}</span>
-        <span class="cinema-group__range">L{{ group.first }} – L{{ group.last }}</span>
-      </div>
-
       <ol class="cinema-list">
         <li
           v-for="cinema in group.items"
@@ -130,32 +125,6 @@ const groups = computed<CinemaGroup[]>(() => {
   );
 }
 
-.cinema-group__head {
-  position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: var(--s3);
-  padding: var(--s4) 0 var(--s2);
-}
-
-.cinema-group:first-child .cinema-group__head {
-  padding-top: 0;
-}
-
-.cinema-group__label {
-  color: var(--text-2);
-  font-family: var(--font-display);
-  font-size: var(--fs-11);
-  letter-spacing: 0.14em;
-  text-shadow: 0 1px 8px rgba(7, 7, 9, 0.9);
-}
-
-.cinema-group__range {
-  color: var(--line-strong);
-  font-size: var(--fs-11);
-  letter-spacing: 0.08em;
-}
-
 .cinema-list {
   position: relative;
   display: grid;
@@ -194,7 +163,7 @@ const groups = computed<CinemaGroup[]>(() => {
   min-width: 56px;
   height: 56px;
   background: var(--bg);
-  color: var(--line-strong);
+  color: var(--muted);
   font-size: var(--fs-28);
   font-weight: 700;
   line-height: 1;
@@ -219,7 +188,7 @@ const groups = computed<CinemaGroup[]>(() => {
 }
 
 .cinema__body {
-  max-width: 92ch;
+  max-width: var(--measure-wide);
   padding-top: 2px;
 }
 
@@ -233,20 +202,21 @@ const groups = computed<CinemaGroup[]>(() => {
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .cinema__key {
   padding: 1px 6px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .cinema__effect {
   margin-top: var(--s2);
+  font-size: var(--fs-14);
 }
 
 .cinema__story {
@@ -256,15 +226,16 @@ const groups = computed<CinemaGroup[]>(() => {
 
 .cinema__story-label {
   color: var(--muted);
-  font-size: var(--fs-11);
-  letter-spacing: 0.12em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .cinema__story p {
+  max-width: var(--measure);
   margin-top: 6px;
   color: var(--muted);
-  font-size: var(--fs-12);
-  line-height: 1.9;
+  font-size: var(--fs-14);
+  line-height: 1.85;
   white-space: pre-line;
 }
 

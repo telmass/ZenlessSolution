@@ -342,9 +342,9 @@ async function copyMarkdown() {
             <tr>
               <th>音擎</th>
               <th>局内 effect</th>
-              <th>单次异放</th>
-              <th>轴总伤</th>
-              <th>相对专武</th>
+              <th class="num">单次异放</th>
+              <th class="num">轴总伤</th>
+              <th class="num">相对专武</th>
             </tr>
           </thead>
           <tbody>
@@ -474,8 +474,8 @@ async function copyMarkdown() {
 
 .damage-axis {
   color: var(--muted);
-  font-size: var(--fs-11);
-  letter-spacing: 0.12em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .damage-enemy {
@@ -484,17 +484,18 @@ async function copyMarkdown() {
   gap: 8px;
   flex-shrink: 0;
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .damage-enemy select {
+  min-height: 40px;
   padding: 7px 10px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .damage-presets {
@@ -505,17 +506,23 @@ async function copyMarkdown() {
 
 .damage-chip,
 .damage-copy {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   padding: 7px 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--muted);
-  font-size: var(--fs-12);
-  transition: all var(--dur-fast) var(--ease-out);
+  font-size: var(--fs-14);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 }
 
 .damage-chip:hover,
 .damage-copy:hover {
-  border-color: var(--line-strong);
+  border-color: var(--text-2);
   color: var(--text);
 }
 
@@ -528,7 +535,7 @@ async function copyMarkdown() {
 
 .damage-copy {
   margin-left: auto;
-  border-color: var(--line-strong);
+  border-color: var(--line-control);
 }
 
 .damage-single {
@@ -551,7 +558,7 @@ async function copyMarkdown() {
 .damage-kicker {
   display: block;
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   letter-spacing: 0.08em;
 }
 
@@ -560,7 +567,7 @@ async function copyMarkdown() {
   margin-top: 2px;
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: var(--fs-36);
+  font-size: var(--fs-52);
   font-weight: 700;
   line-height: 1;
 }
@@ -571,11 +578,14 @@ async function copyMarkdown() {
 }
 
 .damage-modes button {
-  padding: 4px 9px;
-  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-14);
 }
 
 .damage-modes button.is-active {
@@ -587,7 +597,7 @@ async function copyMarkdown() {
 
 .damage-meta {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   line-height: 1.7;
 }
 
@@ -595,34 +605,41 @@ async function copyMarkdown() {
   width: 100%;
   overflow-x: auto;
   border: 1px solid var(--line);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .damage-table {
   width: 100%;
   min-width: 680px;
   border-collapse: collapse;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .damage-table th,
 .damage-table td {
-  padding: 9px 12px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--line);
   text-align: left;
   white-space: nowrap;
 }
 
+.damage-table th.num,
+.damage-table td.num {
+  text-align: right;
+}
+
 .damage-table thead th {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   font-weight: 500;
 }
 
 .damage-table thead th small {
   display: block;
   margin-top: 2px;
-  color: var(--line-strong);
-  font-size: 9px;
+  color: var(--muted);
+  font-size: var(--fs-12);
   font-weight: 400;
 }
 
@@ -635,7 +652,7 @@ async function copyMarkdown() {
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--fs-12);
   font-weight: 400;
 }
 
@@ -654,7 +671,7 @@ async function copyMarkdown() {
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--fs-12);
   font-style: normal;
 }
 
@@ -673,13 +690,14 @@ async function copyMarkdown() {
 
 .damage-engines__head h3 {
   font-family: var(--font-display);
-  font-size: var(--fs-18);
+  font-size: var(--fs-22);
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .damage-engines__head span {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .damage-engines .damage-table {
@@ -688,18 +706,20 @@ async function copyMarkdown() {
 
 .effect-cell {
   color: var(--text-2) !important;
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .damage-attribution h3 {
   font-family: var(--font-display);
-  font-size: var(--fs-18);
+  font-size: var(--fs-22);
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .damage-steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--s6);
   border-top: 1px solid var(--line);
 }
 
@@ -708,19 +728,19 @@ async function copyMarkdown() {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px 10px 0;
+  padding: 12px 12px 12px 0;
   border-bottom: 1px solid var(--line);
 }
 
 .damage-steps span {
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
 }
 
 .damage-steps b {
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: var(--fs-22);
+  font-size: var(--fs-28);
   font-weight: 600;
 }
 
@@ -729,8 +749,11 @@ async function copyMarkdown() {
 }
 
 .damage-events summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   cursor: pointer;
 }
 
@@ -747,12 +770,30 @@ async function copyMarkdown() {
     align-items: flex-start;
   }
 
+  .damage-single b {
+    font-size: var(--fs-36);
+  }
+
   .damage-steps {
     grid-template-columns: 1fr;
   }
 
   .damage-copy {
     margin-left: 0;
+  }
+
+  .damage-chip,
+  .damage-copy,
+  .damage-enemy select {
+    min-height: 44px;
+  }
+
+  .damage-modes button {
+    min-height: 44px;
+  }
+
+  .damage-events summary {
+    min-height: 44px;
   }
 }
 </style>
