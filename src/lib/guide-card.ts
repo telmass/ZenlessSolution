@@ -43,6 +43,26 @@ function drawContain(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: 
   ctx.drawImage(image, x + (w - width) / 2, y + (h - height) / 2, width, height)
 }
 
+function drawFullBody(ctx: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, w: number, h: number) {
+  // 全身立绘的翼展很宽；横向裁到角色主体，纵向保留完整身高。
+  const cropW = image.width * 0.66
+  const cropX = (image.width - cropW) / 2
+  const ratio = Math.min(w / cropW, h / image.height)
+  const width = cropW * ratio
+  const height = image.height * ratio
+  ctx.drawImage(
+    image,
+    cropX,
+    0,
+    cropW,
+    image.height,
+    x + (w - width) / 2,
+    y + (h - height) / 2,
+    width,
+    height,
+  )
+}
+
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   const radius = Math.min(r, w / 2, h / 2)
   ctx.beginPath()
@@ -131,6 +151,7 @@ function effectiveLine(panel: GuideGraduation): string {
 }
 
 function drawPortrait(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap) {
+  const full = images.get(agent.assets.full)
   const tachie = images.get(agent.assets.tachie)
   const avatar = images.get(agent.assets.avatar)
   const x = 48
@@ -142,7 +163,8 @@ function drawPortrait(ctx: CanvasRenderingContext2D, agent: Agent, images: Image
   roundRect(ctx, x, y, w, h, 22)
   ctx.fill()
 
-  if (tachie) drawContain(ctx, tachie, x + 8, y + 8, w - 16, h - 16)
+  if (full) drawFullBody(ctx, full, x + 8, y + 8, w - 16, h - 16)
+  else if (tachie) drawContain(ctx, tachie, x + 8, y + 8, w - 16, h - 16)
   else if (avatar) drawContain(ctx, avatar, x + 70, y + 110, w - 140, w - 140)
 
   ctx.font = font(42, 700, DISPLAY)
@@ -405,6 +427,7 @@ function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap)
 export async function renderGuideCard(agent: Agent, scale = 2): Promise<Blob> {
   if (document.fonts) await document.fonts.ready
   const keys = new Set<string>()
+  keys.add(agent.assets.full)
   keys.add(agent.assets.tachie)
   keys.add(agent.assets.avatar)
   for (const tier of agent.guide.weapons) for (const item of tier.items) keys.add(item.icon)
