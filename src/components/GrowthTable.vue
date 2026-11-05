@@ -82,9 +82,9 @@ const levelCount = computed(() => props.table.levels.length)
 .growth__group h4 {
   margin-bottom: 6px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -97,43 +97,43 @@ const levelCount = computed(() => props.table.levels.length)
   justify-content: space-between;
   gap: 16px;
   padding: 9px 2px;
-  border-bottom: 1px solid rgba(38, 38, 49, 0.6);
+  border-bottom: 1px solid var(--line);
 }
 
 .growth__group dt {
   color: var(--text-2);
-  font-size: 13px;
+  font-size: var(--fs-14);
 }
 
 .growth__group dd {
   margin: 0;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--fs-16);
   font-weight: 600;
 }
 
 .growth__empty {
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-14);
 }
 
 .matrix {
   overflow: auto;
   max-height: 520px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 0;
 }
 
 .matrix table {
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--fs-14);
   white-space: nowrap;
 }
 
 .matrix th,
 .matrix td {
   padding: 7px 10px;
-  border-bottom: 1px solid rgba(38, 38, 49, 0.55);
+  border-bottom: 1px solid var(--line);
   text-align: right;
 }
 
@@ -167,12 +167,12 @@ const levelCount = computed(() => props.table.levels.length)
   background: transparent;
   color: var(--accent);
   text-align: left;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.12em;
 }
 
 .matrix .is-active {
-  background: rgba(242, 225, 76, 0.1);
+  background: var(--accent-soft);
   color: var(--accent);
 }
 </style>

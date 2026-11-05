@@ -10,7 +10,7 @@ const props = defineProps<{
 }>()
 
 const isOpen = computed(() => props.agent.available)
-const tint = computed(() => (isOpen.value ? mediaColor(props.agent.avatar) : '#2c2c36'))
+const tint = computed(() => (isOpen.value ? mediaColor(props.agent.avatar) : 'var(--surface-3)'))
 const label = computed(() => `#${String(props.index + 1).padStart(2, '0')}`)
 const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').slice(0, 1))
 </script>
@@ -23,7 +23,7 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
     :class="isOpen ? 'agent-card--open' : 'agent-card--locked'"
     :style="{ '--tint': tint }"
     :aria-disabled="isOpen ? undefined : 'true'"
-    :title="isOpen ? undefined : `${agent.name} · 未开放（施工中）`"
+    :title="isOpen ? undefined : `${agent.name} · 未开放`"
   >
     <div class="agent-card__media">
       <span class="agent-card__rank num">{{ agent.rarity }}</span>
@@ -63,9 +63,6 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
       </div>
       <p class="agent-card__full">{{ agent.fullName }}</p>
       <p class="agent-card__faction">{{ agent.faction }}</p>
-      <p class="agent-card__note" :class="{ 'agent-card__note--open': isOpen }">
-        {{ isOpen ? '完整档案已开放' : '施工中 · 暂不可进入' }}
-      </p>
     </div>
   </component>
 </template>
@@ -78,22 +75,29 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  transition: transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+  border-radius: 0;
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
 }
 
 .agent-card--open:hover {
   transform: translateY(-3px);
-  border-color: var(--line-strong);
+  border-color: var(--line-control);
+}
+
+.agent-card--open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .agent-card--locked {
-  border-color: #1d1d24;
+  border-color: var(--line);
   cursor: default;
 }
 
 .agent-card--locked:hover {
-  border-color: #2b2b35;
+  border-color: var(--line-control);
 }
 
 .agent-card__media {
@@ -117,7 +121,7 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
       rgba(243, 241, 234, 0.014) 0 1px,
       transparent 1px 9px
     ),
-    linear-gradient(180deg, #121217, #0d0d11);
+    linear-gradient(180deg, var(--surface-2), var(--surface));
 }
 
 .agent-card__media::after {
@@ -162,14 +166,14 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   height: 26px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: 13px;
-  font-weight: 800;
+  font-size: var(--fs-14);
+  font-weight: 700;
   clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
 }
 
 .agent-card--locked .agent-card__rank {
-  background: #24242d;
-  color: #77746c;
+  background: var(--surface-3);
+  color: var(--muted);
 }
 
 .agent-card__index {
@@ -178,7 +182,7 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   right: 8px;
   z-index: 0;
   color: rgba(243, 241, 234, 0.055);
-  font-size: 46px;
+  font-size: var(--fs-36);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -194,12 +198,12 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   bottom: 9px;
   z-index: 2;
   color: var(--text-2);
-  font-size: var(--fs-11);
-  letter-spacing: 0.12em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .agent-card--locked .agent-card__element {
-  color: #77746c;
+  color: var(--muted);
 }
 
 .agent-card__floor {
@@ -221,8 +225,8 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   padding: 1px 6px;
   border: 1px solid rgba(240, 223, 78, 0.42);
   color: var(--accent);
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 .agent-card__frame {
@@ -280,7 +284,7 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   place-items: center;
   color: rgba(243, 241, 234, 0.065);
   font-family: var(--font-display);
-  font-size: clamp(64px, 6vw, 88px);
+  font-size: clamp(var(--fs-36), 6vw, var(--fs-72));
   font-weight: 700;
   line-height: 1;
   user-select: none;
@@ -294,7 +298,7 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   display: grid;
   justify-items: center;
   gap: 7px;
-  padding: 13px 17px;
+  padding: 12px 16px;
   border: 1px solid rgba(243, 241, 234, 0.12);
   background: rgba(7, 7, 9, 0.62);
   transform: translate(-50%, -50%);
@@ -306,28 +310,28 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
   place-items: center;
   width: 22px;
   height: 22px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   color: var(--muted);
-  font-size: 15px;
+  font-size: var(--fs-16);
   font-weight: 400;
   line-height: 1;
 }
 
 .agent-card__locked em {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   font-style: normal;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   line-height: 1;
 }
 
 .agent-card__body {
-  padding: 9px 11px 10px;
+  padding: 10px 12px 12px;
   border-top: 1px solid var(--line);
 }
 
 .agent-card--locked .agent-card__body {
-  border-top-color: #1d1d24;
+  border-top-color: var(--line);
 }
 
 .agent-card__name {
@@ -338,11 +342,13 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
 }
 
 .agent-card__name h2 {
+  min-width: 0;
+  overflow-wrap: break-word;
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
 }
 
 .agent-card--locked .agent-card__name h2 {
@@ -350,17 +356,18 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
 }
 
 .agent-card__name span {
+  flex-shrink: 0;
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.04em;
 }
 
 .agent-card__full {
   margin-top: 2px;
   overflow: hidden;
   color: var(--muted);
-  font-size: 9.5px;
-  letter-spacing: 0.05em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.02em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -368,33 +375,37 @@ const initial = computed(() => props.agent.name.replace(/^[「『【\s]+/, '').s
 .agent-card__faction {
   margin-top: 1px;
   color: var(--muted);
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  opacity: 0.72;
+  font-size: var(--fs-12);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
 }
 
 .agent-card--locked .agent-card__full,
 .agent-card--locked .agent-card__faction {
-  color: #77746c;
+  color: var(--muted);
 }
 
-.agent-card__note {
-  margin-top: 7px;
-  padding-top: 6px;
-  border-top: 1px dashed #24242c;
-  color: #77746c;
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-}
+@media (max-width: 640px) {
+  .agent-card__body {
+    padding: 8px 10px 10px;
+  }
 
-.agent-card__note--open {
-  border-top-color: rgba(240, 223, 78, 0.28);
-  color: var(--accent);
+  .agent-card__element {
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .agent-card__state {
+    left: 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .agent-card--open:hover {
+    transform: none;
+  }
+
+  .agent-card--open:hover .agent-card__media img {
     transform: none;
   }
 }

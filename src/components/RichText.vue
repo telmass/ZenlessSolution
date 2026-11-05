@@ -38,8 +38,13 @@ const parsed = computed(() => lines.value.map(segments))
   display: grid;
   gap: 8px;
   color: var(--text-2);
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: inherit;
+  line-height: 1.7;
+}
+
+.rich p {
+  max-width: var(--rich-measure, var(--measure));
+  overflow-wrap: break-word;
 }
 
 .rich__tag {

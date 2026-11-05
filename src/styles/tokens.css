@@ -7,20 +7,30 @@
   --surface-3: #1b1b23;
   --line: #23232c;
   --line-strong: #3a3a45;
+  /* Control borders: 3.1:1 on --surface-2, 3.4:1 on --bg (WCAG 1.4.11). */
+  --line-control: #646472;
 
-  /* ink */
-  --text: #f3f1ea;
-  --text-2: #c3c0b6;
-  --muted: #8f8c82;
+  /* ink — exactly three text levels, all >= 4.5:1 on every surface */
+  --text: #f3f1ea; /* 16.8:1 on surface */
+  --text-2: #c3c0b6; /* 10.4:1 */
+  --muted: #8f8c82; /* 5.6:1 */
+  /* Disabled/decorative only — never the sole carrier of information. */
+  --text-disabled: #6f6c64;
 
   /* accent */
   --accent: #f0df4e;
+  --accent-hover: #fff06a;
   --accent-soft: rgba(240, 223, 78, 0.1);
+  --accent-glow: rgba(240, 223, 78, 0.35);
   --accent-ink: #141308;
   --fire: #ff6a3d;
   --fire-soft: rgba(255, 106, 61, 0.12);
+  --fire-ink: #ffb59d;
   --danger: #ff5a5f;
+  --danger-ink: #ffb3b4;
   --ok: #5cd6a3;
+  --info: #8fb7ff;
+  --rank-a: #c7a8ff;
 
   /* shape */
   --radius-sm: 2px;
@@ -31,6 +41,7 @@
 
   /* layout */
   --maxw: 1400px;
+  --maxw-detail: 1080px;
   --header-h: 64px;
   --chapter-nav-h: 52px;
   --anchor-offset: calc(var(--header-h) + var(--chapter-nav-h) + 16px);
@@ -50,22 +61,28 @@
   --s11: 96px;
   --s12: 120px;
 
-  /* type */
-  --fs-11: 0.6875rem;
+  /* type — one hand-picked scale: 12 14 16 18 22 28 36 52 72 */
   --fs-12: 0.75rem;
-  --fs-13: 0.8125rem;
-  --fs-15: 0.9375rem;
+  --fs-14: 0.875rem;
   --fs-16: 1rem;
   --fs-18: 1.125rem;
   --fs-22: 1.375rem;
   --fs-28: 1.75rem;
   --fs-36: 2.25rem;
   --fs-52: 3.25rem;
-  --fs-72: clamp(3.25rem, 5.2vw, 4.5rem);
-  --lh-tight: 1.04;
+  --fs-72: 4.5rem;
+
+  /* line height — inversely proportional to size, grows with measure */
+  --lh-display: 1.02;
+  --lh-tight: 1.08;
+  --lh-title: 1.08;
   --lh-snug: 1.24;
-  --lh-body: 1.72;
-  --measure: 64ch;
+  --lh-ui: 1.55;
+  --lh-body: 1.75;
+
+  /* measure — 34em ≈ 34 full-width chars / 68 Latin chars */
+  --measure: 34em;
+  --measure-wide: 40em;
 
   /* motion */
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -74,5 +91,6 @@
 
   /* type families */
   --font-display: "Barlow Condensed", "Bahnschrift", "DIN Alternate", "Noto Sans SC", sans-serif;
-  --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-sans: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui,
+    -apple-system, sans-serif;
 }

@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 defineProps<{
   index: string
   title: string
@@ -20,17 +20,24 @@ defineProps<{
 <style scoped>
 .chapter-head__body h2 {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: clamp(var(--fs-28), 2.6vw, var(--fs-36));
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
+  line-height: var(--lh-title);
 }
 
 .chapter-head__body p {
   max-width: var(--measure);
   margin-top: var(--s3);
   color: var(--muted);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .chapter-head__body p {
+    font-size: var(--fs-14);
+  }
 }
 </style>
 

@@ -9,6 +9,7 @@ import { media, mediaColor } from '@/lib/media'
 
 const agent = phoenix as unknown as Agent
 const agents = agentIndex as unknown[]
+const openAgents = (agentIndex as { available?: boolean }[]).filter((item) => item.available).length
 const counts = {
   agents: agents.length,
   engines: (engineIndex as unknown[]).length,
@@ -21,7 +22,7 @@ const counts = {
   <div class="home">
     <section class="masthead container">
       <div class="masthead__copy">
-        <p class="eyebrow">Zenless Solution · Preview 0.1</p>
+        <p class="eyebrow">Zenless Solution</p>
         <h1>
           代理人、图鉴与配装
           <span>一页查完。</span>
@@ -89,7 +90,7 @@ const counts = {
     <section class="home-section container">
       <header class="section-head">
         <h2>快速入口</h2>
-        <span>Index</span>
+        <span>4 个入口</span>
       </header>
 
       <div class="directory">
@@ -131,7 +132,7 @@ const counts = {
       <div class="dossier">
         <header class="section-head">
           <h2>菲欧妮 · 当前复刻</h2>
-          <span>Vertical slice</span>
+          <span>菲欧妮 · 5 章</span>
         </header>
 
         <p class="dossier__lede">
@@ -171,7 +172,7 @@ const counts = {
       <aside class="tools">
         <header class="section-head">
           <h2>工具</h2>
-          <span>Tools</span>
+          <span>2 个工具</span>
         </header>
 
         <RouterLink to="/agents/phoenix#build" class="tool">
@@ -182,13 +183,8 @@ const counts = {
         <RouterLink to="/agents/phoenix#guide" class="tool">
           <span class="tool__state">41 + 12 + 1</span>
           <b>有效词条</b>
-          <small>异常精通 / 攻击力% 口径</small>
+          <small>异常精通 / 攻击力%</small>
         </RouterLink>
-        <div class="tool is-soon">
-          <span class="tool__state">soon</span>
-          <b>0+1 配置对比</b>
-          <small>伤害引擎接入后开放</small>
-        </div>
       </aside>
     </section>
 
@@ -202,72 +198,74 @@ const counts = {
         <b class="num">{{ counts.agents + counts.engines + counts.sets + counts.bangboo }}</b>
       </div>
       <div>
-        <span>建设进度</span>
-        <b class="num">5 / 7</b>
+        <span>已接入</span>
+        <b class="num">{{ openAgents }} / {{ counts.agents }}</b>
       </div>
-      <p>下一步：0+1 配置对比、其余代理人接入。</p>
     </section>
   </div>
 </template>
 
 <style scoped>
 .home {
-  padding-bottom: var(--s10);
+  padding-bottom: 0;
 }
 
 /* masthead */
 .masthead {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) 360px;
-  gap: clamp(32px, 5vw, 76px);
+  gap: clamp(32px, 5vw, 72px);
   align-items: center;
-  padding: 52px 0 48px;
+  padding: var(--s8) 0;
   border-bottom: 1px solid var(--line);
 }
 
 .masthead__copy h1 {
-  margin: 16px 0 0;
+  margin: var(--s4) 0 0;
   font-family: var(--font-display);
-  font-size: clamp(44px, 6vw, 78px);
-  font-weight: 800;
+  font-size: clamp(var(--fs-36), 5.6vw, var(--fs-72));
+  font-weight: 700;
   letter-spacing: 0.01em;
-  line-height: 0.96;
+  line-height: var(--lh-display);
 }
 
 .masthead__copy h1 span {
   display: block;
   margin-top: 10px;
   color: var(--muted);
-  font-size: 0.42em;
+  font-size: clamp(var(--fs-22), 2vw, var(--fs-28));
   font-weight: 400;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
 }
 
 .masthead__lede {
-  max-width: 50ch;
-  margin-top: 20px;
+  max-width: var(--measure);
+  margin-top: var(--s4);
   color: var(--text-2);
-  font-size: var(--fs-15);
-  line-height: 1.85;
+  font-size: var(--fs-16);
+  line-height: 1.8;
 }
 
 .masthead__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 28px;
+  margin-top: var(--s5);
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 11px 18px;
+  min-height: 44px;
+  padding: 10px 18px;
   border-radius: var(--radius-sm);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 600;
   letter-spacing: 0.04em;
-  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out),
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
 
@@ -282,11 +280,11 @@ const counts = {
 }
 
 .btn--primary:hover {
-  background: #fff06a;
+  background: var(--accent-hover);
 }
 
 .btn--ghost {
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   color: var(--text);
 }
 
@@ -298,16 +296,16 @@ const counts = {
 .masthead__ledger {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin: 36px 0 0;
-  padding-top: 18px;
+  gap: var(--s4);
+  margin: var(--s6) 0 0;
+  padding-top: var(--s4);
   border-top: 1px solid var(--line);
 }
 
 .masthead__ledger dt {
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.1em;
 }
 
 .masthead__ledger dd {
@@ -335,20 +333,20 @@ const counts = {
   padding: 10px 14px;
   border-bottom: 1px solid var(--line);
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.1em;
 }
 
 .spotlight__top b {
-  color: var(--line-strong);
+  color: var(--text-2);
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .spotlight__art {
   position: relative;
   flex: 1;
-  min-height: 280px;
+  min-height: 300px;
   background:
     radial-gradient(
       70% 52% at 50% 34%,
@@ -381,7 +379,7 @@ const counts = {
 }
 
 .spotlight__body {
-  padding: 14px 16px 16px;
+  padding: var(--s4);
   border-top: 1px solid var(--line);
 }
 
@@ -390,32 +388,33 @@ const counts = {
   font-family: var(--font-display);
   font-size: var(--fs-28);
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   line-height: 1.05;
 }
 
 .spotlight__body h2 span {
   margin-left: 6px;
   color: var(--accent);
-  font-size: 0.55em;
+  font-size: var(--fs-14);
   vertical-align: 0.25em;
 }
 
 .spotlight__body p:not(.eyebrow) {
   margin-top: 3px;
   color: var(--muted);
-  font-size: var(--fs-11);
-  letter-spacing: 0.06em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.04em;
 }
 
 .spotlight__link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
+  min-height: 32px;
+  margin-top: var(--s2);
   color: var(--accent);
-  font-size: var(--fs-12);
-  letter-spacing: 0.06em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.04em;
 }
 
 .spotlight__link:hover {
@@ -424,7 +423,7 @@ const counts = {
 
 /* shared section head */
 .home-section {
-  padding-top: 56px;
+  padding-top: var(--s9);
 }
 
 .section-head {
@@ -432,7 +431,7 @@ const counts = {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s4);
-  padding-bottom: 12px;
+  padding-bottom: var(--s3);
   border-bottom: 1px solid var(--line);
 }
 
@@ -440,56 +439,56 @@ const counts = {
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .section-head span {
   color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 /* directory */
 .directory {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 16px;
+  gap: var(--s4);
+  margin-top: var(--s4);
 }
 
 .entry {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 196px;
-  padding: 16px 16px 18px;
+  min-height: 180px;
+  padding: var(--s4);
   background: var(--surface);
   border: 1px solid var(--line);
-  transition: transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
 }
 
 .entry:hover {
   transform: translateY(-2px);
-  border-color: var(--line-strong);
+  border-color: var(--line-control);
 }
 
 .entry__index {
   position: absolute;
   top: 12px;
   right: 14px;
-  color: var(--line-strong);
-  font-size: var(--fs-11);
+  color: var(--muted);
+  font-size: var(--fs-12);
   letter-spacing: 0.08em;
 }
 
 .entry__count {
   color: var(--accent);
-  font-size: clamp(40px, 4.2vw, 58px);
+  font-size: var(--fs-36);
   font-weight: 700;
   letter-spacing: -0.01em;
-  line-height: 0.9;
+  line-height: 0.95;
 }
 
 .entry h3 {
@@ -497,23 +496,26 @@ const counts = {
   font-family: var(--font-display);
   font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .entry p {
   margin-top: 2px;
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
 }
 
 .entry__arrow {
   position: absolute;
   right: 14px;
   bottom: 16px;
-  color: var(--line-strong);
-  font-size: var(--fs-15);
-  transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  color: var(--muted);
+  font-size: var(--fs-16);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .entry:hover .entry__arrow {
@@ -526,28 +528,28 @@ const counts = {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: clamp(32px, 4vw, 64px);
-  padding-top: 56px;
+  padding-top: var(--s9);
 }
 
 .dossier__lede {
-  max-width: 58ch;
-  margin-top: 14px;
+  max-width: var(--measure);
+  margin-top: var(--s3);
   color: var(--text-2);
-  font-size: var(--fs-13);
+  font-size: var(--fs-16);
   line-height: 1.8;
 }
 
 .dossier__links {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin-top: 24px;
+  margin-top: var(--s5);
   border-top: 1px solid var(--line);
 }
 
 .dossier__link {
   display: grid;
   gap: 2px;
-  padding: 14px 12px 14px 0;
+  padding: var(--s3) 12px var(--s3) 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -558,18 +560,18 @@ const counts = {
 
 .dossier__link span {
   color: var(--accent);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 .dossier__link b {
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
 .dossier__link small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   line-height: 1.5;
 }
 
@@ -579,31 +581,31 @@ const counts = {
 
 /* tools */
 .tools {
-  padding-left: 24px;
+  padding-left: var(--s5);
   border-left: 1px solid var(--line);
 }
 
 .tools .section-head {
-  padding-bottom: 12px;
+  padding-bottom: var(--s3);
 }
 
 .tool {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 2px 12px;
-  padding: 13px 0;
+  padding: var(--s3) 0;
   border-bottom: 1px solid var(--line);
 }
 
 .tool b {
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
 .tool small {
   grid-column: 1;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   line-height: 1.5;
 }
 
@@ -613,12 +615,8 @@ const counts = {
   align-self: center;
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-}
-
-.tool.is-soon {
-  opacity: 0.5;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 a.tool:hover b {
@@ -630,9 +628,9 @@ a.tool:hover b {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 16px 40px;
-  margin-top: 56px;
-  padding-top: 18px;
+  gap: var(--s4) var(--s8);
+  margin-top: var(--s9);
+  padding-top: var(--s4);
   border-top: 1px solid var(--line);
 }
 
@@ -644,24 +642,15 @@ a.tool:hover b {
 
 .status span {
   color: var(--muted);
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .status b {
   font-family: var(--font-display);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.status p {
-  margin-left: auto;
-  max-width: 34ch;
-  color: var(--line-strong);
-  font-size: 10px;
-  line-height: 1.6;
-  text-align: right;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 1100px) {
@@ -671,7 +660,7 @@ a.tool:hover b {
 
   .tools {
     padding-left: 0;
-    padding-top: 32px;
+    padding-top: var(--s6);
     border-left: 0;
     border-top: 1px solid var(--line);
   }
@@ -710,24 +699,30 @@ a.tool:hover b {
 
 @media (max-width: 640px) {
   .masthead {
-    padding-top: 36px;
+    padding-top: var(--s6);
   }
 
   .masthead__ledger {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: var(--s3);
   }
 
   .directory {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s3);
+  }
+
+  .spotlight__link {
+    min-height: 44px;
   }
 
   .entry {
-    min-height: 160px;
+    min-height: 150px;
+    padding: var(--s3);
   }
 
   .workspace {
-    padding-top: 40px;
+    padding-top: var(--s8);
   }
 
   .dossier__links {
@@ -747,12 +742,6 @@ a.tool:hover b {
 
   .status {
     align-items: flex-start;
-  }
-
-  .status p {
-    margin-left: 0;
-    max-width: none;
-    text-align: left;
   }
 }
 

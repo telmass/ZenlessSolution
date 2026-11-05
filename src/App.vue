@@ -16,7 +16,6 @@ onErrorCaptured((error) => {
 
 <template>
   <div class="app">
-    <a class="skip-link" href="#content">跳到正文</a>
     <div v-show="navigation.pending" class="route-progress" aria-hidden="true"></div>
     <AppHeader />
 

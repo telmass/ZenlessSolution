@@ -84,6 +84,13 @@ function toggleRow(stat: StatId) {
 }
 
 const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
+
+const summaryStats = computed(() =>
+  keyStats.flatMap((id) => {
+    const row = result.value.breakdown.find((item) => item.stat === id)
+    return row ? [row] : []
+  }),
+)
 </script>
 
 <template>
@@ -103,6 +110,14 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           {{ preset.label }}
         </button>
       </div>
+    </div>
+
+    <div class="panel-summary" aria-label="关键面板">
+      <div v-for="stat in summaryStats" :key="stat.stat" class="panel-summary__item">
+        <span>{{ stat.label }}</span>
+        <b class="num">{{ formatStat(stat.value, stat.unit) }}</b>
+      </div>
+      <a class="panel-summary__link" href="#panel-result">完整结果 ↓</a>
     </div>
 
     <div class="panel-section__grid">
@@ -231,7 +246,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
         </section>
       </div>
 
-      <aside class="result">
+      <aside id="panel-result" class="result">
         <header class="result__head">
           <h3>计算结果</h3>
           <span class="result__tag">局外</span>
@@ -289,7 +304,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
           </p>
 
           <details class="effective__detail">
-            <summary>口径与分配</summary>
+            <summary>词条判定</summary>
             <ul>
               <li v-for="row in effective.rows" :key="row.id">
                 <span>{{ row.label }} × {{ row.rolls }}</span>
@@ -297,7 +312,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
               </li>
             </ul>
             <p>
-              有效：异常精通、攻击力%；小词条：攻击力、穿透值；其余无效。穿透值可切换计入有效。该口径只用于展示，
+              有效：异常精通、攻击力%；小词条：攻击力、穿透值；其余无效。穿透值可切换计入有效。该判定只用于展示，
               不进入面板或伤害计算。
             </p>
           </details>
@@ -320,7 +335,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
         </div>
 
         <div v-if="expanded" class="result__sources">
-          <p class="result__sources-title">{{ STAT_LABELS[expanded] }} · 来源明细</p>
+          <p class="result__sources-title">{{ STAT_LABELS[expanded] }} · 加成明细</p>
           <ul>
             <li v-for="(source, index) in result.breakdown.find((row) => row.stat === expanded)?.sources" :key="index">
               <span>{{ source.text }}</span>
@@ -360,7 +375,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .panel-note {
   max-width: none;
   color: var(--muted);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
+  line-height: 1.7;
 }
 
 .presets {
@@ -371,11 +387,14 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .presets__item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   padding: 8px 14px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--text-2);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 .presets__item:hover {
@@ -388,6 +407,10 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   border-color: var(--accent);
   color: var(--accent-ink);
   font-weight: 600;
+}
+
+.panel-summary {
+  display: none;
 }
 
 .panel-section__grid {
@@ -422,14 +445,14 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .form__head h3 {
   font-family: var(--font-display);
-  font-size: var(--fs-16);
+  font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .form__hint {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
 }
 
 .form__hint b {
@@ -446,17 +469,18 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .pills__item {
-  width: 34px;
-  height: 30px;
-  border: 1px solid var(--line-strong);
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-control);
   border-radius: 2px;
   color: var(--muted);
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: var(--fs-14);
 }
 
 .pills__item:hover {
   color: var(--text);
+  border-color: var(--text-2);
 }
 
 .pills__item.is-active {
@@ -478,7 +502,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   gap: 10px;
   flex: 1 1 240px;
   padding: 8px 10px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   background: var(--bg-soft);
   text-align: left;
 }
@@ -496,17 +520,18 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .engine__body b {
-  font-size: 13px;
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
 .engine__body small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
+  line-height: 1.5;
 }
 
 .engine:hover {
-  border-color: var(--line-strong);
+  border-color: var(--text-2);
 }
 
 .engine.is-active {
@@ -538,18 +563,19 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .field > span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--fs-12);
 }
 
 .field select {
   width: 100%;
+  min-height: 40px;
   padding: 8px 10px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: 2px;
   background: var(--surface-2);
   color: var(--text);
   font: inherit;
-  font-size: 12px;
+  font-size: var(--fs-14);
 }
 
 .field select:focus-visible {
@@ -568,7 +594,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .set-summary p {
   display: flex;
   gap: 8px;
-  font-size: 11px;
+  font-size: var(--fs-14);
+  line-height: 1.6;
 }
 
 .set-summary b {
@@ -592,8 +619,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(38, 38, 49, 0.5);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .sub__label {
@@ -605,15 +632,15 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .sub__label b {
-  font-size: 12px;
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
 .sub__tier {
-  padding: 0 3px;
-  border: 1px solid var(--line-strong);
+  padding: 0 4px;
+  border: 1px solid var(--line-control);
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--fs-12);
   font-style: normal;
   line-height: 1.5;
 }
@@ -625,17 +652,18 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .sub__tier--small {
   border-color: rgba(143, 183, 255, 0.35);
-  color: #8fb7ff;
+  color: var(--info);
 }
 
 .sub__tier--invalid {
-  color: var(--line-strong);
+  color: var(--muted);
 }
 
 .sub__label small {
   grid-column: 1 / -1;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
+  line-height: 1.5;
 }
 
 .stepper {
@@ -645,11 +673,11 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .stepper button {
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--line);
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line-control);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-14);
   line-height: 1;
 }
 
@@ -659,9 +687,9 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .stepper span {
-  min-width: 26px;
+  min-width: 28px;
   text-align: center;
-  font-size: 13px;
+  font-size: var(--fs-16);
 }
 
 .result {
@@ -670,27 +698,28 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   padding: var(--s5);
   border: 1px solid var(--line);
   background: var(--surface);
+  scroll-margin-top: calc(var(--header-h) + var(--chapter-nav-h) + 132px);
 }
 
 .result__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 12px;
+  padding-bottom: var(--s3);
   border-bottom: 1px solid var(--line);
 }
 
 .result__head h3 {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--fs-22);
 }
 
 .result__tag {
   padding: 2px 7px;
   background: var(--accent-soft);
   color: var(--accent);
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 .result__stats {
@@ -702,8 +731,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 2px;
-  border-bottom: 1px solid rgba(38, 38, 49, 0.55);
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--line);
   text-align: left;
 }
 
@@ -716,24 +745,24 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   align-items: center;
   gap: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-14);
 }
 
 .result__label i {
-  color: var(--line-strong);
-  font-size: 10px;
+  color: var(--muted);
+  font-size: var(--fs-12);
   font-style: normal;
 }
 
 .result__row b {
   color: var(--text-2);
-  font-size: 15px;
+  font-size: var(--fs-18);
   font-weight: 600;
 }
 
 .result__row.is-key b {
   color: var(--accent);
-  font-size: 17px;
+  font-size: var(--fs-22);
 }
 
 .result__row.is-open {
@@ -756,29 +785,30 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .effective__head h4 {
   font-family: var(--font-display);
-  font-size: var(--fs-16);
+  font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .effective__toggle {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  min-height: 32px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   cursor: pointer;
 }
 
 .effective__toggle input {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   accent-color: var(--accent);
 }
 
 .effective__bar {
   display: flex;
-  height: 6px;
+  height: 8px;
   margin: var(--s3) 0;
   background: var(--line);
 }
@@ -788,7 +818,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .effective__bar-small {
-  background: #6d7688;
+  background: var(--info);
 }
 
 .effective__bar-invalid {
@@ -805,32 +835,33 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   display: block;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: var(--fs-22);
+  font-size: var(--fs-28);
   font-weight: 600;
   line-height: 1;
 }
 
 .result__effective .effective__nums b {
-  font-size: var(--fs-18);
+  font-size: var(--fs-28);
 }
 
 .effective__nums span {
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
 }
 
 .effective__note {
   margin-top: var(--s2);
   color: var(--text-2);
-  font-size: var(--fs-11);
+  font-size: var(--fs-14);
+  line-height: 1.6;
 }
 
 .effective__warn {
   margin-top: 2px;
   color: var(--danger);
-  font-size: var(--fs-11);
+  font-size: var(--fs-14);
 }
 
 .effective__detail {
@@ -838,8 +869,9 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .effective__detail summary {
+  min-height: 32px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   cursor: pointer;
 }
 
@@ -854,7 +886,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   justify-content: space-between;
   gap: 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
 }
 
 .effective__detail em {
@@ -863,8 +895,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 
 .effective__detail p {
   color: var(--muted);
-  font-size: 10px;
-  line-height: 1.6;
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 .result__sources {
@@ -877,8 +909,8 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 .result__sources-title {
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
 }
 
 .result__sources ul {
@@ -891,7 +923,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 11px;
+  font-size: var(--fs-14);
   color: var(--text-2);
 }
 
@@ -899,7 +931,7 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   flex-shrink: 0;
   color: var(--muted);
   font-style: normal;
-  font-size: 10px;
+  font-size: var(--fs-12);
 }
 
 .result__warnings {
@@ -911,14 +943,14 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
 }
 
 .result__warnings li {
-  color: #ffb3b4;
-  font-size: 11px;
+  color: var(--danger-ink);
+  font-size: var(--fs-14);
 }
 
 .result__note {
-  margin-top: 14px;
+  margin-top: var(--s4);
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   line-height: 1.7;
 }
 
@@ -930,6 +962,48 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
   .result {
     position: static;
   }
+
+  .panel-summary {
+    position: sticky;
+    top: calc(var(--header-h) + var(--chapter-nav-h) + 8px);
+    z-index: 35;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    margin-bottom: var(--s3);
+    padding: 8px 12px;
+    border: 1px solid var(--line-control);
+    background: rgba(16, 16, 21, 0.94);
+    backdrop-filter: blur(10px);
+  }
+
+  .panel-summary__item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .panel-summary__item span {
+    color: var(--muted);
+    font-size: var(--fs-12);
+  }
+
+  .panel-summary__item b {
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--fs-16);
+    font-weight: 600;
+  }
+
+  .panel-summary__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    margin-left: auto;
+    color: var(--accent);
+    font-size: var(--fs-12);
+  }
 }
 
 @media (max-width: 760px) {
@@ -938,10 +1012,47 @@ const keyStats: StatId[] = ['atk', 'anomalyProficiency', 'anomalyMastery']
     align-items: flex-start;
   }
 
+  .presets {
+    width: 100%;
+  }
+
+  .presets__item {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 44px;
+  }
+
   .subs,
   .field-grid,
   .field-grid--mains {
     grid-template-columns: 1fr;
+  }
+
+  .pills__item {
+    width: 44px;
+    height: 44px;
+  }
+
+  .stepper button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .field select {
+    min-height: 44px;
+  }
+
+  .effective__detail summary {
+    min-height: 44px;
+  }
+
+  .result {
+    padding: var(--s4);
+  }
+
+  .panel-summary__link {
+    margin-left: 0;
+    min-height: 44px;
   }
 }
 </style>

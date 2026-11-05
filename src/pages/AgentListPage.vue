@@ -12,7 +12,7 @@ const RARITY_ORDER = ['S', 'A', 'B']
 const STATUS_OPTIONS = [
   { value: '全部', label: '全部' },
   { value: 'open', label: '已开放' },
-  { value: 'locked', label: '施工中' },
+  { value: 'locked', label: '未开放' },
 ] as const
 
 type StatusFilter = (typeof STATUS_OPTIONS)[number]['value']
@@ -23,6 +23,7 @@ const specialty = ref('全部')
 const rarity = ref('全部')
 const faction = ref('全部')
 const status = ref<StatusFilter>('全部')
+const moreFilters = ref(false)
 
 const openCount = computed(() => agents.filter((agent) => agent.available).length)
 const lockedCount = computed(() => agents.length - openCount.value)
@@ -90,7 +91,7 @@ function reset() {
         <h1>代理人</h1>
         <p class="agents-title__lede">
           官方图鉴复刻进行中。已收录 <b>{{ agents.length }}</b> 位代理人，当前仅
-          <b>菲欧妮</b> 开放完整档案；灰色条目为施工中，暂不可进入。
+          <b>菲欧妮</b> 开放完整档案；灰色条目尚未开放。
         </p>
       </div>
 
@@ -156,50 +157,62 @@ function reset() {
           </div>
         </div>
 
-        <div class="filter-row">
-          <span class="filter-label">评级</span>
-          <div class="chips" role="group" aria-label="评级筛选">
-            <button
-              v-for="item in rarities"
-              :key="item"
-              type="button"
-              class="chip"
-              :class="{ 'is-active': rarity === item }"
-              :aria-pressed="rarity === item"
-              @click="rarity = item"
-            >
-              {{ item }}
-            </button>
+        <div id="more-filters" class="filter-extra" :class="{ 'is-open': moreFilters }">
+          <div class="filter-row">
+            <span class="filter-label">评级</span>
+            <div class="chips" role="group" aria-label="评级筛选">
+              <button
+                v-for="item in rarities"
+                :key="item"
+                type="button"
+                class="chip"
+                :class="{ 'is-active': rarity === item }"
+                :aria-pressed="rarity === item"
+                @click="rarity = item"
+              >
+                {{ item }}
+              </button>
+            </div>
+
+            <span class="filter-divider" aria-hidden="true" />
+
+            <span class="filter-label filter-label--inline">状态</span>
+            <div class="chips" role="group" aria-label="开放状态筛选">
+              <button
+                v-for="item in STATUS_OPTIONS"
+                :key="item.value"
+                type="button"
+                class="chip"
+                :class="{ 'is-active': status === item.value }"
+                :aria-pressed="status === item.value"
+                @click="status = item.value"
+              >
+                {{ item.label }}
+              </button>
+            </div>
           </div>
 
-          <span class="filter-divider" aria-hidden="true" />
-
-          <span class="filter-label filter-label--inline">状态</span>
-          <div class="chips" role="group" aria-label="开放状态筛选">
-            <button
-              v-for="item in STATUS_OPTIONS"
-              :key="item.value"
-              type="button"
-              class="chip"
-              :class="{ 'is-active': status === item.value }"
-              :aria-pressed="status === item.value"
-              @click="status = item.value"
-            >
-              {{ item.label }}
-            </button>
+          <div class="filter-row filter-row--select">
+            <span class="filter-label">阵营</span>
+            <label class="filter-select">
+              <span class="sr-only">阵营筛选</span>
+              <select v-model="faction">
+                <option v-for="item in factions" :key="item" :value="item">{{ item }}</option>
+              </select>
+            </label>
+            <span class="filter-hint">已开放 {{ openCount }} · 未开放 {{ lockedCount }}</span>
           </div>
         </div>
 
-        <div class="filter-row filter-row--select">
-          <span class="filter-label">阵营</span>
-          <label class="filter-select">
-            <span class="sr-only">阵营筛选</span>
-            <select v-model="faction">
-              <option v-for="item in factions" :key="item" :value="item">{{ item }}</option>
-            </select>
-          </label>
-          <span class="filter-hint">已开放 {{ openCount }} · 施工中 {{ lockedCount }}</span>
-        </div>
+        <button
+          type="button"
+          class="filter-more"
+          aria-controls="more-filters"
+          :aria-expanded="moreFilters"
+          @click="moreFilters = !moreFilters"
+        >
+          {{ moreFilters ? '收起筛选' : '更多筛选（评级 / 状态 / 阵营）' }}
+        </button>
       </div>
     </section>
 
@@ -227,15 +240,15 @@ function reset() {
 }
 
 .agents-title h1 {
-  margin-top: 6px;
+  margin-top: var(--s2);
 }
 
 .agents-title__lede {
-  max-width: 60ch;
+  max-width: var(--measure);
   margin-top: 10px;
   color: var(--muted);
-  font-size: var(--fs-13);
-  line-height: 1.8;
+  font-size: var(--fs-16);
+  line-height: 1.7;
 }
 
 .agents-title__lede b {
@@ -253,13 +266,13 @@ function reset() {
 
 .agents-meta__open {
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.1em;
 }
 
 .filter-board {
   margin: var(--s5) 0 var(--s4);
-  padding: 14px 16px 6px;
+  padding: var(--s4) var(--s4) var(--s2);
   border: 1px solid var(--line);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 62%),
@@ -271,15 +284,15 @@ function reset() {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--s4);
-  padding-bottom: 12px;
+  padding-bottom: var(--s3);
   border-bottom: 1px solid var(--line);
 }
 
 .filter-board__result {
   margin-left: auto;
   color: var(--muted);
-  font-size: var(--fs-12);
-  letter-spacing: 0.03em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.02em;
 }
 
 .filter-board__result b {
@@ -288,13 +301,16 @@ function reset() {
 }
 
 .filter-reset {
-  flex-shrink: 0;
-  padding: 5px 10px;
-  border: 1px solid var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-control);
   color: var(--muted);
-  font-size: var(--fs-11);
-  letter-spacing: 0.04em;
-  transition: color var(--dur-fast) var(--ease-out),
+  font-size: var(--fs-14);
+  letter-spacing: 0.02em;
+  transition:
+    color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
 
@@ -307,12 +323,20 @@ function reset() {
   display: grid;
 }
 
+.filter-extra {
+  display: contents;
+}
+
+.filter-more {
+  display: none;
+}
+
 .filter-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 10px;
-  padding: 9px 0;
+  gap: 8px 12px;
+  padding: 8px 0;
   border-bottom: 1px solid rgba(35, 35, 44, 0.62);
 }
 
@@ -323,11 +347,11 @@ function reset() {
 
 .filter-label {
   flex-shrink: 0;
-  width: 34px;
+  width: 40px;
   margin-right: 0;
   color: var(--muted);
-  font-size: var(--fs-11);
-  letter-spacing: 0.1em;
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
 }
 
 .filter-label--inline {
@@ -337,14 +361,9 @@ function reset() {
 
 .filter-divider {
   width: 1px;
-  height: 14px;
+  height: 16px;
   margin: 0 4px;
   background: var(--line);
-}
-
-.filter-row .chip {
-  padding: 4px 10px;
-  font-size: var(--fs-11);
 }
 
 .filter-row--select {
@@ -360,13 +379,14 @@ function reset() {
 
 .filter-select select {
   width: 100%;
+  min-height: 40px;
   padding: 6px 28px 6px 10px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text-2);
   font: inherit;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   appearance: none;
   cursor: pointer;
 }
@@ -382,42 +402,43 @@ function reset() {
   top: 50%;
   right: 10px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-12);
   pointer-events: none;
   transform: translateY(-50%);
 }
 
 .filter-hint {
-  color: #77746c;
-  font-size: var(--fs-11);
-  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-size: var(--fs-12);
+  letter-spacing: 0.02em;
 }
 
 .agent-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 20px;
+  gap: var(--s4);
+  margin-top: var(--s5);
 }
 
 .agents-empty {
-  padding: 72px 0 56px;
+  padding: var(--s9) 0 var(--s8);
   border-top: 1px solid var(--line);
   text-align: center;
 }
 
 .agents-empty__title {
-  margin-top: 12px;
+  margin-top: var(--s3);
   font-family: var(--font-display);
   font-size: var(--fs-28);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .agents-empty__copy {
-  margin: 6px auto 16px;
+  max-width: var(--measure);
+  margin: 6px auto var(--s4);
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
 }
 
 @media (max-width: 1160px) {
@@ -451,15 +472,19 @@ function reset() {
 @media (max-width: 760px) {
   .agent-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: var(--s3);
   }
 
   .filter-board {
-    padding-inline: 12px;
+    padding-inline: var(--s3);
   }
 
   .filter-board__top {
     align-items: flex-start;
+  }
+
+  .filter-board__top .codex-search {
+    flex-basis: 100%;
   }
 
   .filter-board__result {
@@ -468,8 +493,45 @@ function reset() {
     margin-left: 0;
   }
 
+  .filter-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .filter-extra {
+    display: none;
+  }
+
+  .filter-extra.is-open {
+    display: grid;
+  }
+
+  .filter-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin: 4px 0 6px;
+    padding: 8px 12px;
+    border: 1px dashed var(--line-control);
+    color: var(--muted);
+    font-size: var(--fs-14);
+  }
+
+  .filter-more:hover,
+  .filter-more[aria-expanded="true"] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .filter-reset {
+    min-height: 44px;
+  }
+
   .filter-label {
-    width: 100%;
+    width: auto;
   }
 
   .filter-divider {
@@ -477,27 +539,45 @@ function reset() {
   }
 
   .filter-label--inline {
-    width: 100%;
+    width: auto;
     margin-left: 0;
   }
 
   .filter-row .chips {
-    margin-left: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 92%, transparent 100%);
+  }
+
+  .filter-row .chips .chip {
+    flex-shrink: 0;
+  }
+
+  .filter-row .chips::-webkit-scrollbar {
+    display: none;
   }
 
   .filter-hint {
     display: none;
   }
-}
-
-@media (max-width: 460px) {
-  .agent-grid {
-    grid-template-columns: 1fr;
-  }
 
   .filter-select {
     max-width: none;
     flex-basis: 100%;
+    width: 100%;
+  }
+
+  .filter-select select {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 460px) {
+  .agent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>

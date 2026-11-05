@@ -124,10 +124,10 @@ watch(
 
 .section-nav__index {
   color: var(--accent);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  opacity: 0.55;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
 }
 
 .section-nav__item.is-active .section-nav__index {
@@ -135,15 +135,15 @@ watch(
 }
 
 .section-nav__label {
-  font-size: var(--fs-15);
+  font-size: var(--fs-14);
   letter-spacing: 0.04em;
 }
 
 .section-nav__count {
   flex-shrink: 0;
   color: var(--text-2);
-  font-size: var(--fs-13);
-  letter-spacing: 0.08em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.06em;
 }
 
 .section-nav__count i {
@@ -172,7 +172,7 @@ watch(
   }
 
   .section-nav__label {
-    font-size: var(--fs-13);
+    font-size: var(--fs-14);
   }
 }
 </style>

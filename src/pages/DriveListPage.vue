@@ -17,6 +17,11 @@ const filtered = computed(() => {
     return `${item.name} ${item.effect2} ${item.effect4}`.toLowerCase().includes(keyword)
   })
 })
+
+function reset() {
+  search.value = ''
+  panelOnly.value = false
+}
 </script>
 
 <template>
@@ -39,7 +44,12 @@ const filtered = computed(() => {
       </label>
 
       <div class="chips">
-        <button class="chip" :class="{ 'is-active': panelOnly }" @click="panelOnly = !panelOnly">
+        <button
+          class="chip"
+          :class="{ 'is-active': panelOnly }"
+          :aria-pressed="panelOnly"
+          @click="panelOnly = !panelOnly"
+        >
           仅看面板可计
         </button>
       </div>
@@ -71,6 +81,11 @@ const filtered = computed(() => {
       </RouterLink>
     </div>
 
-    <p v-else class="codex-empty">没有匹配的驱动盘。</p>
+    <div v-else class="codex-empty">
+      <p class="eyebrow">No Match</p>
+      <p class="empty-state__title">没有匹配的驱动盘</p>
+      <p class="empty-state__copy">换个关键词，或关闭「仅看面板可计」。</p>
+      <button type="button" class="filter-reset" @click="reset">清除筛选</button>
+    </div>
   </div>
 </template>

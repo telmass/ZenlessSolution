@@ -34,7 +34,7 @@ const year = new Date().getFullYear()
 
 <style scoped>
 .footer {
-  margin-top: 80px;
+  margin-top: var(--s9);
   border-top: 1px solid var(--line);
   background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.35));
 }
@@ -42,8 +42,8 @@ const year = new Date().getFullYear()
 .footer__inner {
   display: flex;
   justify-content: space-between;
-  gap: 32px;
-  padding: 34px 0 40px;
+  gap: var(--s6);
+  padding: var(--s6) 0 var(--s8);
 }
 
 .footer__brand {
@@ -61,25 +61,30 @@ const year = new Date().getFullYear()
 
 .footer__brand b {
   font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: 0.16em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.14em;
 }
 
 .footer__brand p {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-12);
+  line-height: 1.6;
 }
 
 .footer__meta {
   text-align: right;
   color: var(--text-2);
-  font-size: 12px;
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 .footer__meta a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--text);
-  border-bottom: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-control);
 }
 
 .footer__meta a:hover {
@@ -89,16 +94,23 @@ const year = new Date().getFullYear()
 
 .footer__meta .muted {
   margin-top: 6px;
-  font-size: 11px;
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 @media (max-width: 760px) {
   .footer__inner {
     flex-direction: column;
+    gap: var(--s4);
+    padding-bottom: var(--s6);
   }
 
   .footer__meta {
     text-align: left;
+  }
+
+  .footer__meta a {
+    min-height: 44px;
   }
 }
 </style>

@@ -172,7 +172,7 @@ const categories = computed(() => props.agent.skills)
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .skill-category__count {
@@ -182,10 +182,10 @@ const categories = computed(() => props.agent.skills)
 
 .skill-category__index {
   margin-left: auto;
-  color: var(--line-strong);
+  color: var(--muted);
   font-size: var(--fs-18);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .move-list {
@@ -208,7 +208,7 @@ const categories = computed(() => props.agent.skills)
 
 .move__title {
   color: var(--text-2);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
   transition: color var(--dur-fast) var(--ease-out);
 }
 
@@ -222,7 +222,7 @@ const categories = computed(() => props.agent.skills)
   flex-wrap: wrap;
   gap: 10px;
   color: var(--muted);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   white-space: nowrap;
 }
 
@@ -232,10 +232,14 @@ const categories = computed(() => props.agent.skills)
 }
 
 .move__toggle {
-  color: var(--line-strong);
+  color: var(--muted);
   font-size: var(--fs-18);
   line-height: 1;
   text-align: right;
+}
+
+.move__row:hover .move__toggle {
+  color: var(--text);
 }
 
 .move.is-open .move__toggle {
@@ -264,7 +268,7 @@ const categories = computed(() => props.agent.skills)
   }
 
   .move__copy {
-    max-width: 60ch;
+    max-width: 34em;
   }
 }
 
@@ -290,18 +294,21 @@ const categories = computed(() => props.agent.skills)
 }
 
 .levels__item {
-  min-width: 28px;
-  height: 26px;
+  min-width: 32px;
+  height: 32px;
   padding: 0 5px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--muted);
-  font-size: var(--fs-11);
-  transition: all var(--dur-fast) var(--ease-out);
+  font-size: var(--fs-12);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 }
 
 .levels__item:hover {
-  border-color: var(--line-strong);
+  border-color: var(--text-2);
   color: var(--text);
 }
 
@@ -314,12 +321,13 @@ const categories = computed(() => props.agent.skills)
 
 .matrix-toggle {
   flex-shrink: 0;
+  min-height: 32px;
   padding: 4px 10px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius-sm);
   color: var(--text-2);
-  font-size: var(--fs-11);
-  letter-spacing: 0.06em;
+  font-size: var(--fs-14);
+  letter-spacing: 0.02em;
 }
 
 .matrix-toggle:hover,
@@ -341,19 +349,21 @@ const categories = computed(() => props.agent.skills)
   padding-left: 12px;
   border-left: 1px solid var(--line);
   color: var(--text-2);
-  font-size: var(--fs-13);
+  font-size: var(--fs-14);
   line-height: 1.7;
 }
 
 .move__note {
+  max-width: var(--measure-wide);
   margin-top: var(--s4);
   color: var(--muted);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
+  line-height: 1.7;
 }
 
 @media (max-width: 720px) {
   .move__row {
-    grid-template-columns: minmax(0, 1fr) 24px;
+    grid-template-columns: minmax(0, 1fr) 28px;
     row-gap: 3px;
   }
 
@@ -366,7 +376,7 @@ const categories = computed(() => props.agent.skills)
     flex-wrap: wrap;
     gap: 8px;
     grid-column: 1;
-    font-size: var(--fs-11);
+    font-size: var(--fs-12);
     white-space: normal;
   }
 
@@ -377,6 +387,15 @@ const categories = computed(() => props.agent.skills)
 
   .move__toolbar {
     flex-direction: column;
+  }
+
+  .levels__item {
+    min-width: 44px;
+    height: 44px;
+  }
+
+  .matrix-toggle {
+    min-height: 44px;
   }
 }
 </style>

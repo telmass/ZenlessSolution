@@ -59,6 +59,9 @@ h1,
 h2,
 h3,
 h4 {
+  font-weight: 700;
+  line-height: var(--lh-title);
+  letter-spacing: 0.01em;
   text-wrap: balance;
 }
 
@@ -74,6 +77,32 @@ ol {
   outline-offset: 3px;
 }
 
+/* Shared control surface. Components may tighten spacing, not the contract. */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-control);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-14);
+}
+
+input:not([type="checkbox"]):not([type="radio"])::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
 .container {
   width: min(var(--maxw), calc(100% - var(--gutter) * 2));
   margin-inline: auto;
@@ -82,6 +111,7 @@ ol {
 .num {
   font-family: var(--font-display);
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
   letter-spacing: 0.02em;
 }
 
@@ -100,24 +130,25 @@ ol {
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 0;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
+  min-height: 24px;
   padding: 2px 8px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   color: var(--text-2);
   font-size: var(--fs-12);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .tag--fire {
   border-color: rgba(255, 106, 61, 0.45);
   background: var(--fire-soft);
-  color: #ffb59d;
+  color: var(--fire-ink);
 }
 
 .tag--accent {
@@ -138,6 +169,7 @@ ol {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  font-size: var(--fs-12);
   white-space: nowrap;
   border: 0;
 }
@@ -166,41 +198,84 @@ ol {
   font-family: var(--font-display);
   font-size: var(--fs-52);
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 0.86;
+  letter-spacing: 0.01em;
 }
 
 .chapter-head__body h2 {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: clamp(var(--fs-28), 2.6vw, var(--fs-36));
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
+  line-height: var(--lh-title);
 }
 
 .chapter-head__body p {
   max-width: var(--measure);
   margin-top: var(--s3);
   color: var(--muted);
-  font-size: var(--fs-15);
+  font-size: var(--fs-16);
+  line-height: 1.7;
 }
-
 
 .hairline {
   border-top: 1px solid var(--line);
 }
 
+/* Empty / not-found state shared by every content-dependent view. */
+.empty-state {
+  padding: var(--s9) 0;
+  border-top: 1px solid var(--line);
+}
+
+.empty-state__title {
+  margin-top: var(--s3);
+  font-family: var(--font-display);
+  font-size: var(--fs-28);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.empty-state__copy {
+  max-width: var(--measure);
+  margin-top: var(--s2);
+  color: var(--muted);
+  font-size: var(--fs-14);
+}
+
+.empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin-top: var(--s5);
+}
+
+.empty-state__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--accent);
+  font-size: var(--fs-14);
+  border-bottom: 1px solid rgba(240, 223, 78, 0.35);
+}
+
+.empty-state__link:hover {
+  color: var(--text);
+  border-color: var(--text-2);
+}
+
 @media (max-width: 900px) {
   :root {
     --chapter-nav-h: 48px;
-    --gutter: 18px;
+    --gutter: 20px;
   }
 
   .chapter {
-    padding-top: var(--s7);
+    padding-top: var(--s8);
   }
 
   .chapter + .chapter {
-    margin-top: var(--s7);
+    margin-top: var(--s8);
   }
 
   .chapter-head {
@@ -211,6 +286,14 @@ ol {
 
   .chapter-head__index {
     font-size: var(--fs-36);
+  }
+
+  .chapter-head__body p {
+    font-size: var(--fs-14);
+  }
+
+  .empty-state__link {
+    min-height: 44px;
   }
 }
 
@@ -227,4 +310,3 @@ ol {
     transition-duration: 0.01ms !important;
   }
 }
-

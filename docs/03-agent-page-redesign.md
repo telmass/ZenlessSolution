@@ -50,8 +50,8 @@ brand-fidelity: 8
 
 - 色板：`#070709` 底、`#101015` 面、`#23232c` 发丝线、`#f3f1ea` 正文、`#8f8c82` 次要、`#f0df4e` 品牌、`#ff6a3d` 角色元素色。
 - 字体：Barlow Condensed 600/700（Latin/数字）+ Noto Sans SC（中文），全局 ≤ 2 族；`public/fonts/` 自托管，OFL 许可。
-- 字号：11/12/13/15/16/18/22/28/36/52/clamp；正文 16px / 1.72。
-- 宽度：内容容器 1240 → **1400px**，减少宽屏两侧空带；章节 padding 80 → **64px**（移动 40px）。
+- 字号：12/14/16/18/22/28/36/52/72（九档；>2026-11-05 由 11/12/13/15/16/18/22/28/36/52 迁移，见 [`07-ui-system.md`](07-ui-system.md)）；正文 16px / 1.75；正文行宽 34em。
+- 宽度：内容容器 1240 → **1400px**，减少宽屏两侧空带；详情页 1080px；章节 padding 80 → **64px**（移动 40px）。
 - 间距：4px 基准；章节 padding 64（移动 40），章节间距 64。
 - 形状：结构面 0 圆角、控件 2px、头像圆形；移除卡片 12px 圆角与大面积阴影。
 - 去掉了 `PROFILE / KEY CINEMA / PRIORITY / W-ENGINE / REFERENCE PANEL` 等装饰性英文微标签，只保留 `Lv.60`、`54 词条`、`精 1` 这类真实元信息。
@@ -76,10 +76,10 @@ brand-fidelity: 8
 
 ## 6. 可访问性与响应式
 
-- Skip link「跳到正文」；`main#content` 可聚焦；章节导航 `aria-label="章节"`、`aria-current="location"`。
+- `main#content` 可聚焦；章节导航 `aria-label="章节"`、`aria-current="location"`。
 - 手风琴按钮 `aria-expanded` / `aria-controls`；影画故事使用原生 `<details>`。
 - `prefers-reduced-motion` 关闭平滑滚动与过渡。
-- 断点：1200 / 1080 / 900 / 820 / 760 / 620 / 560；移动端导航横向滚动，页面无横向溢出（390px 实测 `scrollWidth = 390`）。
+- 断点：1160 / 1080 / 980 / 900 / 820 / 760 / 640 / 460；移动端导航横向滚动，页面无横向溢出（390px 实测 `scrollWidth = 390`）。字号与触控约束见 [`07-ui-system.md`](07-ui-system.md)。
 
 ## 7. 验证
 

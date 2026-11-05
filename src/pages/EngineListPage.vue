@@ -31,10 +31,17 @@ function substatText(item: EngineIndexItem) {
   if (!item.subStat) return '无副词条'
   return `${item.subStat.label} ${item.subStat.kind === 'pct' ? `${item.subStat.value}%` : `+${item.subStat.value}`}`
 }
+
+function reset() {
+  search.value = ''
+  rank.value = '全部'
+  trait.value = '全部'
+}
 </script>
 
 <template>
-  <div class="codex container">    <header class="codex-head">
+  <div class="codex container">
+    <header class="codex-head">
       <div>
         <h1>音擎</h1>
         <p>基础攻击、高级属性与精炼特效。点击查看 1–5 阶完整描述。</p>
@@ -58,6 +65,7 @@ function substatText(item: EngineIndexItem) {
           :key="item"
           class="chip"
           :class="{ 'is-active': rank === item }"
+          :aria-pressed="rank === item"
           @click="rank = item"
         >
           {{ item }}
@@ -71,6 +79,7 @@ function substatText(item: EngineIndexItem) {
           :key="item"
           class="chip"
           :class="{ 'is-active': trait === item }"
+          :aria-pressed="trait === item"
           @click="trait = item"
         >
           {{ item }}
@@ -107,6 +116,11 @@ function substatText(item: EngineIndexItem) {
       </RouterLink>
     </div>
 
-    <p v-else class="codex-empty">没有匹配的音擎。</p>
+    <div v-else class="codex-empty">
+      <p class="eyebrow">No Match</p>
+      <p class="empty-state__title">没有匹配的音擎</p>
+      <p class="empty-state__copy">换个关键词，或清除评级 / 职业筛选。</p>
+      <button type="button" class="filter-reset" @click="reset">清除筛选</button>
+    </div>
   </div>
 </template>

@@ -22,6 +22,11 @@ const filtered = computed(() => {
 function rankClass(value: string) {
   return value === 'A' ? 'rank-tag--a' : value === 'B' ? 'rank-tag--b' : ''
 }
+
+function reset() {
+  search.value = ''
+  rank.value = '全部'
+}
 </script>
 
 <template>
@@ -49,6 +54,7 @@ function rankClass(value: string) {
           :key="item"
           class="chip"
           :class="{ 'is-active': rank === item }"
+          :aria-pressed="rank === item"
           @click="rank = item"
         >
           {{ item }}
@@ -85,6 +91,11 @@ function rankClass(value: string) {
       </RouterLink>
     </div>
 
-    <p v-else class="codex-empty">没有匹配的邦布。</p>
+    <div v-else class="codex-empty">
+      <p class="eyebrow">No Match</p>
+      <p class="empty-state__title">没有匹配的邦布</p>
+      <p class="empty-state__copy">换个关键词，或清除评级筛选。</p>
+      <button type="button" class="filter-reset" @click="reset">清除筛选</button>
+    </div>
   </div>
 </template>
