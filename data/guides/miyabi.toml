@@ -391,8 +391,9 @@ lines = [
 [graduationPanel]
 totals = [
     { label = "攻击力", value = 2912.8, unit = "" },
-    { label = "异常精通", value = 364, unit = "" },
-    { label = "异常掌控", value = 116, unit = "" },
+    { label = "暴击率", value = 79.4, unit = "%" },
+    { label = "暴击伤害", value = 133.2, unit = "%" },
+    { label = "异常精通", value = 346, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
 computedAt = "2026-10-20T05:37:22+00:00"
@@ -404,7 +405,7 @@ core = "异常精通 +90、基础攻击力 +75"
 set4 = "折枝剑歌"
 set2 = "河豚电音"
 mainStats = "4 号位暴击伤害 +48%，5 号位穿透率 +24%，6 号位攻击力 +30%"
-subStats = "54 条满配：暴击率 ×20、暴击伤害 ×4、攻击力% ×10、异常精通 ×14、穿透值 ×5、生命值% ×1"
+subStats = "54 条满配：暴击率 ×21、暴击伤害 ×4、攻击力% ×10、异常精通 ×12、穿透值 ×6、生命值% ×1"
 
 [graduationPanel.spec]
 agentId = "ep-996"
@@ -420,11 +421,11 @@ core = [
     "atk_base",
 ]
 subStats = [
-    { id = "cr", count = 20 },
+    { id = "cr", count = 21 },
     { id = "cd", count = 4 },
     { id = "atk_pct", count = 10 },
-    { id = "am", count = 14 },
-    { id = "pen_val", count = 5 },
+    { id = "am", count = 12 },
+    { id = "pen_val", count = 6 },
     { id = "hp_pct", count = 1 },
 ]
 budget = 54
