@@ -289,7 +289,7 @@ lines = [
 [graduationPanel]
 totals = [
     { label = "攻击力", value = 2642.7, unit = "" },
-    { label = "异常精通", value = 440, unit = "" },
+    { label = "异常精通", value = 422, unit = "" },
     { label = "异常掌控", value = 248.6, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
@@ -302,7 +302,7 @@ core = "异常掌控 +36、基础攻击力 +75"
 set4 = "囚徒手记"
 set2 = "法厄同之歌"
 mainStats = "4 号位异常精通 +92，5 号位增伤 +30%，6 号位异常掌控 +30%"
-subStats = "54 条满配：异常精通 ×26、攻击力% ×14、穿透值 ×10、攻击力 ×4"
+subStats = "54 条满配：异常精通 ×24、攻击力% ×14、穿透值 ×8、小攻击 ×4、生命值% ×4"
 
 [graduationPanel.spec]
 agentId = "ep-1926"
@@ -318,10 +318,11 @@ core = [
     "atk_base",
 ]
 subStats = [
-    { id = "am", count = 26 },
+    { id = "am", count = 24 },
     { id = "atk_pct", count = 14 },
-    { id = "pen_val", count = 10 },
+    { id = "pen_val", count = 8 },
     { id = "atk_flat", count = 4 },
+    { id = "hp_pct", count = 4 },
 ]
 budget = 54
 filler = 0
