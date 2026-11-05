@@ -5,6 +5,7 @@ officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/1276/detail"
 [_meta]
 agentId = "ep-1276"
 name = "薇薇安·班希"
+preAudit = "2026-11-06 队伍套装确认：爱丽丝只选 4 獠牙重金属，普罗米娅选 4 囚徒手记。"
 coreText = "[普通攻击：落羽生花]命中处于属性异常状态的目标时，触发一次[异放]：额外结算一次相对于原属性异常伤害的属性异常伤害。\n异放比例（每 10 点异常精通）：\n以太 6.15%\n电 3.20%\n火 8%\n物理 0.75%\n冰 1.08%\n风 0.32%\n[普通攻击：裙裾浮游·悬落]或[普通攻击：落羽生花]命中处于任意属性异常状态的目标时，使目标陷入[薇薇安的预言]，每 0.55 秒受到薇薇安 55% 攻击力的以太伤害，该伤害可以触发属性异常效果的额外伤害；当目标不再处于属性异常状态时，[薇薇安的预言]结束。\n进入战场时，薇薇安获得 2 点[飞羽]。"
 role = "以太异常 · 后台紊乱"
 oneLiner = "后台持续积蓄以太异常，并在敌人处于异常状态时结算异放，放大队伍紊乱伤害。"
@@ -185,14 +186,12 @@ agentId = "ep-1385"
 name = "爱丽丝"
 role = "异常"
 avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/31/15559334/9de81fb0768d528204ba87a600ba6c5e_4639668304344154125.png"
-note = "物理异常主 C，极性强击自紊乱；薇薇安的以太异常与物理异常互相结算紊乱，双异常体系。"
+note = "物理异常主 C，4 獠牙重金属；薇薇安的以太异常与物理异常互相结算紊乱，双异常体系。"
 set4 = [
     { name = "獠牙重金属", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/6d11b8c1e66b1824d7d790d444cde696_8208571772759525563.png" },
-    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
 ]
 set4Ids = [
     "ep-104",
-    "ep-1194",
 ]
 
 [[teams.members]]
@@ -229,12 +228,12 @@ agentId = "ep-1926"
 name = "普罗米娅"
 role = "异常"
 avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/05/02/34600917/92e74d05f5a68b8a84b3d35bc79fca9e_1342197640853565616.png"
-note = "冰异常副 C，南宫羽蓄力破韧开失衡窗口，薇薇安后台异放配合双异常紊乱。"
+note = "冰异常副 C，4 囚徒手记；霜刑异放与薇薇安后台异放配合双异常紊乱。"
 set4 = [
-    { name = "谶羽之誓", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png" },
+    { name = "囚徒手记", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/03/16/141353238/4ebfdd28579fa98ff24f948ec172d845_1191765839213633481.png" },
 ]
 set4Ids = [
-    "ep-2116",
+    "ep-1906",
 ]
 
 [[teams.members]]
