@@ -4,6 +4,7 @@ import type { Agent, CoreTable, GrowthTable as GrowthTableData } from '@/types/a
 import { movePreview } from '@/core/skills/preview'
 import GrowthTable from '@/components/GrowthTable.vue'
 import RichText from '@/components/RichText.vue'
+import { publicUrl } from '@/lib/url'
 
 const props = defineProps<{ agent: Agent }>()
 
@@ -40,7 +41,7 @@ const categories = computed(() => props.agent.skills)
       class="skill-category"
     >
       <header class="skill-category__head">
-        <img :src="category.icon" alt="" aria-hidden="true" />
+        <img :src="publicUrl(category.icon)" alt="" aria-hidden="true" />
         <h3>{{ category.name }}</h3>
         <span class="skill-category__count num">{{ category.moves.length }} 式</span>
         <span class="skill-category__index num" aria-hidden="true">

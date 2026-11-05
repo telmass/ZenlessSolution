@@ -23,7 +23,7 @@
 | 20s 伤害参考轴、单次异放、0+1 / 2+1 / 4+1 / 6+1 对比 | ✅ |
 | 攻略卡导出（PNG 保存 / 复制剪贴板） | ✅ |
 | UI 与排版系统（九档字号 / 34em 行宽 / 对比度 / 移动端 44px 触控） | ✅ |
-| 发布打磨（404 / 加载与错误 / a11y / SEO / Cloudflare 部署 / 运维文档） | ✅ |
+| 发布打磨（404 / 加载与错误 / a11y / SEO / Cloudflare 与 GitHub Pages 部署 / 运维文档） | ✅ |
 | 其余 60 位代理人档案 | ⏳ 施工中（图鉴条目已收录） |
 
 ## 快速开始
@@ -45,6 +45,16 @@ pnpm preview
 - 章节锚点：`#overview`、`#skills`、`#cinemas`、`#guide`、`#build`、`#damage`；影画子锚点 `#cinema-1..6` 仍可用。
 - 旧链接 `?tab=skills|cinemas|guide|build|damage` 会自动改写为对应 hash，不刷新页面。
 - `#skills` 默认展开「普通攻击：裁生」；其余招式点击行内展开，全等级表可切换。
+
+## 部署
+
+纯静态：`pnpm build` 产出 `dist/`，无后端、无运行时环境变量。
+
+- **GitHub Pages（项目页）**：`.github/workflows/deploy.yml` 已配置；仓库 Settings → Pages → Source 选 `GitHub Actions`，push `master` 即发布到 `https://<user>.github.io/<repo>/`。
+  - CI 用 `VITE_BASE=/<repo>/` 构建，路由 / 图片 / 字体自动跟随子路径；深链由 `404.html` 回退。
+  - 本地验证子路径：`VITE_BASE=/<repo>/ pnpm build` + `VITE_BASE=/<repo>/ pnpm preview`。
+- **Cloudflare Pages / 其它静态托管**：构建 `pnpm build`，输出 `dist`；`_headers`、`_redirects` 已随 `public/` 打包。
+- 细节与限制见 [docs/05-operations.md](docs/05-operations.md) 第 3 节。
 
 ## 数据与资产
 
