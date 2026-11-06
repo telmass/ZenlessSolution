@@ -5,6 +5,7 @@ officialGuide = "https://baike.mihoyo.com/zzz/wiki/content/1385/detail"
 [_meta]
 agentId = "ep-1385"
 name = "爱丽丝·泰姆菲尔德"
+preAudit = "2026-11-06 面板参考确认：低词条约 2800 攻击 / 320 精通（30 条预测），满配维持约 3000 攻击并把异常精通拉满（30 条）。"
 role = "物理异常 · 爆发主C"
 oneLiner = "以三段蓄力与极性强击快速结算物理异常与紊乱。"
 tags = ["物理属性异常", "三段蓄力", "极性强击", "紊乱"]
@@ -284,9 +285,9 @@ lines = [
 
 [graduationPanel]
 totals = [
-    { label = "异常精通", value = 372, unit = "" },
-    { label = "异常掌控", value = 196.0, unit = "" },
-    { label = "攻击力", value = 3016.8, unit = "" },
+    { label = "攻击力", value = 3007.6, unit = "" },
+    { label = "异常精通", value = 480, unit = "" },
+    { label = "异常掌控", value = 196, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
 computedAt = "2026-10-15T18:05:26+00:00"
@@ -298,7 +299,7 @@ core = "异常掌控 +36、基础攻击力 +75"
 set4 = "獠牙重金属"
 set2 = "法厄同之歌"
 mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
-subStats = "54 条满配：异常精通 ×18、攻击力% ×10、穿透值 ×7、小攻击 ×8、暴击伤害 ×5、暴击率 ×3、生命值% ×3"
+subStats = "54 条满配：异常精通 ×30、攻击力% ×11、小攻击 ×5、穿透值 ×6、生命值% ×2"
 
 [graduationPanel.spec]
 agentId = "ep-1385"
@@ -315,22 +316,20 @@ core = [
     "atk_base",
 ]
 subStats = [
-    { id = "am", count = 18 },
-    { id = "atk_pct", count = 10 },
-    { id = "pen_val", count = 7 },
-    { id = "atk_flat", count = 8 },
-    { id = "cd", count = 5 },
-    { id = "cr", count = 3 },
-    { id = "hp_pct", count = 3 },
+    { id = "am", count = 30 },
+    { id = "atk_pct", count = 11 },
+    { id = "atk_flat", count = 5 },
+    { id = "pen_val", count = 6 },
+    { id = "hp_pct", count = 2 },
 ]
 budget = 54
 filler = 0
 
 [graduationPanelAlt]
 totals = [
-    { label = "异常精通", value = 300, unit = "" },
-    { label = "异常掌控", value = 196.0, unit = "" },
-    { label = "攻击力", value = 2845.2, unit = "" },
+    { label = "攻击力", value = 2797.4, unit = "" },
+    { label = "异常精通", value = 318, unit = "" },
+    { label = "异常掌控", value = 196, unit = "" },
 ]
 note = "由仓库计算器（POST /api/panel/calc 同一份 core 逻辑）实算后固定，非手填。"
 computedAt = "2026-10-15T18:05:26+00:00"
@@ -343,10 +342,10 @@ core = "异常掌控 +36、基础攻击力 +75"
 set4 = "獠牙重金属"
 set2 = "法厄同之歌"
 mainStats = "4 号位异常精通 +92，5 号位物理伤害 +30%，6 号位异常掌控 +30%"
-subStats = "低词条参考：异常精通 ×10、攻击力% ×8、小攻击 ×4、穿透值 ×3"
+subStats = "30 条预测参考：异常精通 ×12、攻击力% ×7、小攻击 ×4、穿透值 ×7"
 
 [graduationPanelAlt.spec]
-budget = 25
+budget = 30
 core = ["ac", "atk_base"]
 filler = 0
 agentId = "ep-1385"
@@ -358,10 +357,10 @@ disc5MainId = "dmg_30"
 disc5Element = "物理"
 disc6MainId = "ac_pct_30"
 subStats = [
-  { id = "am", count = 10 },
-  { id = "atk_pct", count = 8 },
-  { id = "atk_flat", count = 4 },
-  { id = "pen_val", count = 3 },
+    { id = "am", count = 12 },
+    { id = "atk_pct", count = 7 },
+    { id = "atk_flat", count = 4 },
+    { id = "pen_val", count = 7 },
 ]
 
 [cinemaPriority]

@@ -335,7 +335,11 @@ function graduationLabel(item: GuideGraduation): string {
                 </div>
                 <p>{{ member.note }}</p>
                 <div class="team__sets">
-                  <span v-for="set in member.set4" :key="set.name" class="team__set">
+                  <span
+                    v-for="set in member.set4.slice(0, 1)"
+                    :key="set.name"
+                    class="team__set"
+                  >
                     <img v-if="media(set.icon)" :src="media(set.icon)" alt="" />
                     {{ set.name }}
                   </span>
