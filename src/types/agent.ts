@@ -189,10 +189,12 @@ export interface Agent {
     coreBonus: Record<string, number>[]
     /** Per-rank display rows for the overview (label + one value per rank). */
     effects: { label: string; values: string[] }[]
-    /** Phoenix-only mechanics; other agents leave these undefined. */
+    /** Core-passive scaling rows (Phoenix/Alice); other agents leave these undefined. */
     amFlat?: number[]
     critDmg?: number[]
     tickAtkPct?: number[]
+    /** Alice：物理异常积蓄效率（核心等级 1–7）。 */
+    buildupEfficiencyPct?: number[]
   }
   /** Display-only substat whitelist; never enters panel/damage math. */
   substatProfile: { effective: string[]; small: string[] }

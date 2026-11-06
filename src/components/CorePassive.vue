@@ -34,6 +34,12 @@ const matrixRows = computed(() => {
   if (passive.value.amFlat) extra.push({ label: '异常精通', values: passive.value.amFlat.slice(1).map(String) })
   if (passive.value.critDmg) extra.push({ label: '灼蚀暴击伤害', values: passive.value.critDmg.slice(1).map(String) })
   if (passive.value.tickAtkPct) extra.push({ label: '灼蚀周期伤害', values: passive.value.tickAtkPct.slice(1).map(String) })
+  if (passive.value.buildupEfficiencyPct) {
+    extra.push({
+      label: '物理异常积蓄效率',
+      values: passive.value.buildupEfficiencyPct.slice(1).map((value) => `${value}%`),
+    })
+  }
   return [...rows, ...extra]
 })
 
@@ -85,6 +91,10 @@ const coreNote = computed(() => {
               <dd class="num">{{ passive.tickAtkPct![passiveIndex] }}% 攻击</dd>
             </div>
           </template>
+          <div v-if="passive.buildupEfficiencyPct">
+            <dt>物理异常积蓄效率</dt>
+            <dd class="num">+{{ passive.buildupEfficiencyPct[passiveIndex] }}%</dd>
+          </div>
           <div v-for="row in coreRows" :key="row.label">
             <dt>{{ row.label }}</dt>
             <dd class="num">{{ row.value.includes('%') ? row.value : `+${row.value}` }}</dd>

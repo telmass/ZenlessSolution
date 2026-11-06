@@ -99,6 +99,11 @@ CORE_TO_FIELD = {
 # Vivian 核心被动的异放系数（A–F，每 10 点异常精通的百分比）。
 VIVIAN_RELEASE_COEF = ["3.59%", "4.11%", "4.63%", "5.15%", "5.65%", "6.15%"]
 
+ALICE_MECHANICS = {
+    # 物理异常积蓄效率：核心被动等级 1–7（A–F 对应 2–7）。
+    "buildupEfficiencyPct": [12.5, 14.6, 16.7, 18.8, 20.8, 22.9, 25],
+}
+
 PHOENIX_MECHANICS = {
     "amFlat": [43, 50, 57, 64, 71, 78, 85],
     "critDmg": [12.5, 14.6, 16.7, 18.8, 20.8, 22.9, 25],
@@ -614,6 +619,7 @@ def main() -> None:
                     else []
                 ),
                 **(PHOENIX_MECHANICS if slug == "phoenix" else {}),
+                **(ALICE_MECHANICS if slug == "alice" else {}),
             },
             "substatProfile": {"effective": effective, "small": small},
             "damageModel": {"phoenix": "phoenix", "vivian": "vivian", "alice": "alice"}.get(slug),
