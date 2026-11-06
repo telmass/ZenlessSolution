@@ -136,6 +136,13 @@ function cinemaGain(line: string): { label: string; value: number; from: string 
   return { label: `L${level}`, value, from: from ?? '' }
 }
 
+function graduationBudgetLabel(item: GuideGraduation): string {
+  const budget = item.spec.budget ?? 0
+  if (budget === 54) return '54 词条'
+  const analysis = graduationAnalysis(item)
+  return analysis.effective >= budget ? `${budget} 有效` : `${budget} 词条`
+}
+
 function graduationLabel(item: GuideGraduation): string {
   const budget = item.spec.budget ?? 0
   if (budget === 54) return '满配 · 54 词条'
@@ -286,7 +293,7 @@ function graduationLabel(item: GuideGraduation): string {
         <article v-for="item in graduationCards" :key="item.title" class="graduation">
           <header class="graduation__head">
             <h4>{{ graduationLabel(item) }}</h4>
-            <span v-if="item.spec.budget" class="tag tag--accent">{{ item.spec.budget }} 词条</span>
+            <span v-if="item.spec.budget" class="tag tag--accent">{{ graduationBudgetLabel(item) }}</span>
           </header>
           <div class="graduation__totals">
             <div v-for="total in graduationTotals(agent, item)" :key="total.label">
