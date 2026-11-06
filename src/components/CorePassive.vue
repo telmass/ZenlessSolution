@@ -24,25 +24,6 @@ const coreRows = computed(() =>
   })),
 )
 
-/** A–F 全等级矩阵：展示每一级的变化，而不是只看当前等级。 */
-const matrixRows = computed(() => {
-  const rows = passive.value.effects.map((effect) => ({
-    label: effect.label,
-    values: effect.values,
-  }))
-  const extra: { label: string; values: string[] }[] = []
-  if (passive.value.amFlat) extra.push({ label: '异常精通', values: passive.value.amFlat.slice(1).map(String) })
-  if (passive.value.critDmg) extra.push({ label: '灼蚀暴击伤害', values: passive.value.critDmg.slice(1).map(String) })
-  if (passive.value.tickAtkPct) extra.push({ label: '灼蚀周期伤害', values: passive.value.tickAtkPct.slice(1).map(String) })
-  if (passive.value.buildupEfficiencyPct) {
-    extra.push({
-      label: '物理异常积蓄效率',
-      values: passive.value.buildupEfficiencyPct.slice(1).map((value) => `${value}%`),
-    })
-  }
-  return [...rows, ...extra]
-})
-
 /** 核心技表里除数值外还有「核心被动技能等级 +1」，之前没有展示。 */
 const coreNote = computed(() => {
   const row = coreSkill.value?.moves[0]?.table?.levels[levelIndex.value] as
@@ -91,37 +72,18 @@ const coreNote = computed(() => {
               <dd class="num">{{ passive.tickAtkPct![passiveIndex] }}% 攻击</dd>
             </div>
           </template>
-          <div v-if="passive.buildupEfficiencyPct">
-            <dt>物理异常积蓄效率</dt>
-            <dd class="num">+{{ passive.buildupEfficiencyPct[passiveIndex] }}%</dd>
-          </div>
           <div v-for="row in coreRows" :key="row.label">
             <dt>{{ row.label }}</dt>
             <dd class="num">{{ row.value.includes('%') ? row.value : `+${row.value}` }}</dd>
           </div>
+          <div v-if="passive.buildupEfficiencyPct">
+            <dt>物理异常积蓄效率</dt>
+            <dd class="num">+{{ passive.buildupEfficiencyPct[passiveIndex] }}%</dd>
+          </div>
+
         </dl>
         <p v-if="coreNote" class="core-passive__note">{{ coreNote }}</p>
       </aside>
-    </div>
-
-    <div class="core-passive__matrix-wrap">
-      <p class="core-passive__matrix-title">A–F 各等级变化</p>
-      <table class="core-passive__matrix">
-        <thead>
-          <tr>
-            <th>属性</th>
-            <th v-for="item in coreLevels" :key="item" :class="{ 'is-active': item === level }">{{ item }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in matrixRows" :key="row.label">
-            <th>{{ row.label }}</th>
-            <td v-for="(value, index) in row.values" :key="index" :class="{ 'is-active': index === levelIndex }">
-              {{ value }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
     <div v-if="extra" class="core-passive__extra">
@@ -224,47 +186,6 @@ const coreNote = computed(() => {
   margin-top: var(--s2);
   color: var(--muted);
   font-size: var(--fs-12);
-}
-
-.core-passive__matrix-wrap {
-  margin-top: var(--s5);
-  padding-top: var(--s4);
-  border-top: 1px solid var(--line);
-  overflow-x: auto;
-}
-
-.core-passive__matrix-title {
-  margin-bottom: var(--s2);
-  color: var(--muted);
-  font-size: var(--fs-12);
-  letter-spacing: 0.08em;
-}
-
-.core-passive__matrix {
-  width: 100%;
-  min-width: 520px;
-  border-collapse: collapse;
-  font-size: var(--fs-12);
-}
-
-.core-passive__matrix th,
-.core-passive__matrix td {
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--line);
-  text-align: right;
-  white-space: nowrap;
-}
-
-.core-passive__matrix thead th:first-child,
-.core-passive__matrix tbody th {
-  text-align: left;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.core-passive__matrix .is-active {
-  color: var(--accent);
-  font-weight: 600;
 }
 
 .core-passive__extra {
