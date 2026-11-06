@@ -97,7 +97,14 @@ CORE_TO_FIELD = {
 # per-rank numbers below are the official core-passive values used by
 # core/damage (amFlat 43–85, sear crit DMG 12.5–25%, tick 25–50% ATK).
 # Vivian 核心被动的异放系数（A–F，每 10 点异常精通的百分比）。
-VIVIAN_RELEASE_COEF = ["3.59%", "4.11%", "4.63%", "5.15%", "5.65%", "6.15%"]
+VIVIAN_RELEASE_COEFS = {
+    "以太": ["3.59%", "4.11%", "4.63%", "5.15%", "5.65%", "6.15%"],
+    "电": ["1.86%", "2.12%", "2.38%", "2.64%", "2.90%", "3.20%"],
+    "火": ["4.66%", "5.32%", "5.98%", "6.64%", "7.30%", "8.00%"],
+    "物理": ["0.44%", "0.51%", "0.58%", "0.65%", "0.70%", "0.75%"],
+    "冰": ["0.63%", "0.72%", "0.81%", "0.90%", "0.99%", "1.08%"],
+    "风": ["0.18%", "0.21%", "0.24%", "0.26%", "0.29%", "0.32%"],
+}
 
 ALICE_MECHANICS = {
     # 物理异常积蓄效率：核心被动等级 1–7（A–F 对应 2–7）。
@@ -614,7 +621,10 @@ def main() -> None:
                 "coreBonus": bonus,
                 "effects": core_effects(item)
                 + (
-                    [{"label": "异放系数（以太）", "values": VIVIAN_RELEASE_COEF}]
+                    [
+                        {"label": f"异放系数（{element}）", "values": values}
+                        for element, values in VIVIAN_RELEASE_COEFS.items()
+                    ]
                     if slug == "vivian"
                     else []
                 ),
