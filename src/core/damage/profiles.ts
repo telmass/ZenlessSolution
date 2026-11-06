@@ -22,6 +22,10 @@ export interface DamageHighlight {
 
 export interface DamageProfile {
   singleTitle: string
+  axisLabel: string
+  singleMetricLabel: string
+  axisTotalLabel: string
+  critNote: string
   /** Whether the single-hit card exposes 期望/必暴/不暴. */
   critModes: boolean
   /** Footnote for the engine comparison table. */
@@ -47,6 +51,10 @@ function config(
 
 const PHOENIX: DamageProfile = {
   singleTitle: '单次焚罪异放 · 失衡 1.5×',
+  axisLabel: '20s 参考轴',
+  singleMetricLabel: '单次异放',
+  axisTotalLabel: '轴总伤',
+  critNote: '灼蚀与异放暴击按期望计',
   critModes: true,
   engineNote: '100% 覆盖上限；朔月裁霜的冰伤/异放增伤对火属性不触发，壳中之灵的以太增伤同样不触发。',
   highlight: { eventId: 'sear-tick', label: '灼蚀 tick', mode: 'total' },
@@ -72,6 +80,10 @@ const PHOENIX: DamageProfile = {
 
 const VIVIAN: DamageProfile = {
   singleTitle: '单次异放 · 失衡 1.5×',
+  axisLabel: '20s 参考轴',
+  singleMetricLabel: '单次异放',
+  axisTotalLabel: '轴总伤',
+  critNote: '异放不吃暴击',
   critModes: false,
   engineNote: '专武的 +40% 积蓄效率未折算成额外异常次数，专武收益被低估；双生泣星需维持 4 层、触电唇彩需目标处于异常。',
   highlight: { eventId: 'corruption', label: '侵蚀 tick', mode: 'perHit' },
@@ -95,7 +107,33 @@ const VIVIAN: DamageProfile = {
   ],
 }
 
+const ALICE: DamageProfile = {
+  singleTitle: '单次极性强击 · 失衡 1.5×',
+  axisLabel: '默认机制口径（单轮）',
+  singleMetricLabel: '极性强击',
+  axisTotalLabel: '默认总伤',
+  critNote: '异常伤害不吃暴击',
+  critModes: false,
+  engineNote: '对齐 zzz_calculator 的 Alice 默认机制：1 次极性强击 + 10 次核心追击 + 1 次满持续物理紊乱；C6 追加 6 次决胜追击。',
+  highlight: { eventId: 'assault', label: '极性强击', mode: 'total' },
+  attribution: [
+    { from: '0+1', to: '1+1', label: 'C1' },
+    { from: '1+1', to: '2+1', label: 'C2' },
+    { from: '2+1', to: '4+1', label: 'C4' },
+    { from: '4+1', to: '6+1', label: 'C6' },
+  ],
+  configs: [
+    config('0+1', '0+1', 0, 'ep-1503', 1, 54, '0 影画 + 专武精 1', '异常掌控 +60 / 强击物伤 +20%', 'cinema'),
+    config('1+1', '1+1', 1, 'ep-1503', 1, 54, 'C1 减防 20%', '异常掌控 +60 / 强击物伤 +20%', 'cinema'),
+    config('2+1', '2+1', 2, 'ep-1503', 1, 54, 'C2 强击与紊乱 +15%', '异常掌控 +60 / 强击物伤 +20%', 'cinema'),
+    config('4+1', '4+1', 4, 'ep-1503', 1, 54, 'C4 物理抗性无视 10%', '异常掌控 +60 / 强击物伤 +20%', 'cinema'),
+    config('6+1', '6+1', 6, 'ep-1503', 1, 54, 'C6 决胜追击 6 次', '异常掌控 +60 / 强击物伤 +20%', 'cinema'),
+    config('0+1 平民', '0+1 平民', 0, 'ep-1503', 1, 28, '28 有效词条', '异常掌控 +60 / 强击物伤 +20%', 'budget'),
+  ],
+}
+
 export function damageProfileFor(agent: Agent): DamageProfile {
+  if (agent.damageModel === 'alice') return ALICE
   if (agent.damageModel === 'vivian') return VIVIAN
   if (agent.damageModel === 'phoenix') return PHOENIX
   throw new Error(`${agent.slug}: no damage model`)

@@ -36,7 +36,7 @@ const graduation30 = props.agent.guide.graduationAlt?.panel
 
 const CONFIGS: DamageConfig[] = profile.configs.map((item) => ({
   ...item,
-  spec: item.budget === 30 ? graduation30 : graduation54,
+  spec: item.budget < 54 ? graduation30 : graduation54,
 }))
 
 const selected = ref(['0+1', '2+1', '4+1', '6+1'])
@@ -174,9 +174,9 @@ function markdown() {
     ['攻击力', ...visible.value.map((item) => format(item.panel.stats.atk, 1))],
     ['异常精通', ...visible.value.map((item) => format(item.panel.stats.anomalyProficiency, 1))],
     ['异常掌控', ...visible.value.map((item) => format(item.panel.stats.anomalyMastery, 1))],
-    ['单次异放', ...visible.value.map((item) => format(item.damage.single.total))],
+    [profile.singleMetricLabel, ...visible.value.map((item) => format(item.damage.single.total))],
     [profile.highlight.label, ...visible.value.map((item) => format(highlightValue(item)))],
-    ['轴总伤', ...visible.value.map((item) => format(total(item)))],
+    [profile.axisTotalLabel, ...visible.value.map((item) => format(total(item)))],
     ['相对基准', ...visible.value.map((item) => percent(relative(item)))],
   ]
   return [
@@ -200,7 +200,7 @@ async function copyMarkdown() {
 <template>
   <div class="damage">
     <div class="damage-toolbar">
-      <span class="damage-axis">20s 参考轴</span>
+      <span class="damage-axis">{{ profile.axisLabel }}</span>
       <label class="damage-enemy">
         <span>敌人</span>
         <select v-model="enemyId">
@@ -247,7 +247,7 @@ async function copyMarkdown() {
             : singleMode === 'crit'
               ? '必暴'
               : '不暴'
-          : '异放不吃暴击' }}
+          : profile.critNote }}
       </p>
     </section>
 
@@ -262,8 +262,8 @@ async function copyMarkdown() {
             <tr>
               <th>音擎</th>
               <th>局内 effect</th>
-              <th class="num">单次异放</th>
-              <th class="num">轴总伤</th>
+              <th class="num">{{ profile.singleMetricLabel }}</th>
+              <th class="num">{{ profile.axisTotalLabel }}</th>
               <th class="num">相对专武</th>
             </tr>
           </thead>
@@ -309,7 +309,7 @@ async function copyMarkdown() {
             <td v-for="item in metricRows" :key="item.id" class="num">{{ format(item.am, 1) }}</td>
           </tr>
           <tr>
-            <th>单次异放<small>失衡 1.5×</small></th>
+            <th>{{ profile.singleMetricLabel }}<small>失衡 1.5×</small></th>
             <td v-for="item in metricRows" :key="item.id" class="num">{{ format(item.single) }}</td>
           </tr>
           <tr>
@@ -319,7 +319,7 @@ async function copyMarkdown() {
             </td>
           </tr>
           <tr class="is-total">
-            <th>轴总伤</th>
+            <th>{{ profile.axisTotalLabel }}</th>
             <td v-for="item in metricRows" :key="item.id" class="num">{{ format(item.total) }}</td>
           </tr>
           <tr>

@@ -67,7 +67,7 @@ interface SharedOptions {
 }
 
 function commonZones({ type, mode, enemy, options }: SharedOptions, stats: CombatStats) {
-  const defIgnore = type === 'release' ? (options.defIgnore ?? 0) : 0
+  const defIgnore = options.defIgnore ?? 0
   const extraResPen = type === 'release' ? (stats.releaseResPen ?? 0) : 0
   return {
     dmgBonus: stats.dmgBonus,
