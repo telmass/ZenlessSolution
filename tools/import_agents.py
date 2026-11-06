@@ -637,6 +637,7 @@ def main() -> None:
             "cinemas": cinemas,
             "assets": {"avatar": avatar, "tachie": tachie, "full": full, "film": film},
             "guide": guide,
+            **({"potential": guide_src["potential"]} if guide_src.get("potential") else {}),
             "sources": [
                 {
                     "label": "官方 WIKI · 代理人",

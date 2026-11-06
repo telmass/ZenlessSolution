@@ -203,6 +203,13 @@ export interface Agent {
   skills: AgentSkill[]
   cinemas: AgentCinema[]
   assets: { avatar: string; tachie: string; full: string; film?: string }
+  /** Optional 2.5 potential activation block (e.g. Grace). */
+  potential?: {
+    name: string
+    summary: string
+    effects: string[]
+    note?: string
+  }
   guide: AgentGuide
   sources: { label: string; url: string }[]
   repairs?: string[]

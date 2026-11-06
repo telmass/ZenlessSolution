@@ -18,8 +18,8 @@ editorialSources = [
 ]
 
 [cinemaPriority]
-keyLevels = []
-note = "旧攻略未标注关键影画；六层均为数值/机制提升，按顺序阅读"
+keyLevels = [2, 6]
+note = "关键影画：2/6"
 
 [[skillPriority]]
 key = "core"
@@ -61,7 +61,7 @@ id = "special"
 key = "assist"
 label = "支援技"
 icon = "/images/skills/assist.webp"
-level = 12
+level = 7
 maxLevel = 12
 next = ">"
 id = "assist"
@@ -70,7 +70,7 @@ id = "assist"
 key = "dodge"
 label = "闪避"
 icon = "/images/skills/dodge.webp"
-level = 11
+level = 7
 maxLevel = 12
 next = ""
 id = "dodge"
@@ -88,25 +88,7 @@ refinement = 1
 
 [[weapons]]
 tier = "下位"
-note = "壳中之灵提供异常掌控，直接放大电属性异常积蓄；没有专武时优先选它。"
-
-[[weapons.items]]
-name = "壳中之灵"
-stats = "S 级 · 基础攻击 713 · 异常掌控 30%"
-icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/02/24/141353238/3214160dc64637a1823af2cef51d505b_6802413686352293170.png"
-engineId = "ep-1883"
-refinement = 1
-
-[[weapons]]
-tier = "备选"
-note = "触电唇彩与双生泣星都是 A 级异常音擎：前者精通白值高，后者靠异常触发叠攻击，按精炼取用。"
-
-[[weapons.items]]
-name = "触电唇彩"
-stats = "A 级 · 基础攻击 594 · 异常精通 75"
-icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/27/11536806/d40322e5c28b18493b8893d34f0fc9ef_67866270705971352.png"
-engineId = "ep-210"
-refinement = 5
+note = "双生泣星：A 级异常音擎，靠异常触发叠攻击，按精炼取用；其余音擎不考虑。"
 
 [[weapons.items]]
 name = "双生泣星"
@@ -116,15 +98,15 @@ engineId = "ep-212"
 refinement = 5
 
 [[driveBuilds]]
-name = "自由蓝调 4 件套 + 雷暴重金属 2 件套"
+name = "自由蓝调 4 件套 + 混沌爵士 2 件套"
 subPriority = [
     { label = "异常精通", next = ">", id = "am" },
     { label = "攻击力%", next = ">", id = "atk_pct" },
-    { label = "穿透值", next = ">", id = "pen_val" },
-    { label = "攻击力", next = "", id = "atk_flat" },
+    { label = "攻击力", next = ">", id = "atk_flat" },
+    { label = "穿透值", next = "", id = "pen_val" },
 ]
 set4Id = "自由蓝调"
-set2Id = "雷暴重金属"
+set2Id = "混沌爵士"
 
 [[driveBuilds.mainStats]]
 slot = "4 号位"
@@ -136,7 +118,7 @@ mainId = "am_92"
 [[driveBuilds.mainStats]]
 slot = "5 号位"
 main = "电属性伤害 +30%"
-alt = "攻击力 +30%"
+alt = "穿透率 +24%"
 note = ""
 mainId = "dmg_30"
 
@@ -154,81 +136,92 @@ effect4 = "[强化特殊技]命中敌人时，根据装备者的属性类型，�
 scene = "主力 4 件套"
 icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png"
 
-[driveBuilds.set2.main]
-name = "雷暴重金属"
-label = "电属性伤害+10%。"
-icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/75f9b18188620315fa938eb30766a91b_6083615496627787609.png"
+[[driveBuilds.set2.main]]
+name = "混沌爵士"
+label = "异常精通+30点。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/09/12/141353238/8568657ee1c1230ddad9fb021ff45499_5857861870100619839.png"
 
-[driveBuilds.set2.alt]
+[[driveBuilds.set2.main]]
 name = "法厄同之歌"
 label = "异常掌控+8%。"
 icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png"
 
 [[teams]]
-name = "格丽娜青"
+name = "格柚薇"
 
 [[teams.members]]
 agentId = "ep-150"
 name = "格莉丝"
 role = "异常"
 avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/06/25/76099754/d98501189911794e65a7bbcb205e65ed_6543737891696181009.png"
-note = "电能叠满后强化特殊技爆发，负责电属性异常与感电。"
+note = "电异常主 C，强化特殊技快速堆感电，潜能激化后手雷范围清杂。"
 set4 = [
     { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
 ]
 
 [[teams.members]]
-agentId = "ep-316"
-name = "丽娜"
+agentId = "ep-1386"
+name = "柚叶"
 role = "支援"
-avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/141353238/9a978a559ee6822481b7d4143170affe_464856154643405893.png"
-note = "电属性穿透与异常积蓄加成，延长感电窗口。"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/07/10/76099754/f288f8b22deafa2493c389fc4465d77b_8800233381222281203.png"
+note = "彩糖花火染以太/电，加速异常积蓄并提供攻击加成。"
 set4 = [
-    { name = "摇摆爵士", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/4f85a6c7c3f2a3bbde23b282b477f8dd_5575643858815083946.png" },
+    { name = "月光骑士颂", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/08/28/141353238/45a099a013cc85a590b788d3fbe236e9_2367370402205746903.PNG" },
 ]
 
 [[teams.members]]
-agentId = "ep-680"
-name = "青衣"
-role = "击破"
-avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/08/04/141353238/77d70d7c49d4785dbb8d98438219cde7_7990459774903021190.png"
-note = "快速失衡，给格莉丝创造强化特殊技爆发窗口。"
+agentId = "ep-1276"
+name = "薇薇安"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2025/04/17/15559334/ff1a8df24b61a379f46ff3e739e4b312_3615697079972716080.png"
+note = "以太异常后台异放，补紊乱伤害；与感电互相结算。"
 set4 = [
-    { name = "震星迪斯科", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/b3feeb5bf8107a0f9aa81c948fb18d70_6028598368786670636.png" },
+    { name = "法厄同之歌", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png" },
 ]
 
 [[teams]]
-name = "格丽妮"
+name = "格维蕾"
 
 [[teams.members]]
 agentId = "ep-150"
 name = "格莉丝"
 role = "异常"
 avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/06/25/76099754/d98501189911794e65a7bbcb205e65ed_6543737891696181009.png"
-note = "主输出，靠范围手雷清杂并维持感电。"
+note = "电异常主 C，负责感电与范围清杂。"
 set4 = [
     { name = "自由蓝调", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/ec6bd15b507c13de9ed3dfe331893b03_785141162503433306.png" },
 ]
 
 [[teams.members]]
-agentId = "ep-316"
-name = "丽娜"
-role = "支援"
-avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/141353238/9a978a559ee6822481b7d4143170affe_464856154643405893.png"
-note = "穿透与异常积蓄增益，兼顾聚怪。"
+agentId = "ep-1960"
+name = "维琳娜"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/15/76099754/11878922b3ca137a99bf3906b74cb5df_3794220973506474405.png"
+note = "风异常副 C，异放与减抗补足伤害。"
 set4 = [
-    { name = "摇摆爵士", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/4f85a6c7c3f2a3bbde23b282b477f8dd_5575643858815083946.png" },
+    { name = "呼啸沙龙", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/06/18/76099754/7589a4b9181ef956d0b22e3a60fc3908_2366218006868139587.png" },
 ]
 
 [[teams.members]]
-agentId = "ep-80"
-name = "妮可"
-role = "支援"
-avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/25/76099754/1cb64706be3eca5400e7cc02b8a82e60_3042993825218318926.png"
-note = "减防聚怪，短窗口内放大范围电伤。"
+agentId = "ep-2076"
+name = "蕾米埃尔"
+role = "异常"
+avatar = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/15559334/13b7b06627a8a99ffdf1f397b1daf7d1_5495460923605178593.png"
+note = "流明异常后台，耀变引擎与异放补伤害。"
 set4 = [
-    { name = "摇摆爵士", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/05/29/15559334/4f85a6c7c3f2a3bbde23b282b477f8dd_5575643858815083946.png" },
+    { name = "谶羽之誓", icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png" },
 ]
+
+[potential]
+name = "潜能激化"
+summary = "冲刺攻击 / 闪避反击后可直接衔接后续普攻段；终结技后特殊技先聚怪，再手雷范围轰炸。"
+effects = [
+    "冲刺攻击、闪避反击后无需前序普攻，直接衔接后续高倍率普攻段。",
+    "终结技后释放特殊技：先聚怪，再投掷多颗手雷进行范围轰炸。",
+    "普攻各段伤害与失衡倍率提升，四段最高 424.3%；垫步射击同步增强。",
+    "异常积蓄效率提升，更快触发感电。",
+]
+note = "机制说明，不进入面板计算；具体数值以游戏内潜能激化面板为准。"
 
 [[textGuide]]
 title = "出招表（循环）"
@@ -251,19 +244,15 @@ lines = [
 [[textGuide]]
 title = "影画要点"
 lines = [
-  "L1 再充能弹膛：[普通攻击]第四段每次命中敌人时，全队角色回复0.25点能量； 同一招式内，该效果最多为全队回复2点能量。",
-  "L2 电致击穿：在[普通攻击]、[特殊技]、[强化特殊技]等招式中投掷手雷命中敌人时，目标的电属性伤害抗性降低8.5%，电属性异常积蓄抗性降低8.5%，持续8秒。",
-  "L3 首席机械师：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
-  "L4 爆破电容：发动[强化特殊技]时，格莉丝获得6层充能（上限6层）； [普通攻击：高压射钉]或[冲刺攻击：突击检查]命中敌人时，消耗1层充能，使当前招式的能量获得效率提升20%。",
-  "L5 「冰冷铁魔女」：[普通攻击]、[闪避]、[支援技]、[特殊技]、[连携技]技能等级+2",
-  "L6 起爆扳机：消耗所有[电能]发动[特殊技]或[强化特殊技]时，能够强化招式效果，额外投掷一颗手雷，并使每颗手雷造成的伤害提升至原本的200%。",
+    "L2 电致击穿：在[普通攻击]、[特殊技]、[强化特殊技]等招式中投掷手雷命中敌人时，目标的电属性伤害抗性降低8.5%，电属性异常积蓄抗性降低8.5%，持续8秒。",
+    "L6 起爆扳机：消耗所有[电能]发动[特殊技]或[强化特殊技]时，能够强化招式效果，额外投掷一颗手雷，并使每颗手雷造成的伤害提升至原本的200%。",
 ]
 
 [graduationPanel]
 totals = [
-    { label = "攻击力", value = 0, unit = "" },
-    { label = "异常精通", value = 0, unit = "" },
-    { label = "异常掌控", value = 0, unit = "" },
+    { label = "攻击力", value = 2482.2, unit = "" },
+    { label = "异常精通", value = 502, unit = "" },
+    { label = "异常掌控", value = 196.3, unit = "" },
 ]
 note = "页面按 spec 实算，totals 仅保留旧计算器审计值。"
 computedAt = "2026-11-05T00:00:00+00:00"
@@ -273,7 +262,7 @@ agent = "格莉丝·霍华德"
 weapon = "嵌合编译器"
 core = "异常掌控 +36、基础攻击力 +75"
 set4 = "自由蓝调"
-set2 = "雷暴重金属"
+set2 = "混沌爵士"
 mainStats = "4 号位异常精通 +92，5 号位电属性伤害 +30%，6 号位异常掌控 +30%"
 subStats = "54 条满配：异常精通 ×26、攻击力% ×12、小攻击 ×6、穿透值 ×6、小生命 ×4"
 
@@ -282,7 +271,7 @@ agentId = "ep-150"
 weaponId = "ep-214"
 refinement = 1
 set4Id = "ep-191"
-set2Id = "ep-153"
+set2Id = "ep-800"
 disc4MainId = "am_92"
 disc5MainId = "dmg_30"
 disc5Element = "电"
@@ -300,9 +289,9 @@ filler = 0
 
 [graduationPanelAlt]
 totals = [
-    { label = "攻击力", value = 0, unit = "" },
-    { label = "异常精通", value = 0, unit = "" },
-    { label = "异常掌控", value = 0, unit = "" },
+    { label = "攻击力", value = 2308.4, unit = "" },
+    { label = "异常精通", value = 394, unit = "" },
+    { label = "异常掌控", value = 196.3, unit = "" },
 ]
 note = "页面按 spec 实算，totals 仅保留旧计算器审计值。"
 computedAt = "2026-11-05T00:00:00+00:00"
@@ -313,7 +302,7 @@ agent = "格莉丝·霍华德"
 weapon = "嵌合编译器"
 core = "异常掌控 +36、基础攻击力 +75"
 set4 = "自由蓝调"
-set2 = "雷暴重金属"
+set2 = "混沌爵士"
 mainStats = "4 号位异常精通 +92，5 号位电属性伤害 +30%，6 号位异常掌控 +30%"
 subStats = "30 条参考：异常精通 ×14、攻击力% ×9、小攻击 ×4、穿透值 ×3"
 
@@ -322,7 +311,7 @@ agentId = "ep-150"
 weaponId = "ep-214"
 refinement = 1
 set4Id = "ep-191"
-set2Id = "ep-153"
+set2Id = "ep-800"
 disc4MainId = "am_92"
 disc5MainId = "dmg_30"
 disc5Element = "电"

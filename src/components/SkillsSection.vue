@@ -148,6 +148,18 @@ const categories = computed(() => props.agent.skills)
         </li>
       </ul>
     </section>
+
+    <section v-if="agent.potential" class="potential">
+      <header class="potential__head">
+        <h3>{{ agent.potential.name }}</h3>
+        <span class="potential__tag">2.5</span>
+      </header>
+      <p class="potential__summary">{{ agent.potential.summary }}</p>
+      <ul class="potential__list">
+        <li v-for="(effect, index) in agent.potential.effects" :key="index">{{ effect }}</li>
+      </ul>
+      <p v-if="agent.potential.note" class="potential__note">{{ agent.potential.note }}</p>
+    </section>
   </div>
 </template>
 
@@ -155,6 +167,58 @@ const categories = computed(() => props.agent.skills)
 .skill-categories {
   display: grid;
   gap: var(--s9);
+}
+
+.potential {
+  padding: var(--s6);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+
+.potential__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s3);
+}
+
+.potential__head h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-24);
+  font-weight: 600;
+}
+
+.potential__tag {
+  padding: 2px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: var(--fs-12);
+}
+
+.potential__summary {
+  color: var(--text-2);
+  font-size: var(--fs-14);
+  line-height: 1.7;
+}
+
+.potential__list {
+  display: grid;
+  gap: 6px;
+  margin-top: var(--s3);
+  padding-left: 18px;
+  color: var(--text-2);
+  font-size: var(--fs-14);
+  line-height: 1.7;
+  list-style: disc;
+}
+
+.potential__note {
+  margin-top: var(--s3);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.6;
 }
 
 .skill-category__head {
