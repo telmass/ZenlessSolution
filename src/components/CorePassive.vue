@@ -23,6 +23,15 @@ const coreRows = computed(() =>
     value: effect.values[levelIndex.value],
   })),
 )
+
+/** 核心技表里除数值外还有「核心被动技能等级 +1」，之前没有展示。 */
+const coreNote = computed(() => {
+  const row = coreSkill.value?.moves[0]?.table?.levels[levelIndex.value] as
+    | { lines?: string[] }
+    | undefined
+  const lines = row?.lines ?? []
+  return lines.find((line: string) => line.includes('技能等级')) ?? ''
+})
 </script>
 
 <template>
@@ -68,6 +77,7 @@ const coreRows = computed(() =>
             <dd class="num">{{ row.value.includes('%') ? row.value : `+${row.value}` }}</dd>
           </div>
         </dl>
+        <p v-if="coreNote" class="core-passive__note">{{ coreNote }}</p>
       </aside>
     </div>
 
@@ -165,6 +175,12 @@ const coreRows = computed(() =>
   color: var(--text);
   font-size: var(--fs-18);
   font-weight: 600;
+}
+
+.core-passive__note {
+  margin-top: var(--s2);
+  color: var(--muted);
+  font-size: var(--fs-12);
 }
 
 .core-passive__extra {

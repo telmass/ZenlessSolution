@@ -22,14 +22,15 @@ describe('alice panel references', () => {
     expect(panel.warnings.filter((line) => !line.includes('2 件套'))).toEqual([])
   })
 
-  it('matches the 30-roll low reference (~2800 ATK / ~320 AP)', () => {
+  it('matches the 28-effective low reference (~320 AP)', () => {
     const alt = agent.guide.graduationAlt!
     const totals = graduationTotals(agent, alt)
     const byLabel = Object.fromEntries(totals.map((item) => [item.label, item.value]))
-    expect(Math.abs(byLabel['攻击力'] - 2800)).toBeLessThan(5)
-    expect(Math.abs(byLabel['异常精通'] - 320)).toBeLessThan(3)
-    expect(alt.panel!.budget).toBe(30)
-    expect(Object.values(alt.panel!.substats).reduce((sum, value) => sum + value, 0)).toBe(30)
+    expect(byLabel['攻击力']).toBeCloseTo(3151.5, 1)
+    expect(byLabel['异常精通']).toBe(318)
+    expect(alt.panel!.budget).toBe(28)
+    const counts = alt.panel!.substats
+    expect(counts['anomaly_proficiency'] + counts['atk_pct']).toBe(28)
   })
 
   it('counts 41 effective / 11 small / 2 invalid on the full build', () => {

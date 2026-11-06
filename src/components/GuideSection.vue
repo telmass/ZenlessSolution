@@ -137,10 +137,11 @@ function cinemaGain(line: string): { label: string; value: number; from: string 
 }
 
 function graduationLabel(item: GuideGraduation): string {
-  const budget = item.spec.budget
+  const budget = item.spec.budget ?? 0
   if (budget === 54) return '满配 · 54 词条'
-  if (budget === 30) return '小毕业 · 30 词条'
-  return item.title
+  const analysis = graduationAnalysis(item)
+  if (analysis.effective >= budget) return `小毕业 · ${budget} 有效词条`
+  return `小毕业 · ${budget} 词条`
 }
 </script>
 
