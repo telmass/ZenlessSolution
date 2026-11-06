@@ -68,7 +68,7 @@ describe('every shipped dossier', () => {
     const phoenix = agents.find((agent) => agent.slug === 'phoenix')!
     const spec = specFromGraduation(phoenix, phoenix.guide.graduation!)
     const result = computePanel(inputFromSpec(phoenix, spec))
-    expect(result.stats.atk).toBeCloseTo(2538.05, 2)
+    expect(result.stats.atk).toBeCloseTo(2519.05, 2)
     expect(result.stats.anomalyProficiency).toBe(510)
     expect(result.stats.anomalyMastery).toBeCloseTo(255.36, 2)
   })

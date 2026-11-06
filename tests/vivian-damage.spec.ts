@@ -128,8 +128,8 @@ describe('vivian damage model', () => {
   it('matches the 41-effective / 12-small / 1-invalid allocation', () => {
     const analysis = analyzeSubstats(spec.substats, agent.substatProfile, { budget: 54 })
     expect(analysis.effective).toBe(41)
-    expect(analysis.small).toBe(12)
-    expect(analysis.invalid).toBe(1)
+    expect(analysis.small).toBe(11)
+    expect(analysis.invalid).toBe(2)
   })
 
   it('marks C2 / C6 as key cinemas and lists all three mastery 2-piece sets', () => {

@@ -38,7 +38,12 @@ const spec = reactive<BuildSpec>({
 })
 
 const mains = computed<MainStatInfo[]>(() => {
-  const out: MainStatInfo[] = []
+  // 1/2/3 号位是固定主词条：小生命 / 小攻击 / 小防御。
+  const out: MainStatInfo[] = [
+    { slot: 1, stat: 'hp', kind: 'flat' },
+    { slot: 2, stat: 'atk', kind: 'flat' },
+    { slot: 3, stat: 'def', kind: 'flat' },
+  ]
   for (const slot of [4, 5, 6] as const) {
     const rule = mainStatsFor(slot).find((item) => item.id === spec.mainStats[slot])
     if (rule) out.push({ slot, stat: rule.stat, kind: rule.kind })

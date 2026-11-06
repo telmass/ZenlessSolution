@@ -23,8 +23,8 @@ describe('phoenix effective substats', () => {
   it('reproduces 41 effective + 12 small + 1 invalid', () => {
     const result = analyzeSubstats(graduation54.substats, PHOENIX_PROFILE, { budget: 54 })
     expect(result.effective).toBe(41)
-    expect(result.small).toBe(12)
-    expect(result.invalid).toBe(1)
+    expect(result.small).toBe(11)
+    expect(result.invalid).toBe(2)
     expect(result.total).toBe(54)
     expect(result.overBudget).toBe(false)
   })
@@ -35,8 +35,8 @@ describe('phoenix effective substats', () => {
       includePenValue: true,
     })
     expect(result.effective).toBe(47)
-    expect(result.small).toBe(6)
-    expect(result.invalid).toBe(1)
+    expect(result.small).toBe(5)
+    expect(result.invalid).toBe(2)
   })
 
   it('handles the 30-roll budget', () => {

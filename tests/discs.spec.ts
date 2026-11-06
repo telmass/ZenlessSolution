@@ -20,9 +20,9 @@ import type { MainStatInfo } from '@/core/panel/discs'
 const PHOENIX_54 = {
   anomaly_proficiency: 30,
   atk_pct: 11,
-  atk_flat: 6,
+  atk_flat: 5,
   pen_value: 6,
-  hp_pct: 1,
+  hp_pct: 2,
 }
 
 const PHOENIX_30 = {
@@ -33,6 +33,9 @@ const PHOENIX_30 = {
 
 // 4 号位异常精通 / 5 号位属性伤害 / 6 号位异常掌控
 const MAINS: MainStatInfo[] = [
+  { slot: 1, stat: 'hp', kind: 'flat' },
+  { slot: 2, stat: 'atk', kind: 'flat' },
+  { slot: 3, stat: 'def', kind: 'flat' },
   { slot: 4, stat: 'anomalyProficiency', kind: 'flat' },
   { slot: 5, stat: 'dmgBonus', kind: 'flat' },
   { slot: 6, stat: 'anomalyMastery', kind: 'pct' },
@@ -82,6 +85,10 @@ describe('per-disc substat allocation', () => {
   it('caps the same substat at (6 - main occurrences) * 6', () => {
     expect(maxRollsFor('anomaly_proficiency', substats, MAINS)).toBe(30)
     expect(maxRollsFor('atk_pct', substats, MAINS)).toBe(36)
+    expect(maxRollsFor('hp_flat', substats, MAINS)).toBe(30)
+    expect(maxRollsFor('atk_flat', substats, MAINS)).toBe(30)
+    expect(maxRollsFor('def_flat', substats, MAINS)).toBe(30)
+    expect(maxRollsFor('hp_pct', substats, MAINS)).toBe(36)
     const doubleAtkMain: MainStatInfo[] = [
       ...MAINS,
       { slot: 5, stat: 'atk', kind: 'pct' },
@@ -100,6 +107,15 @@ describe('per-disc substat allocation', () => {
     )
     partial[0].lines.push({ id: 'atk_flat', rolls: 1 }, { id: 'pen_value', rolls: 1 })
     expect(canUpgrade(partial[0])).toBe(true)
+  })
+
+  it('blocks hp_flat / atk_flat / def_flat on the fixed 1/2/3 slots', () => {
+    const discs = emptyDiscs()
+    discs[0].lines.push({ id: 'hp_flat', rolls: 1 })
+    discs[1].lines.push({ id: 'atk_flat', rolls: 1 })
+    discs[2].lines.push({ id: 'def_flat', rolls: 1 })
+    const errors = validateDiscs(discs, substats, MAINS)
+    expect(errors.filter((error) => error.includes('与主词条重复'))).toHaveLength(3)
   })
 
   it('rejects a substat that duplicates the disc main stat', () => {

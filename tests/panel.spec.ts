@@ -12,10 +12,10 @@ describe('out-of-combat panel engine', () => {
   it('reproduces the legacy 54-roll graduation panel', () => {
     const result = computePanel(inputFromSpec(agent, graduation54))
 
-    expect(result.stats.atk).toBeCloseTo(2538.05, 2)
+    expect(result.stats.atk).toBeCloseTo(2519.05, 2)
     expect(result.stats.anomalyProficiency).toBe(510)
     expect(result.stats.anomalyMastery).toBeCloseTo(255.36, 2)
-    expect(result.stats.hp).toBeCloseTo(10103.19, 2)
+    expect(result.stats.hp).toBeCloseTo(10333.38, 2)
     expect(result.stats.def).toBe(796)
     expect(result.stats.impact).toBe(86)
     expect(result.stats.critRate).toBe(5)
@@ -45,7 +45,7 @@ describe('out-of-combat panel engine', () => {
 
     expect(labels).toContain('核心技')
     expect(labels).toContain('涅槃初翎')
-    // 1585 base x 1.33 + (316 + 114) = 2538.05, not 1585 + 713 + ...
+    // 1585 base x 1.33 + (316 + 95) = 2519.05, not 1585 + 713 + ...
     expect(result.stats.atk).toBeLessThan(2600)
   })
 
@@ -53,7 +53,7 @@ describe('out-of-combat panel engine', () => {
     const input = inputFromSpec(agent, graduation54)
     input.substats = { ...input.substats, atk_flat: 7 }
     const result = computePanel(input)
-    expect(result.totalSubstatRolls).toBe(55)
+    expect(result.totalSubstatRolls).toBe(56)
     expect(result.warnings.some((warning) => warning.includes('54'))).toBe(true)
   })
 

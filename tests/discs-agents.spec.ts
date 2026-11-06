@@ -23,7 +23,11 @@ const panel = panelData as unknown as {
 
 function mainsFor(agent: Agent): MainStatInfo[] {
   const spec = agent.guide.graduation!.panel!
-  const out: MainStatInfo[] = []
+  const out: MainStatInfo[] = [
+    { slot: 1, stat: 'hp', kind: 'flat' },
+    { slot: 2, stat: 'atk', kind: 'flat' },
+    { slot: 3, stat: 'def', kind: 'flat' },
+  ]
   for (const slot of [4, 5, 6] as const) {
     const rule = panel.mainStats.find(
       (item) => item.slot === slot && item.id === spec.mainStats[String(slot) as '4' | '5' | '6'],

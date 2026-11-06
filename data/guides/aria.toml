@@ -281,7 +281,7 @@ lines = [
 
 [graduationPanel]
 totals = [
-    { label = "攻击力", value = 2715.2, unit = "" },
+    { label = "攻击力", value = 2696.2, unit = "" },
     { label = "异常精通", value = 442, unit = "" },
     { label = "异常掌控", value = 253.7, unit = "" },
 ]
@@ -295,7 +295,7 @@ core = "异常掌控 +36、基础攻击力 +75"
 set4 = "法厄同之歌"
 set2 = "流光咏叹"
 mainStats = "4 号位异常精通 +92，5 号位以太伤害 +30%，6 号位异常掌控 +30%"
-subStats = "54 条满配：异常精通 ×26、攻击力% ×15、小攻击 ×6、穿透值 ×6、生命值% ×1"
+subStats = "54 条满配：异常精通 ×26、攻击力% ×15、小攻击 ×5、穿透值 ×6、生命值% ×2"
 
 [graduationPanel.spec]
 agentId = "ep-1793"
@@ -314,9 +314,9 @@ core = [
 subStats = [
     { id = "am", count = 26 },
     { id = "atk_pct", count = 15 },
-    { id = "atk_flat", count = 6 },
+    { id = "atk_flat", count = 5 },
     { id = "pen_val", count = 6 },
-    { id = "hp_pct", count = 1 },
+    { id = "hp_pct", count = 2 },
 ]
 budget = 54
 filler = 0
