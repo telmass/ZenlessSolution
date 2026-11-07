@@ -281,10 +281,10 @@ function drawWeapons(
   }
 }
 
-function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, images: ImageMap) {
+function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, images: ImageMap): number {
   rowLabel(ctx, '驱动盘推荐', y)
   const build = agent.guide.builds[0]
-  if (!build) return
+  if (!build) return y + 94
   let x = VALUE_X
   const set4Icon = images.get(build.set4.icon)
   const set4Label = `4 ${build.set4.name}`
@@ -299,43 +299,53 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   ctx.font = font(11, 500)
   ctx.fillStyle = INK
   ctx.fillText(set4Label, x + 34, y + 9)
-  x += w4 + 6
 
-  const set2 = build.set2[0]
-  if (set2) {
-    const icon = images.get(set2.icon)
-    const label = `2 ${build.set2.map((item) => item.name).join(' / ')}`
-    ctx.font = font(11, 500)
-    const width = textWidth(ctx, label) + 52
-    roundRect(ctx, x, y, width, 32, 9)
-    ctx.fillStyle = CHIP
-    ctx.fill()
-    ctx.strokeStyle = BORDER
-    ctx.stroke()
-    if (icon) drawContain(ctx, icon, x + 4, y + 3, 26, 26)
-    ctx.font = font(11, 500)
+  const suffix = build.name.includes('+') ? build.name.split('+').slice(1).join('+').trim() : '2 件套'
+  const title = `${build.set4.name} 4 件套 + ${suffix}`
+  ctx.font = font(10, 500)
+  ctx.fillStyle = MUTED
+  ctx.fillText(title, VALUE_X, y + 52)
+
+  let optionY = y + 70
+  const set2Labels = [...new Set(build.set2.map((item) => item.label).filter(Boolean))]
+  const perOptionEffect = set2Labels.length > 1
+  for (const option of build.set2) {
+    const icon = images.get(option.icon)
+    if (icon) drawContain(ctx, icon, VALUE_X, optionY - 12, 16, 16)
+    ctx.font = font(10, 500)
     ctx.fillStyle = INK
-    ctx.fillText(label, x + 34, y + 9)
+    const line = perOptionEffect ? `${option.name} · ${option.label}` : option.name
+    ctx.fillText(line, VALUE_X + 22, optionY)
+    optionY += 20
+  }
+  if (!perOptionEffect && set2Labels[0]) {
+    ctx.font = font(10, 500)
+    ctx.fillStyle = MUTED
+    ctx.fillText(set2Labels[0], VALUE_X + 22, optionY)
+    optionY += 20
   }
 
+  let statY = optionY + 8
   let statX = VALUE_X
   build.mainStats.forEach((stat) => {
     const label = `${stat.slot} ${stat.main}`
     ctx.font = font(10, 500)
     const width = textWidth(ctx, label) + 24
-    roundRect(ctx, statX, y + 40, width, 28, 8)
+    roundRect(ctx, statX, statY, width, 28, 8)
     ctx.fillStyle = SOFT
     ctx.fill()
     ctx.font = font(10, 500)
     ctx.fillStyle = MUTED
-    ctx.fillText(label, statX + 10, y + 48)
+    ctx.fillText(label, statX + 10, statY + 8)
     if (stat.alt && stat.alt !== '无') {
       ctx.font = font(9, 500)
       ctx.fillStyle = '#7b8494'
-      ctx.fillText(`备选 ${stat.alt}`, statX + 9, y + 74)
+      ctx.fillText(`备选 ${stat.alt}`, statX + 9, statY + 34)
     }
     statX += Math.max(width, stat.alt && stat.alt !== '无' ? textWidth(ctx, `备选 ${stat.alt}`) + 18 : 0) + 6
   })
+
+  return statY + 44
 }
 
 function drawTeams(ctx: CanvasRenderingContext2D, teams: GuideTeam[], y: number, images: ImageMap) {
@@ -424,15 +434,16 @@ function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap)
   drawSkills(ctx, agent, 82, images)
   drawCinemas(ctx, agent, 140)
   drawWeapons(ctx, agent.guide.weapons, 200, images)
-  drawDrives(ctx, agent, 398, images)
-  drawTeams(ctx, agent.guide.teams, 492, images)
+  const drivesEnd = drawDrives(ctx, agent, 398, images)
+  const teamsY = drivesEnd + 8
+  drawTeams(ctx, agent.guide.teams, teamsY, images)
   drawGraduation(
     ctx,
     agent,
     [agent.guide.graduationAlt, agent.guide.graduation]
       .filter((item): item is GuideGraduation => Boolean(item))
       .sort((a, b) => (a.spec.budget ?? 0) - (b.spec.budget ?? 0)),
-    606,
+    teamsY + 114,
   )
 }
 

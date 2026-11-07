@@ -98,7 +98,7 @@ engineId = "ep-212"
 refinement = 5
 
 [[driveBuilds]]
-name = "自由蓝调 4 件套 + 混沌爵士 2 件套"
+name = "自由蓝调 4 件套 + 精通/掌控 2 件套"
 subPriority = [
     { label = "异常精通", next = ">", id = "am" },
     { label = "攻击力%", next = ">", id = "atk_pct" },
@@ -145,6 +145,11 @@ icon = "https://act-upload.mihoyo.com/nap-obc-indep/2024/09/12/141353238/8568657
 name = "法厄同之歌"
 label = "异常掌控+8%。"
 icon = "https://act-upload.mihoyo.com/nap-obc-indep/2025/03/05/82500917/b815a9e4150ea81e31de93ac69733ed6_2280902498308679533.png"
+
+[[driveBuilds.set2.main]]
+name = "谶羽之誓"
+label = "异常精通+30点。"
+icon = "https://act-upload.mihoyo.com/nap-obc-indep/2026/07/22/141353238/c147d9fccba49a1f4176f795883d03be_9023105643546740094.png"
 
 [[teams]]
 name = "格柚薇"

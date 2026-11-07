@@ -55,10 +55,9 @@ const builds = computed(() => guide.value.builds)
 const firstBuild = computed(() => builds.value[0])
 
 /** 2 件套可能是多个等效选项（都加同一条属性），效果只展示一次。 */
-const set2Effect = computed(() => {
-  const labels = [...new Set((firstBuild.value?.set2 ?? []).map((item) => item.label).filter(Boolean))]
-  return labels.join('；')
-})
+const set2Labels = computed(() => [
+  ...new Set((firstBuild.value?.set2 ?? []).map((item) => item.label).filter(Boolean)),
+])
 
 const graduationCards = computed(() =>
   [guide.value.graduation, guide.value.graduationAlt].filter((item): item is GuideGraduation => Boolean(item)),
@@ -236,10 +235,13 @@ function graduationLabel(item: GuideGraduation): string {
             <div class="set-card__list">
               <div v-for="option in firstBuild.set2" :key="option.name" class="set-card__option">
                 <img v-if="media(option.icon)" :src="media(option.icon)" alt="" />
-                <span>{{ option.name }}</span>
+                <div class="set-card__option-copy">
+                  <b>{{ option.name }}</b>
+                  <span v-if="set2Labels.length > 1">{{ option.label }}</span>
+                </div>
               </div>
             </div>
-            <p v-if="set2Effect" class="set-card__effect">{{ set2Effect }}</p>
+            <p v-if="set2Labels.length === 1" class="set-card__effect">{{ set2Labels[0] }}</p>
           </div>
         </div>
 
@@ -681,7 +683,25 @@ function graduationLabel(item: GuideGraduation): string {
 .set-card__option {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
+}
+
+.set-card__option-copy {
+  display: grid;
+  gap: 1px;
+}
+
+.set-card__option-copy b {
+  margin: 0;
+  font-size: var(--fs-14);
+  font-weight: 500;
+}
+
+.set-card__option-copy span {
+  color: var(--muted);
+  font-size: var(--fs-12);
+  line-height: 1.4;
 }
 
 .set-card__option img {
