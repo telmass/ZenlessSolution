@@ -199,7 +199,7 @@ export interface Agent {
   /** Display-only substat whitelist; never enters panel/damage math. */
   substatProfile: { effective: string[]; small: string[] }
   /** Which damage model this agent owns. */
-  damageModel: 'phoenix' | 'vivian' | 'alice' | null
+  damageModel: 'phoenix' | 'vivian' | 'alice' | 'aria' | null
   skills: AgentSkill[]
   cinemas: AgentCinema[]
   assets: { avatar: string; tachie: string; full: string; film?: string }

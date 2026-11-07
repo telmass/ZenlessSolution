@@ -132,7 +132,31 @@ const ALICE: DamageProfile = {
   ],
 }
 
+const ARIA: DamageProfile = {
+  singleTitle: '单次侵蚀异放 · 失衡 1.5×',
+  axisLabel: '默认机制口径（单轮）',
+  singleMetricLabel: '侵蚀异放',
+  axisTotalLabel: '默认总伤',
+  critNote: '异放暴击按期望计（C1 25% + 掌控转化）',
+  critModes: false,
+  engineNote: '对齐 zzz_calculator 的 Aria 默认设置：1 次失衡期侵蚀异放；异放比例用局外异常掌控 × 核心以太系数 × 1.5。',
+  highlight: { eventId: 'release', label: '侵蚀异放', mode: 'total' },
+  attribution: [
+    { from: '0+1', to: '1+1', label: 'C1' },
+    { from: '1+1', to: '2+1', label: 'C2' },
+    { from: '2+1', to: '6+1', label: 'C6' },
+  ],
+  configs: [
+    config('0+1', '0+1', 0, 'ep-1883', 1, 54, '0 影画 + 专武精 1', '异常精通 +90 / 异常目标增伤 20%', 'cinema'),
+    config('1+1', '1+1', 1, 'ep-1883', 1, 54, 'C1 异放暴击', '异常精通 +90 / 异常目标增伤 20%', 'cinema'),
+    config('2+1', '2+1', 2, 'ep-1883', 1, 54, 'C2 减防 24%', '异常精通 +90 / 异常目标增伤 20%', 'cinema'),
+    config('6+1', '6+1', 6, 'ep-1883', 1, 54, 'C6 以太伤害 +40%', '异常精通 +90 / 异常目标增伤 20%', 'cinema'),
+    config('0+1 平民', '0+1 平民', 0, 'ep-1883', 1, 30, '30 词条', '异常精通 +90 / 异常目标增伤 20%', 'budget'),
+  ],
+}
+
 export function damageProfileFor(agent: Agent): DamageProfile {
+  if (agent.damageModel === 'aria') return ARIA
   if (agent.damageModel === 'alice') return ALICE
   if (agent.damageModel === 'vivian') return VIVIAN
   if (agent.damageModel === 'phoenix') return PHOENIX

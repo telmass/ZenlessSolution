@@ -106,6 +106,18 @@ VIVIAN_RELEASE_COEFS = {
     "风": ["0.18%", "0.21%", "0.24%", "0.26%", "0.29%", "0.32%"],
 }
 
+ARIA_MECHANICS = {
+    "anomalyProficiencyFlat": [45, 52, 60, 67, 75, 82, 90],
+    "releaseCoefficientPctByElement": {
+        "以太": [16.0, 18.3, 20.6, 22.9, 25.2, 27.5],
+        "电": [8.3, 9.5, 10.7, 11.9, 13.1, 14.3],
+        "火": [20.8, 23.8, 26.8, 29.8, 32.7, 35.7],
+        "物理": [1.46, 1.67, 1.88, 2.08, 2.29, 2.5],
+        "冰": [2.1, 2.4, 2.7, 3.0, 3.3, 3.6],
+        "风": [0.8, 0.9, 1.1, 1.2, 1.3, 1.4],
+    },
+}
+
 ALICE_MECHANICS = {
     # 物理异常积蓄效率：核心被动等级 1–7（A–F 对应 2–7）。
     "buildupEfficiencyPct": [12.5, 14.6, 16.7, 18.8, 20.8, 22.9, 25],
@@ -627,12 +639,22 @@ def main() -> None:
                     ]
                     if slug == "vivian"
                     else []
+                )
+                + (
+                    [{"label": "异常精通", "values": [str(v) for v in ARIA_MECHANICS["anomalyProficiencyFlat"][1:]]}]
+                    + [
+                        {"label": f"异放系数（{element}）", "values": [f"{v}%" for v in values]}
+                        for element, values in ARIA_MECHANICS["releaseCoefficientPctByElement"].items()
+                    ]
+                    if slug == "aria"
+                    else []
                 ),
                 **(PHOENIX_MECHANICS if slug == "phoenix" else {}),
                 **(ALICE_MECHANICS if slug == "alice" else {}),
+                **(ARIA_MECHANICS if slug == "aria" else {}),
             },
             "substatProfile": {"effective": effective, "small": small},
-            "damageModel": {"phoenix": "phoenix", "vivian": "vivian", "alice": "alice"}.get(slug),
+            "damageModel": {"phoenix": "phoenix", "vivian": "vivian", "alice": "alice", "aria": "aria"}.get(slug),
             "skills": skills,
             "cinemas": cinemas,
             "assets": {"avatar": avatar, "tachie": tachie, "full": full, "film": film},
