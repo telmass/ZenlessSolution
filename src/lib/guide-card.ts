@@ -307,21 +307,20 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   ctx.fillText(title, VALUE_X, y + 52)
 
   let optionY = y + 70
-  const set2Labels = [...new Set(build.set2.map((item) => item.label).filter(Boolean))]
-  const perOptionEffect = set2Labels.length > 1
+  const groups = new Map<string, typeof build.set2>()
   for (const option of build.set2) {
-    const icon = images.get(option.icon)
+    const key = option.label || option.name
+    const list = groups.get(key) ?? []
+    list.push(option)
+    groups.set(key, list)
+  }
+  for (const [label, items] of groups) {
+    const icon = images.get(items[0].icon)
     if (icon) drawContain(ctx, icon, VALUE_X, optionY - 12, 16, 16)
     ctx.font = font(10, 500)
     ctx.fillStyle = INK
-    const line = perOptionEffect ? `${option.name} · ${option.label}` : option.name
-    ctx.fillText(line, VALUE_X + 22, optionY)
-    optionY += 20
-  }
-  if (!perOptionEffect && set2Labels[0]) {
-    ctx.font = font(10, 500)
-    ctx.fillStyle = MUTED
-    ctx.fillText(set2Labels[0], VALUE_X + 22, optionY)
+    const names = items.map((item) => item.name).join(' / ')
+    ctx.fillText(`${names} · ${label}`, VALUE_X + 22, optionY)
     optionY += 20
   }
 

@@ -55,9 +55,16 @@ const builds = computed(() => guide.value.builds)
 const firstBuild = computed(() => builds.value[0])
 
 /** 2 件套可能是多个等效选项（都加同一条属性），效果只展示一次。 */
-const set2Labels = computed(() => [
-  ...new Set((firstBuild.value?.set2 ?? []).map((item) => item.label).filter(Boolean)),
-])
+const set2Groups = computed(() => {
+  const groups = new Map<string, NonNullable<typeof firstBuild.value>['set2']>()
+  for (const option of firstBuild.value?.set2 ?? []) {
+    const key = option.label || option.name
+    const list = groups.get(key) ?? []
+    list.push(option)
+    groups.set(key, list)
+  }
+  return [...groups.entries()].map(([label, items]) => ({ label, items }))
+})
 
 const graduationCards = computed(() =>
   [guide.value.graduation, guide.value.graduationAlt].filter((item): item is GuideGraduation => Boolean(item)),
@@ -233,15 +240,16 @@ function graduationLabel(item: GuideGraduation): string {
               2 件套{{ firstBuild.set2.length > 1 ? ' · 任选其一' : '' }}
             </span>
             <div class="set-card__list">
-              <div v-for="option in firstBuild.set2" :key="option.name" class="set-card__option">
-                <img v-if="media(option.icon)" :src="media(option.icon)" alt="" />
-                <div class="set-card__option-copy">
-                  <b>{{ option.name }}</b>
-                  <span v-if="set2Labels.length > 1">{{ option.label }}</span>
+              <div v-for="group in set2Groups" :key="group.label" class="set-card__option-group">
+                <div class="set-card__option-members">
+                  <span v-for="option in group.items" :key="option.name" class="set-card__member">
+                    <img v-if="media(option.icon)" :src="media(option.icon)" alt="" />
+                    <b>{{ option.name }}</b>
+                  </span>
                 </div>
+                <span class="set-card__effect-inline">{{ group.label }}</span>
               </div>
             </div>
-            <p v-if="set2Labels.length === 1" class="set-card__effect">{{ set2Labels[0] }}</p>
           </div>
         </div>
 
@@ -680,28 +688,42 @@ function graduationLabel(item: GuideGraduation): string {
   margin-top: 4px;
 }
 
-.set-card__option {
+.set-card__option-group {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px 14px;
   width: 100%;
 }
 
-.set-card__option-copy {
-  display: grid;
-  gap: 1px;
+.set-card__option-members {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
 }
 
-.set-card__option-copy b {
+.set-card__member {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.set-card__member img {
+  width: 34px;
+  height: 34px;
+}
+
+.set-card__member b {
   margin: 0;
   font-size: var(--fs-14);
   font-weight: 500;
 }
 
-.set-card__option-copy span {
+.set-card__effect-inline {
   color: var(--muted);
   font-size: var(--fs-12);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .set-card__option img {
