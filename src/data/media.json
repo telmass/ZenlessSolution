@@ -182,13 +182,6 @@
   "height": 810
  },
  {
-  "key": "agent:ep-1852:avatar",
-  "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/03/19/15559334/47fa944608544745d4b648e2224b9381_5402359186626856976.png",
-  "variant": "avatar",
-  "width": 200,
-  "height": 200
- },
- {
   "key": "agent:ep-1791:avatar",
   "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/02/02/15559334/8fce0ceee85d57e5fda2b2db7d36204e_3586351240444152860.png",
   "variant": "avatar",
@@ -229,6 +222,13 @@
   "variant": "cinema",
   "width": 1440,
   "height": 810
+ },
+ {
+  "key": "agent:ep-1852:avatar",
+  "url": "https://act-upload.mihoyo.com/nap-obc-indep/2026/03/19/15559334/47fa944608544745d4b648e2224b9381_5402359186626856976.png",
+  "variant": "avatar",
+  "width": 200,
+  "height": 200
  },
  {
   "key": "agent:velina:avatar",
