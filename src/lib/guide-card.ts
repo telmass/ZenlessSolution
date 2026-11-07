@@ -300,13 +300,6 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
   ctx.fillStyle = INK
   ctx.fillText(set4Label, x + 34, y + 9)
 
-  const suffix = build.name.includes('+') ? build.name.split('+').slice(1).join('+').trim() : '2 件套'
-  const title = `${build.set4.name} 4 件套 + ${suffix}`
-  ctx.font = font(10, 500)
-  ctx.fillStyle = MUTED
-  ctx.fillText(title, VALUE_X, y + 52)
-
-  let optionY = y + 70
   const groups = new Map<string, typeof build.set2>()
   for (const option of build.set2) {
     const key = option.label || option.name
@@ -314,17 +307,26 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
     list.push(option)
     groups.set(key, list)
   }
+
+  const set2X = x + w4 + 16
+  let groupY = y + 9
   for (const [label, items] of groups) {
-    const icon = images.get(items[0].icon)
-    if (icon) drawContain(ctx, icon, VALUE_X, optionY - 12, 16, 16)
+    let gx = set2X
+    for (const item of items) {
+      const icon = images.get(item.icon)
+      if (icon) drawContain(ctx, icon, gx, groupY - 13, 18, 18)
+      ctx.font = font(10, 500)
+      ctx.fillStyle = INK
+      ctx.fillText(item.name, gx + 22, groupY)
+      gx += 22 + textWidth(ctx, item.name) + 10
+    }
     ctx.font = font(10, 500)
-    ctx.fillStyle = INK
-    const names = items.map((item) => item.name).join(' / ')
-    ctx.fillText(`${names} · ${label}`, VALUE_X + 22, optionY)
-    optionY += 20
+    ctx.fillStyle = MUTED
+    ctx.fillText(`· ${label}`, gx, groupY)
+    groupY += 24
   }
 
-  let statY = optionY + 8
+  const statY = y + Math.max(44, groups.size * 24 + 8)
   let statX = VALUE_X
   build.mainStats.forEach((stat) => {
     const label = `${stat.slot} ${stat.main}`
