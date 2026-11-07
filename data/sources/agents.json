@@ -159,11 +159,7 @@
   "trait": "异常",
   "panelMode": "standard",
   "importantSubStats": [
-   "atk_flat",
    "atk_pct",
-   "crit_rate",
-   "crit_dmg",
-   "pen_value",
    "anomaly_proficiency"
   ],
   "source": "https://baike.mihoyo.com/zzz/wiki/content/150/detail?mhy_presentation_style=fullscreen",
