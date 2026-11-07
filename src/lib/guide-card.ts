@@ -279,6 +279,7 @@ function drawWeapons(
     }
     top += 36
   }
+  return top + 4
 }
 
 function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, images: ImageMap): number {
@@ -308,25 +309,31 @@ function drawDrives(ctx: CanvasRenderingContext2D, agent: Agent, y: number, imag
     groups.set(key, list)
   }
 
-  const set2X = x + w4 + 16
-  let groupY = y + 9
+  const set2X = x + w4 + 12
+  let groupY = y
   for (const [label, items] of groups) {
-    let gx = set2X
+    const names = items.map((item) => item.name).join(' / ')
+    const text = `${names} · ${label}`
+    ctx.font = font(10, 500)
+    const chipW = 8 + items.length * 22 + 6 + textWidth(ctx, text) + 12
+    roundRect(ctx, set2X, groupY, chipW, 32, 9)
+    ctx.fillStyle = CHIP
+    ctx.fill()
+    ctx.strokeStyle = BORDER
+    ctx.stroke()
+    let ix = set2X + 4
     for (const item of items) {
       const icon = images.get(item.icon)
-      if (icon) drawContain(ctx, icon, gx, groupY - 13, 18, 18)
-      ctx.font = font(10, 500)
-      ctx.fillStyle = INK
-      ctx.fillText(item.name, gx + 22, groupY)
-      gx += 22 + textWidth(ctx, item.name) + 10
+      if (icon) drawContain(ctx, icon, ix, groupY + 5, 22, 22)
+      ix += 22
     }
     ctx.font = font(10, 500)
-    ctx.fillStyle = MUTED
-    ctx.fillText(`· ${label}`, gx, groupY)
-    groupY += 24
+    ctx.fillStyle = INK
+    ctx.fillText(text, ix + 6, groupY + 9)
+    groupY += 36
   }
 
-  const statY = y + Math.max(44, groups.size * 24 + 8)
+  const statY = y + Math.max(44, groups.size * 36 + 8)
   let statX = VALUE_X
   build.mainStats.forEach((stat) => {
     const label = `${stat.slot} ${stat.main}`
@@ -418,12 +425,18 @@ function drawGraduation(
       ctx.fillText(line, x + 12, top + 84)
     }
   })
+  return y - 2 + (Math.min(cards.length, 2) - 1) * 124 + 112 + 16
 }
 
-function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap) {
+function drawCard(
+  ctx: CanvasRenderingContext2D,
+  agent: Agent,
+  images: ImageMap,
+  height = H,
+): number {
   ctx.fillStyle = '#eef1f5'
-  ctx.fillRect(0, 0, W, H)
-  roundRect(ctx, CARD_X, CARD_Y, CARD_W, CARD_H, 30)
+  ctx.fillRect(0, 0, W, height)
+  roundRect(ctx, CARD_X, CARD_Y, CARD_W, height - 32, 30)
   ctx.fillStyle = '#ffffff'
   ctx.fill()
   ctx.strokeStyle = '#d7dbe2'
@@ -434,11 +447,11 @@ function drawCard(ctx: CanvasRenderingContext2D, agent: Agent, images: ImageMap)
   sectionBody(ctx, 80)
   drawSkills(ctx, agent, 82, images)
   drawCinemas(ctx, agent, 140)
-  drawWeapons(ctx, agent.guide.weapons, 200, images)
-  const drivesEnd = drawDrives(ctx, agent, 398, images)
+  const weaponsEnd = drawWeapons(ctx, agent.guide.weapons, 200, images)
+  const drivesEnd = drawDrives(ctx, agent, weaponsEnd + 24, images)
   const teamsY = drivesEnd + 8
   drawTeams(ctx, agent.guide.teams, teamsY, images)
-  drawGraduation(
+  return drawGraduation(
     ctx,
     agent,
     [agent.guide.graduationAlt, agent.guide.graduation]
@@ -471,14 +484,28 @@ export async function renderGuideCard(agent: Agent, scale = 2): Promise<Blob> {
     }),
   )
 
+  const scratch = document.createElement('canvas')
+  scratch.width = W * scale
+  scratch.height = H * scale
+  const scratchCtx = scratch.getContext('2d')
+  if (!scratchCtx) throw new Error('canvas 2d unavailable')
+  scratchCtx.scale(scale, scale)
+  scratchCtx.textBaseline = 'top'
+  const bottom = drawCard(scratchCtx, agent, images)
+
+  const contentHeight = Math.min(H, Math.max(940, bottom + 24))
   const canvas = document.createElement('canvas')
   canvas.width = W * scale
-  canvas.height = H * scale
+  canvas.height = contentHeight * scale
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('canvas 2d unavailable')
   ctx.scale(scale, scale)
   ctx.textBaseline = 'top'
-  drawCard(ctx, agent, images)
+  if (contentHeight < H - 2) {
+    drawCard(ctx, agent, images, contentHeight)
+  } else {
+    ctx.drawImage(scratch, 0, 0)
+  }
 
   return await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('生成攻略卡失败'))), 'image/png')
